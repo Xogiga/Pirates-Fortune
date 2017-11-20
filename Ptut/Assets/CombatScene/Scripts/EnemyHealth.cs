@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
-    private float health_stat = 100;				//On t'enmerde avec ta stat d'armure
+    private float health_stat = 100;
     private float current_health;
     private GameObject hb;
     public Text health_text;
