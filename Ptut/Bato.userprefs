@@ -1,0 +1,18 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\Deplacement.cs">
+    <Files>
+      <File FileName="Assets\CombatScene\Scripts\GameManagerCombat.cs" Line="81" Column="3" />
+      <File FileName="Assets\CombatScene\Scripts\Attaque.cs" Line="212" Column="50" />
+      <File FileName="Assets\CombatScene\Scripts\Deplacement.cs" Line="10" Column="33" />
+      <File FileName="Assets\CombatScene\Scripts\Clickablee.cs" Line="24" Column="55" />
+      <File FileName="Assets\CombatScene\Scripts\WhereCanIGo.cs" Line="29" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Moi\Documents\Cours\Ptut\Bato\Assets\Script\Event1.cs" line="22" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
