@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 private int i=4;
+=======
+public int i = 3;
+>>>>>>> origin/master
