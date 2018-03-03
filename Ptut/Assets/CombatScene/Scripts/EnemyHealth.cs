@@ -54,6 +54,7 @@ public class EnemyHealth : MonoBehaviour
         if (current_health < 0)
         {
             current_health = 0;
+			Destroy(this.gameObject,1);									//Détruit l'ennemi quand il n'a plus de PV
         }
         SetUI();
         StartCoroutine(DecreaseBar());
@@ -66,6 +67,7 @@ public class EnemyHealth : MonoBehaviour
 		
     IEnumerator IncreaseBar()
     {
+		hb.SetActive(true);
         while (health_bar.fillAmount <= current_health / health_stat)
         {
             yield return new WaitForSeconds(Time.deltaTime);
@@ -76,6 +78,7 @@ public class EnemyHealth : MonoBehaviour
 
     IEnumerator DecreaseBar()
     {
+		hb.SetActive(true);
         while (health_bar.fillAmount >= current_health / health_stat)
         {
             yield return new WaitForSeconds(Time.deltaTime);

@@ -107,9 +107,11 @@ GameObject:
   - component: {fileID: 4059256502774664}
   - component: {fileID: 212010842117552714}
   - component: {fileID: 65749924377979614}
+  - component: {fileID: 114761588688440846}
   - component: {fileID: 114849134333236166}
   - component: {fileID: 114490979013682266}
   - component: {fileID: 114643819975747658}
+  - component: {fileID: 114369469965607582}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Player
@@ -238,6 +240,17 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114369469965607582
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1658186758284720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd0a2c7d5eed7c04caa17ae2e6c4b817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114461681684594600
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -401,6 +414,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health_text: {fileID: 114562026367993076}
   health_bar: {fileID: 114841707090785448}
+--- !u!114 &114761588688440846
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1658186758284720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba9054ac6c04e741af8c3038eeb9dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114841707090785448
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -440,7 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 114553263519860712}
-  ismoving: 0
+  is_moving: 0
   statsDeDeplacement: 4
   pointDeDeplacement: 0
 --- !u!114 &114859967961953364
