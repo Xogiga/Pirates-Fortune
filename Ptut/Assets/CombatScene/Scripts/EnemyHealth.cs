@@ -34,8 +34,7 @@ public class EnemyHealth : MonoBehaviour
     void Start()
     {
         hb = GameObject.Find("Enemy_stats_canvas");
-       // hb.SetActive(false);    
-        StartCoroutine(test());
+        hb.SetActive(false);
     }
 
     void IncreaseHealth(int health_change)
@@ -64,16 +63,7 @@ public class EnemyHealth : MonoBehaviour
     {
         health_text.text = current_health.ToString();
     }
-
-
-    IEnumerator test()
-    {
-        yield return new WaitForSeconds(2);
-        DeductHealth(60);
-        yield return new WaitForSeconds(2);
-        IncreaseHealth(30);
-    }
-
+		
     IEnumerator IncreaseBar()
     {
         while (health_bar.fillAmount <= current_health / health_stat)

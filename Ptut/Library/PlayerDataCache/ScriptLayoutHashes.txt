@@ -112,6 +112,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.SpatialMappingRenderer
 0d0738a8252a9e76f49ebb7e4c50f66c Assembly-CSharp.dll:.Deplacement
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.S_Canvas
+510d3feee1b2bc26bd87ad3538e5f794 Assembly-CSharp.dll:.EnemyHealth
 ebd50d753c52bc3f4aee1d079787326d Assembly-CSharp.dll:.Spawn
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Attaque
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.scri
