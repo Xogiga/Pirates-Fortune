@@ -58,6 +58,8 @@
      <Compile Include="Assets\CombatScene\Scripts\GameManager_BeginFight.cs" />
      <Compile Include="Assets\CombatScene\Scripts\GameManager_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\GameManger_BeginEnnemyTurn.cs" />
+     <Compile Include="Assets\CombatScene\Scripts\Hero_Attack_1.cs" />
+     <Compile Include="Assets\CombatScene\Scripts\Hero_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\CombatScene\Scripts\WhereCanIGo.cs" />
      <Compile Include="Assets\MapScene\Script\Bouger.cs" />
@@ -67,6 +69,7 @@
      <Compile Include="Assets\MapScene\Script\S_Event2.cs" />
      <Compile Include="Assets\MapScene\Script\scri.cs" />
      <Compile Include="Assets\MapScene\Script\Spawn.cs" />
+     <None Include="Assets\dontdelete.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

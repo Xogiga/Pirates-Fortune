@@ -48,7 +48,7 @@ public class EnemyHealth : MonoBehaviour
         StartCoroutine(IncreaseBar());
     }
 
-    void DeductHealth(int health_change)
+    public void DeductHealth(int health_change)
     {
         current_health -= health_change;
         if (current_health < 0)
