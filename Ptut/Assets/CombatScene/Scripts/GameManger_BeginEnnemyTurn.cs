@@ -8,7 +8,7 @@ public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 	private GameManager_Master game_master;
 	private Hero_Master hero_master;
 	private GameObject bouton_fin_de_tour;
-	private GameObject annonce;
+	private Announce_Script annonce;
 	private bool are_references_set;
 
 	void OnStart(){
@@ -20,7 +20,7 @@ public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master>();
 		hero_master = GameObject.FindWithTag ("Player").GetComponent<Hero_Master> ();
 		bouton_fin_de_tour = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Button").gameObject;			//Trouve un objet inactif à partir de son parent
-		annonce = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Announce").gameObject;
+		annonce = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Announce").gameObject.GetComponentInChildren<Announce_Script>();
 		are_references_set = true;
 	}
 		
@@ -33,9 +33,7 @@ public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 			game_master.is_it_your_turn = false;
 			bouton_fin_de_tour.SetActive (false);
 
-			annonce.SetActive (true);
-			annonce.GetComponentInChildren<Text> ().text = "Ennemy Turn !";
-			StartCoroutine (Disable_UI (annonce));
+			//annonce.Announce ("Ennemy Turn !");
 
 			GameObject ennemi = GameObject.FindWithTag ("Ennemi");
 			Attaque deplacement_ennemi = ennemi.GetComponent<Attaque> ();
@@ -46,17 +44,12 @@ public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 	public void End_ennemy_turn(){
 		Set_needed_references ();
 		if (game_master.is_it_your_turn == false) {
-			hero_master.Reset_Point_De_Deplacement();
+			hero_master.Reset_Point();
 			game_master.is_it_your_turn = true;
 			bouton_fin_de_tour.SetActive (true);
-			annonce.SetActive (true);
-			annonce.GetComponentInChildren<Text> ().text = "Your Turn !";
-			StartCoroutine (Disable_UI (annonce));
+			annonce.Announce ("Your Turn !");
 		}
 	}
 
-	IEnumerator Disable_UI(GameObject annonce){																	//Fait disparaitre l'annonce
-		yield return new WaitForSeconds (1);
-		annonce.SetActive (false);
-	}
+
 }

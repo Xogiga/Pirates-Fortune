@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CombatScene\Scripts\Announce_Script.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Attaque.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Clickablee.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Deplacement.cs" />

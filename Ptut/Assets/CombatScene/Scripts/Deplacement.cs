@@ -9,7 +9,6 @@ public class Deplacement : MonoBehaviour {
 
 	void OnEnable(){
 		Set_initial_references ();
-		setUI ();
 	}
 
 	void Set_initial_references()
@@ -23,9 +22,7 @@ public class Deplacement : MonoBehaviour {
 			StartCoroutine (Move (endposition));
 	}
 
-	public void setUI(){
-		stats.text = "Point de Deplacement = "+hero_master.point_de_deplacement.ToString();
-	}
+
 
 	IEnumerator Move(Vector3 endposition)
 	{
@@ -43,7 +40,7 @@ public class Deplacement : MonoBehaviour {
 			goto Fin;
 		} else {
 			hero_master.point_de_deplacement -= (Mathf.Abs (xparcours) + Mathf.Abs (yparcours));
-			setUI ();
+			hero_master.setUI ();
 		}
 
 		if (Mathf.Abs (xparcours) == Mathf.Abs (yparcours)) {              					 //Tout les deplacements en diagonale

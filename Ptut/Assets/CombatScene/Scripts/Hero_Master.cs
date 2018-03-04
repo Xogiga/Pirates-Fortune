@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Hero_Master : MonoBehaviour {
 	private GameManager_Master Game_Master;
@@ -8,8 +9,12 @@ public class Hero_Master : MonoBehaviour {
 	private Deplacement script_deplacement;
 	private GameManger_BeginEnnemyTurn ennemy_turn_script;
 	public bool is_moving;
+	public Text text_deplacement;
+	public Text text_action;
 	private float stats_de_deplacement;
 	public float point_de_deplacement;
+	private int stats_daction;
+	private int action_point;
 
 	// Use this for initialization
 	void Start () {
@@ -20,26 +25,44 @@ public class Hero_Master : MonoBehaviour {
 		SetInitialReferences();
 	}
 
-	public void Reset_Point_De_Deplacement()
+	public void Reset_Point()
 	{
 		point_de_deplacement = stats_de_deplacement;
-		script_deplacement.setUI ();
+		action_point = stats_daction;
+		setUI ();
 	}
 
 	void SetInitialReferences()
 	{
 		is_moving = false;
 		stats_de_deplacement = 4;
+		stats_daction = 5;
+		action_point = stats_daction;
 		point_de_deplacement = stats_de_deplacement;
 		Game_Master = GameObject.Find("GameManager (1)").GetComponent<GameManager_Master>();		//Permet l'accès aux infos du Game Master
 		script_attack = this.GetComponent<Hero_Attack_1> ();
 		script_deplacement = this.GetComponent<Deplacement> ();
 		ennemy_turn_script = GameObject.Find("GameManager (1)").GetComponent<GameManger_BeginEnnemyTurn>();
+		setUI ();
+	}
+
+	public void setUI(){																		//Met à jour les infos du personnage
+		text_deplacement.text = "Movement Point = "+point_de_deplacement;
+		text_action.text = "Action Point = " + action_point;
+	}
+
+	public int Get_Action_Point(){
+		return action_point;
+	}
+
+	public void Set_Action_Point(int val){
+		action_point = val;
+		setUI ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (Game_Master.is_it_your_turn == true && is_moving == false){						//Vérifie que c'est le tour du joueur
+		if (Game_Master.is_it_your_turn == true && is_moving == false){							//Vérifie que c'est le tour du joueur
 			
 			if (Input.GetKeyDown (KeyCode.A)|| Input.GetKeyDown (KeyCode.Z))					//Gère les compétences
 				{
