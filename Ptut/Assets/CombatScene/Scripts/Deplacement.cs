@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Deplacement : MonoBehaviour {
-	public Text stats;
 	private Hero_Master hero_master;
 
 	void OnEnable(){
@@ -13,7 +12,7 @@ public class Deplacement : MonoBehaviour {
 
 	void Set_initial_references()
 	{
-		hero_master = GameObject.Find ("Hero(Clone)").GetComponent<Hero_Master> ();
+		hero_master = this.GetComponent<Hero_Master> ();
 		hero_master.is_moving = false;
 	}
 

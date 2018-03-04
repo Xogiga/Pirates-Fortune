@@ -11,7 +11,7 @@ public class EnemyHealth : MonoBehaviour
     public Text health_text;
     public Image health_bar;
 
-    void OnMouseOver()
+    void OnMouseEnter()
     {
         hb.SetActive(true);
     }
@@ -28,14 +28,11 @@ public class EnemyHealth : MonoBehaviour
     void SetInitialReferences()
     {
         current_health = health_stat;
+		hb = GameObject.Find("Enemy_stats_canvas");
+		hb.SetActive(false);
         SetUI();
     }
-
-    void Start()
-    {
-        hb = GameObject.Find("Enemy_stats_canvas");
-        hb.SetActive(false);
-    }
+		
 
     void IncreaseHealth(int health_change)
     {
@@ -84,7 +81,7 @@ public class EnemyHealth : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
             health_bar.fillAmount -= 0.01f;
         }
-        health_bar.fillAmount = current_health / health_stat;           // Les calculs sur les floats merdent toujours, donc je lui redonne la valeur exacte à la fin
+        health_bar.fillAmount = current_health / health_stat;           	// Les calculs sur les floats merdent toujours, donc je lui redonne la valeur exacte à la fin
     }
 
 }
