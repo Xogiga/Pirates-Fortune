@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public class Deplacement : MonoBehaviour {
 	public Text stats;
-	public bool is_moving;
-	public float statsDeDeplacement;
-	public float pointDeDeplacement;
+	private Hero_Master hero_master;
 
 	void OnEnable(){
 		Set_initial_references ();
@@ -16,23 +14,22 @@ public class Deplacement : MonoBehaviour {
 
 	void Set_initial_references()
 	{
-		pointDeDeplacement = statsDeDeplacement;
-		is_moving = false;
+		hero_master = GameObject.Find ("Hero(Clone)").GetComponent<Hero_Master> ();
+		hero_master.is_moving = false;
 	}
 
 	public void justmove (Vector3 endposition)
 	{
-			Vector3 endpos = endposition;
-			StartCoroutine (Move (endpos));
+			StartCoroutine (Move (endposition));
 	}
 
 	public void setUI(){
-		stats.text = "Point de Deplacement = "+pointDeDeplacement.ToString();
+		stats.text = "Point de Deplacement = "+hero_master.point_de_deplacement.ToString();
 	}
 
 	IEnumerator Move(Vector3 endposition)
 	{
-		is_moving = true;   // Booléen qui empêche d'engager un nouveau déplacement, de rappeller la fonction, avant que le précédent soit fini
+		hero_master.is_moving = true;   // Booléen qui empêche d'engager un nouveau déplacement, de rappeller la fonction, avant que le précédent soit fini
 
 		Vector3 newpos; // Arrivée du déplacement de 1 case
 		Vector3 parcours = endposition - this.transform.position; //Récupère la distance entre le joueur et la case
@@ -42,10 +39,10 @@ public class Deplacement : MonoBehaviour {
 		float waittime = 0.04f; //Temps entre chaque micro-déplacement de MoveToward
 		float step = 4*waittime; //Vitesse*Temps = distance de MoveTowards
 
-		if ((Mathf.Abs (xparcours) + Mathf.Abs (yparcours)) > pointDeDeplacement) {  //Vérifie que le jouer a assez de point de déplacement
+		if ((Mathf.Abs (xparcours) + Mathf.Abs (yparcours)) > hero_master.point_de_deplacement) {  //Vérifie que le jouer a assez de point de déplacement
 			goto Fin;
 		} else {
-			pointDeDeplacement -= (Mathf.Abs (xparcours) + Mathf.Abs (yparcours));
+			hero_master.point_de_deplacement -= (Mathf.Abs (xparcours) + Mathf.Abs (yparcours));
 			setUI ();
 		}
 
@@ -196,7 +193,7 @@ public class Deplacement : MonoBehaviour {
 		}
 	}
 		Fin:
-		is_moving = false;				 // Booléen qui autorise un nouveau déplacement
+		hero_master.is_moving = false;				 // Booléen qui autorise un nouveau déplacement
 }
 
 }

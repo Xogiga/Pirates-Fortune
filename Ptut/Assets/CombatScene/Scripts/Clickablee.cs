@@ -8,8 +8,7 @@ public class Clickablee : MonoBehaviour {
 	private GameObject game_manager;
 	private GameManager_Master game_master;
 	private GameObject player;									//Ralentie le jeu ?
-	private GameObject ennemi;
-	private Deplacement script_player;
+	private Hero_Master hero_master;
 	private bool are_references_set;
 
 	void OnEnable(){
@@ -24,42 +23,34 @@ public class Clickablee : MonoBehaviour {
 
 	void Set_needed_references(){
 		player = GameObject.FindWithTag ("Player");
-		ennemi = GameObject.FindWithTag ("Ennemi");
-		script_player = player.GetComponent<Deplacement> ();
+		hero_master = player.GetComponent<Hero_Master> ();
 		are_references_set = true;
-	}
-
-	public void OnMouseDown() {
-		if (are_references_set == false) {
-			Set_needed_references ();
-		}
-		if (game_master.is_it_your_turn == true && script_player.is_moving == false) {
-			if (this.transform.position != player.transform.position && this.transform.position != ennemi.transform.position) {
-				script_player.justmove (this.transform.position);
-			}
-		}
-	}
+	}		
 
 		public void OnMouseEnter(){
 			if (are_references_set == false) {
 				Set_needed_references ();
 			}
-			if (game_master.is_it_your_turn == true && script_player.is_moving == false){
-						Vector3 distance = this.transform.position - player.transform.position;
-						if(Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= script_player.pointDeDeplacement){						// arrondi car les calculs de floats bug
-					if (this.transform.position != player.transform.position && this.transform.position != ennemi.transform.position) {
-						this.GetComponent<SpriteRenderer> ().sprite = mouseover;
-						}
-					}
+			if (game_master.is_it_your_turn == true && hero_master.is_moving == false){
+				Vector3 distance = this.transform.position - player.transform.position;
+				if(Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.point_de_deplacement){						// arrondi car les calculs de floats bug
+					this.GetComponent<SpriteRenderer> ().sprite = mouseover;
 				}
+			}
 		}
 
 
 		public void OnMouseExit(){
-			if (game_master.is_it_your_turn == true) {
+			if (game_master.is_it_your_turn == true)
 				this.GetComponent<SpriteRenderer> ().sprite = classic;
-			}
 		}
+
+		void Update(){																														//Permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
+			if(this.GetComponent<SpriteRenderer> ().sprite == mouseover)
+				if(game_master.is_it_your_turn==false)
+					this.GetComponent<SpriteRenderer> ().sprite = classic;
+		}
+
 	}
 
 

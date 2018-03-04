@@ -5,31 +5,38 @@ using UnityEngine.UI;
 
 public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 
-	private GameObject game_manager;
 	private GameManager_Master game_master;
-	private GameObject player;
-	private Deplacement script_player;
+	private Hero_Master hero_master;
 	private GameObject bouton_fin_de_tour;
 	private GameObject annonce;
+	private bool are_references_set;
 
+	void OnStart(){
+		are_references_set = false;	
+	}
 
 	void Set_needed_references()
 	{
-		game_manager = GameObject.FindGameObjectWithTag ("GameManager");
-		game_master = game_manager.GetComponent<GameManager_Master>();
-		player = GameObject.FindWithTag ("Player");
-		script_player = player.GetComponent<Deplacement> ();
+		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master>();
+		hero_master = GameObject.FindWithTag ("Player").GetComponent<Hero_Master> ();
 		bouton_fin_de_tour = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Button").gameObject;			//Trouve un objet inactif à partir de son parent
 		annonce = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Announce").gameObject;
+		are_references_set = true;
 	}
 		
 
 	public void Begin_ennemy_turn(){
-		
-		Set_needed_references ();
-		if (game_master.is_it_your_turn == true && script_player.is_moving == false) {
+		if (are_references_set == false)
+			Set_needed_references ();
+		if (game_master.is_it_your_turn == true && hero_master.is_moving==false) {
+			
 			game_master.is_it_your_turn = false;
 			bouton_fin_de_tour.SetActive (false);
+
+			annonce.SetActive (true);
+			annonce.GetComponentInChildren<Text> ().text = "Ennemy Turn !";
+			StartCoroutine (Disable_UI (annonce));
+
 			GameObject ennemi = GameObject.FindWithTag ("Ennemi");
 			Attaque deplacement_ennemi = ennemi.GetComponent<Attaque> ();
 			deplacement_ennemi.Comportement ();
@@ -39,8 +46,7 @@ public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 	public void End_ennemy_turn(){
 		Set_needed_references ();
 		if (game_master.is_it_your_turn == false) {
-			script_player.pointDeDeplacement = script_player.statsDeDeplacement;
-			script_player.setUI ();
+			hero_master.Reset_Point_De_Deplacement();
 			game_master.is_it_your_turn = true;
 			bouton_fin_de_tour.SetActive (true);
 			annonce.SetActive (true);
@@ -49,7 +55,7 @@ public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 		}
 	}
 
-	IEnumerator Disable_UI(GameObject annonce){
+	IEnumerator Disable_UI(GameObject annonce){																	//Fait disparaitre l'annonce
 		yield return new WaitForSeconds (1);
 		annonce.SetActive (false);
 	}

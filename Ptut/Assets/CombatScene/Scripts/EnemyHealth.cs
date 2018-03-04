@@ -54,7 +54,7 @@ public class EnemyHealth : MonoBehaviour
         if (current_health < 0)
         {
             current_health = 0;
-			Destroy(this.gameObject,1);									//Détruit l'ennemi quand il n'a plus de PV
+			//Destroy(this.gameObject,1);									//Détruit l'ennemi quand il n'a plus de PV, crée plein d'erreur de référencement dans d'autres scripts
         }
         SetUI();
         StartCoroutine(DecreaseBar());
