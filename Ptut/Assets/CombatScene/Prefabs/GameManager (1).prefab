@@ -55,7 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   empty_tile: {fileID: 1472448750779328, guid: 4080d4f6a61ce1244840bf16be933dfa, type: 2}
   obstacle: {fileID: 1364595545333460, guid: 61990ba17a855904d894fbc71d6e0d60, type: 2}
-  player: {fileID: 1658186758284720, guid: 64d21dbfe94d8504a8308967400d9eef, type: 2}
+  player: {fileID: 1074011259229062, guid: 64d21dbfe94d8504a8308967400d9eef, type: 2}
   ennemi: {fileID: 1896411845429136, guid: 6c3c528efde539f4b90a08e981f98d40, type: 2}
   combat_HUD: {fileID: 223076755832872794, guid: d0856032a5a91a8408839e87dc476502,
     type: 2}

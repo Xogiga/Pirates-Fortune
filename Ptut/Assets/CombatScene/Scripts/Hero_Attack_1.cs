@@ -14,7 +14,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 	void Set_references(){
 		annonce = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Announce").gameObject.GetComponentInChildren<Announce_Script>();
 		hero_master = this.GetComponent<Hero_Master> ();
-	}
+	}		
 
 	public int Range(Transform ennemy)
 	{

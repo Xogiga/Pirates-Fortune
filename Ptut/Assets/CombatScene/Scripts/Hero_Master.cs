@@ -15,6 +15,9 @@ public class Hero_Master : MonoBehaviour {
 	public float point_de_deplacement;
 	private int stats_daction;
 	private int action_point;
+	private bool programmed_attack;
+	private int next_attack_code;
+	public Texture2D sprite_curseur;
 
 	// Use this for initialization
 	void Start () {
@@ -35,6 +38,8 @@ public class Hero_Master : MonoBehaviour {
 	void SetInitialReferences()
 	{
 		is_moving = false;
+		programmed_attack = false;
+		next_attack_code = 0;
 		stats_de_deplacement = 4;
 		stats_daction = 5;
 		action_point = stats_daction;
@@ -60,6 +65,14 @@ public class Hero_Master : MonoBehaviour {
 		setUI ();
 	}
 
+	public void Set_Next_Attack(int skill_number)
+	{
+		programmed_attack = true;
+		next_attack_code = skill_number;
+		Cursor.SetCursor (sprite_curseur,Vector2.zero,CursorMode.ForceSoftware);
+
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (Game_Master.is_it_your_turn == true && is_moving == false){							//Vérifie que c'est le tour du joueur
@@ -76,15 +89,36 @@ public class Hero_Master : MonoBehaviour {
 							script_attack.Lancer_de_Couteau(hit.transform);						//Appel la deuxième compétence
 				}
 
+
+
+
 			if (Input.GetMouseButtonDown (0)) {													//Gère les déplacements à la souris
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);					//Crée un rayon
 				RaycastHit hit;																	//Permet de récupérer la hitbox touchée
-				if (Physics.Raycast (ray, out hit))												//Return True si le Rayon touche une hitbox à la position de la souris
-					if (hit.transform.tag == "Map")												//Vérifie que l'objet touché fait partie de la map
-					{
+				if (Physics.Raycast (ray, out hit)) {											//Return True si le Rayon touche une hitbox à la position de la souris
+					if (hit.transform.tag == "Map") {												//Vérifie que l'objet touché fait partie de la map
 						script_deplacement.justmove (hit.transform.position);					//Se déplace jusqu'à la case sélectionée
 					}
+
+					if (programmed_attack == true) {												//Gère les attaques à la souris
+						if (hit.transform.tag == "Ennemi")
+							switch (next_attack_code) {												//Switch qui détermine quelle attaque lancer
+							case 1:
+								script_attack.Frappe (hit.transform);
+								break;
+							case 2:
+								script_attack.Lancer_de_Couteau (hit.transform);
+								break;
+							}
+						programmed_attack = false;													//Suprimme l'action enregistrée
+						Cursor.SetCursor (null,Vector2.zero,CursorMode.Auto);
+					}
+				}
 			}
+
+
+
+
 
 			if (Input.GetKeyDown (KeyCode.Space)) {												//Gère la fin de tour
 				ennemy_turn_script.Begin_ennemy_turn();
