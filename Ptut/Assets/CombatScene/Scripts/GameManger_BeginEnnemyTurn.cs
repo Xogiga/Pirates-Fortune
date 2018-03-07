@@ -33,7 +33,7 @@ public class GameManger_BeginEnnemyTurn : MonoBehaviour {
 			game_master.is_it_your_turn = false;
 			bouton_fin_de_tour.SetActive (false);
 
-			//annonce.Announce ("Ennemy Turn !");
+			annonce.Announce ("Ennemy Turn !");
 
 			GameObject ennemi = GameObject.FindWithTag ("Ennemi");
 			Attaque deplacement_ennemi = ennemi.GetComponent<Attaque> ();
