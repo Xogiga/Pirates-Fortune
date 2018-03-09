@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 224939895422036440}
   - component: {fileID: 212810646537600462}
-  - component: {fileID: 114008692277319510}
   - component: {fileID: 65186918922106380}
-  m_Layer: 8
+  - component: {fileID: 114220216796911856}
+  m_Layer: 9
   m_Name: tiles
   m_TagString: Map
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.56, y: 2.56, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114008692277319510
+--- !u!114 &114220216796911856
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -111,6 +111,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 12.28987, y: 5.5353246}
   m_SizeDelta: {x: 2.56, y: 2.56}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.99999964, y: 0.9999998}

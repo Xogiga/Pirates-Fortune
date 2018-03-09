@@ -14,11 +14,12 @@ public class Deplacement : MonoBehaviour {
 	{
 		hero_master = this.GetComponent<Hero_Master> ();
 		hero_master.is_moving = false;
+
 	}
 
 	public void justmove (Vector3 endposition)
 	{
-			StartCoroutine (Move (endposition));
+		StartCoroutine (Move (endposition));
 	}
 
 

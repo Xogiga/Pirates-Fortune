@@ -92,12 +92,14 @@ public class Hero_Master : MonoBehaviour {
 
 
 
-			if (Input.GetMouseButtonDown (0)) {													//Gère les déplacements à la souris
-				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);					//Crée un rayon
-				RaycastHit hit;																	//Permet de récupérer la hitbox touchée
-				if (Physics.Raycast (ray, out hit)) {											//Return True si le Rayon touche une hitbox à la position de la souris
+			if (Input.GetMouseButtonDown (0)) {														//Gère les déplacements à la souris
+				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
+				RaycastHit hit;																		//Permet de récupérer la hitbox touchée
+				if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
 					if (hit.transform.tag == "Map") {												//Vérifie que l'objet touché fait partie de la map
-						script_deplacement.justmove (hit.transform.position);					//Se déplace jusqu'à la case sélectionée
+						Game_Master.set_matrice_case (Mathf.RoundToInt(hit.transform.position.x), Mathf.RoundToInt(hit.transform.position.y), 1);					//Change la case de destination en 1
+						Game_Master.set_matrice_case (Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y), 0);					//Change la case de départ en 0
+						script_deplacement.justmove (hit.transform.position);						//Se déplace jusqu'à la case sélectionée
 					}
 
 					if (programmed_attack == true) {												//Gère les attaques à la souris

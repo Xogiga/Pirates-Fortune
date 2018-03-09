@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 114347141497706582}
   - component: {fileID: 114411027444418870}
   - component: {fileID: 65264585246240814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pirate1
   m_TagString: Ennemi
   m_Icon: {fileID: 0}
