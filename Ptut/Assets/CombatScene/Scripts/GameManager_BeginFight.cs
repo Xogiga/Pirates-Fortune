@@ -15,6 +15,8 @@ public class GameManager_BeginFight : MonoBehaviour {
 	public int width;
 	public int height;
 	public int nb_elem_rand;
+	public int nb_ennemies;
+	public int nb_allies; 
 
 	private int[,] matrice_case;
  
@@ -50,16 +52,10 @@ public class GameManager_BeginFight : MonoBehaviour {
 	void Begin_fight(){
 		create_matrice ();
 		instantiate_matrice ();
-		Pop_allié (3);
-		Pop_ennemi (3);
+		Pop_allié (nb_allies);
+		Pop_ennemi (nb_ennemies);
 		Display_HUD ();
 		rempli_liste_perso();
-
-		//
-		/*for (int i = 0; i < 10; i++) {
-			print (liste_perso[i]);
-		}
-		*/
 	}
 
 	void Set_initial_references()
@@ -220,19 +216,23 @@ public class GameManager_BeginFight : MonoBehaviour {
 
 	//Remplissage de la liste des personnages en alternant allié/ennemi
 	private void rempli_liste_perso () {
-		int cpt_1 = 0;																			//Compteur d'elements total
-		int cpt_2 = 0;																			//Compteur d'elements dans chaque liste
+		int compteur_liste_globale = 0;																			//Compteur d'elements total
+		int compteur_liste_faction = 0;																			//Compteur d'elements dans chaque liste
 		GameObject[] liste_gentil = GameObject.FindGameObjectsWithTag ("Player");
 		GameObject[] liste_mechant = GameObject.FindGameObjectsWithTag ("Ennemi");
-		int nb_ele = liste_gentil.Length;
-		nb_ele += liste_mechant.Length;
-		while (cpt_1 < nb_ele){
-			if (liste_gentil [cpt_2] != null) 
-				liste_perso[cpt_1] = liste_gentil [cpt_2];
-			if (liste_mechant[cpt_2] != null)
-				liste_perso[cpt_1+1] = liste_mechant [cpt_2];
-			cpt_1 += 2;
-			cpt_2 += 1;
+		int nb_ele = liste_gentil.Length + liste_mechant.Length;
+
+		while (compteur_liste_globale < nb_ele){																//Tant que tous les personnages ne sont pas ajoutés, continue de boucler
+			if (compteur_liste_faction<liste_gentil.Length) 													//Si le compteur est bien dans la liste
+				if(liste_gentil[compteur_liste_faction] != null)												//Si la case à cette indice n'est pas nulle
+					liste_perso[compteur_liste_globale] = liste_gentil [compteur_liste_faction];				//Ajoute un personnage à la liste
+			
+			if (compteur_liste_faction<liste_mechant.Length)
+				if(liste_mechant[compteur_liste_faction] != null)
+					liste_perso[compteur_liste_globale+1] = liste_mechant [compteur_liste_faction];
+			
+			compteur_liste_globale += 2;
+			compteur_liste_faction += 1;
 		}
 	}
 }

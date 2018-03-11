@@ -15,7 +15,7 @@ public class GameManager_Master : MonoBehaviour {
 
 	private void OnEnable(){
 		Set_initial_reference();
-		StartCoroutine (Wait_before_launch ());
+		Call_event_begin_fight();
 	}
 
 
@@ -47,20 +47,17 @@ public class GameManager_Master : MonoBehaviour {
 		}
 	}
 
+	public void set_matrice_case(int x,int y,int val){																	//Modifie la valeur d'une case de la matrice passé en paramètre
+		matrice_case[x,y]=val;
+	}
+
 	void Update () {
 		if (Input.GetKey ("escape")) 
 		{
 			Application.Quit ();
 		}
 
-	}
+	}		
 
-	IEnumerator Wait_before_launch(){																	
-		yield return new WaitForSeconds (0.1f);
-		Call_event_begin_fight();
-	}
 
-	public void set_matrice_case(int x,int y,int val){																	//Modifie la valeur d'une case de la matrice passé en paramètre
-		matrice_case[x,y]=val;
-	}
 }

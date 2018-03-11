@@ -64,14 +64,13 @@
      <Compile Include="Assets\CombatScene\Scripts\Hero_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\PlayerHealth.cs" />
      <Compile Include="Assets\CombatScene\Scripts\WhereCanIGo.cs" />
-     <Compile Include="Assets\MapScene\Script\Bouger.cs" />
-     <Compile Include="Assets\MapScene\Script\Destroy.cs" />
-     <Compile Include="Assets\MapScene\Script\Music.cs" />
-     <Compile Include="Assets\MapScene\Script\S_Canvas.cs" />
-     <Compile Include="Assets\MapScene\Script\S_Event2.cs" />
-     <Compile Include="Assets\MapScene\Script\scri.cs" />
-     <Compile Include="Assets\MapScene\Script\Spawn.cs" />
-     <None Include="Assets\dontdelete.txt" />
+     <Compile Include="Assets\Script_test\Bouger.cs" />
+     <Compile Include="Assets\Script_test\Destroy.cs" />
+     <Compile Include="Assets\Script_test\Music.cs" />
+     <Compile Include="Assets\Script_test\S_Canvas.cs" />
+     <Compile Include="Assets\Script_test\S_Event2.cs" />
+     <Compile Include="Assets\Script_test\scri.cs" />
+     <Compile Include="Assets\Script_test\Spawn.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
