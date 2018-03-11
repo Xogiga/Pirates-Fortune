@@ -23,6 +23,8 @@ public class GameManager_BeginFight : MonoBehaviour {
 	private List<Tuples> case_spawn_equipe_alies ;																			//Liste des cases d'apparition possible des personnages alliés
 	private List<Tuples> case_spawn_equipe_ennemy;																			//Liste des cases d'apparition possible des personnages ennemis
 
+	private GameObject[] liste_perso = new GameObject[24];
+
 	public class Tuples																										//Permet de créer une sous-classe de type Tuples (int,int)
 	{
 		public int x;
@@ -38,9 +40,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 
 	void OnEnable(){
 		Set_initial_references ();
-		game_manager_master.event_begin_fight += Begin_fight;															//Ne marche plus
-		/*Begin_fight ();
-		game_manager_master.is_it_your_turn = true;*/
+		game_manager_master.event_begin_fight += Begin_fight;
 	}
 
 	void OnDisable(){
@@ -50,9 +50,16 @@ public class GameManager_BeginFight : MonoBehaviour {
 	void Begin_fight(){
 		create_matrice ();
 		instantiate_matrice ();
-		Pop_allié ();
-		Pop_ennemi ();
+		Pop_allié (3);
+		Pop_ennemi (3);
 		Display_HUD ();
+		rempli_liste_perso();
+
+		//
+		/*for (int i = 0; i < 10; i++) {
+			print (liste_perso[i]);
+		}
+		*/
 	}
 
 	void Set_initial_references()
@@ -151,39 +158,56 @@ public class GameManager_BeginFight : MonoBehaviour {
 	}
 		
 
-	void Pop_allié()
+	void Pop_allié(int nb_al)
 	{
-		int x =0, y=0, cpt =0;
-		int i = Random.Range(0, case_spawn_equipe_alies.Count);
-		foreach (Tuples t in case_spawn_equipe_alies) {
-			if (cpt == i) {
-				x = t.x;
-				y = t.y;
-			}
-			cpt++;
+		int x =0, y=0, cpt, cpt_al =0, i;																		//cpt_al : répétitions de la boucle pour chaque spawn
+		while (cpt_al < nb_al) {
+			do {
+				cpt=0;
+				i = Random.Range (0, case_spawn_equipe_alies.Count);
+				foreach (Tuples t in case_spawn_equipe_alies) {
+					if (cpt == i) {
+						x = t.x;
+						y = t.y;
+					}
+					cpt++;
+				}
+
+			} while (matrice_case [x, y] == 1); 
+
+			matrice_case [x, y] = 1;
+			Instantiate (player, new Vector3 (x, y, 0f), Quaternion.identity); 
+			cpt_al++;
 		}
-		Instantiate (player,new Vector3(x,y,0f), Quaternion.identity); 
 	}
 
-	void Pop_ennemi(){
-		int x =0, y=0, cpt =0;
-		int i = Random.Range(0, case_spawn_equipe_ennemy.Count);
-		foreach (Tuples t in case_spawn_equipe_ennemy) {
-			if (cpt == i) {
-				x = t.x;
-				y = t.y;
-				matrice_case [x, y] = 1;
-			}
-			cpt++;
+	void Pop_ennemi(int nb_enn){
+		int x =0, y=0, cpt, cpt_enn =0, i;																		//cpt_al : répétitions de la boucle pour chaque spawn
+		while (cpt_enn < nb_enn) {
+			do {
+				cpt=0;
+				i = Random.Range (0, case_spawn_equipe_ennemy.Count);
+				foreach (Tuples t in case_spawn_equipe_ennemy) {
+					if (cpt == i) {
+						x = t.x;
+						y = t.y;
+					}
+					cpt++;
+				}
+
+			} while (matrice_case [x, y] == 1); 
+
+			matrice_case [x, y] = 1;
+			Instantiate (ennemi, new Vector3 (x, y, 0f), Quaternion.identity); 
+			cpt_enn++;
 		}
-		Instantiate (ennemi,new Vector3(x,y,0f), Quaternion.identity);  
 	}
 
 	void Display_HUD(){
 		Instantiate(combat_HUD);
 	}
 
-	private Vector3 Find_a_free_tile (){
+	private Vector3 Find_a_free_tile () {
 
 		Vector3 freePlace = Vector3.zero;
 		colliders_list = Physics.OverlapSphere(freePlace, 0);
@@ -192,5 +216,23 @@ public class GameManager_BeginFight : MonoBehaviour {
 			colliders_list = Physics.OverlapSphere(freePlace, 0);
 		}
 		return freePlace;
+	}
+
+	//Remplissage de la liste des personnages en alternant allié/ennemi
+	private void rempli_liste_perso () {
+		int cpt_1 = 0;																			//Compteur d'elements total
+		int cpt_2 = 0;																			//Compteur d'elements dans chaque liste
+		GameObject[] liste_gentil = GameObject.FindGameObjectsWithTag ("Player");
+		GameObject[] liste_mechant = GameObject.FindGameObjectsWithTag ("Ennemi");
+		int nb_ele = liste_gentil.Length;
+		nb_ele += liste_mechant.Length;
+		while (cpt_1 < nb_ele){
+			if (liste_gentil [cpt_2] != null) 
+				liste_perso[cpt_1] = liste_gentil [cpt_2];
+			if (liste_mechant[cpt_2] != null)
+				liste_perso[cpt_1+1] = liste_mechant [cpt_2];
+			cpt_1 += 2;
+			cpt_2 += 1;
+		}
 	}
 }

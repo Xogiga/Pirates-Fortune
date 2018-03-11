@@ -13,8 +13,6 @@ public class GameManager_Master : MonoBehaviour {
 	private GameManager_BeginFight script_matrice;
 	private int[,] matrice_case;
 
-
-
 	private void OnEnable(){
 		Set_initial_reference();
 		StartCoroutine (Wait_before_launch ());
