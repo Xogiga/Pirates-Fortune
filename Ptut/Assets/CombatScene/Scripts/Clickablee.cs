@@ -5,9 +5,8 @@ using UnityEngine;
 public class Clickablee : MonoBehaviour {
 	public Sprite classic;
 	public Sprite mouseover;
-	private GameObject game_manager;
 	private GameManager_Master game_master;
-	private GameObject player;									//Ralentie le jeu ?
+	private GameObject player;									
 	private Hero_Master hero_master;
 	private bool are_references_set;
 
@@ -16,18 +15,18 @@ public class Clickablee : MonoBehaviour {
 	}
 
 	void Set_initial_references(){
-		game_manager = GameObject.FindGameObjectWithTag ("GameManager");
-		game_master = game_manager.GetComponent<GameManager_Master>();
+		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master>();
 		are_references_set = false;
 	}
 
 	void Set_needed_references(){
-		player = GameObject.FindWithTag ("Player");
+		player = game_master.get_playing_perso ();
 		hero_master = player.GetComponent<Hero_Master> ();
 		are_references_set = true;
 	}		
 
 		public void OnMouseEnter(){
+		
 			if (are_references_set == false) {
 				Set_needed_references ();
 			}

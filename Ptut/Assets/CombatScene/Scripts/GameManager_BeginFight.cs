@@ -19,13 +19,11 @@ public class GameManager_BeginFight : MonoBehaviour {
 	public int nb_allies; 
 
 	private int[,] matrice_case;
- 
-	private Collider[] colliders_list;
 
 	private List<Tuples> case_spawn_equipe_alies ;																			//Liste des cases d'apparition possible des personnages alliés
 	private List<Tuples> case_spawn_equipe_ennemy;																			//Liste des cases d'apparition possible des personnages ennemis
 
-	private GameObject[] liste_perso = new GameObject[24];
+	private GameObject[] liste_perso = new GameObject[16];
 
 	public class Tuples																										//Permet de créer une sous-classe de type Tuples (int,int)
 	{
@@ -202,37 +200,43 @@ public class GameManager_BeginFight : MonoBehaviour {
 	void Display_HUD(){
 		Instantiate(combat_HUD);
 	}
-
-	private Vector3 Find_a_free_tile () {
-
-		Vector3 freePlace = Vector3.zero;
-		colliders_list = Physics.OverlapSphere(freePlace, 0);
-		while (colliders_list.Length != 1) {
-			freePlace= new Vector3(Random.Range (0, width), Random.Range (0, height), 0f);
-			colliders_list = Physics.OverlapSphere(freePlace, 0);
-		}
-		return freePlace;
-	}
+		
 
 	//Remplissage de la liste des personnages en alternant allié/ennemi
-	private void rempli_liste_perso () {
-		int compteur_liste_globale = 0;																			//Compteur d'elements total
-		int compteur_liste_faction = 0;																			//Compteur d'elements dans chaque liste
+	private void rempli_liste_perso () {																	
+		int compteur_ennemies = 0;
+		int compteur_heros = 0;
+		int indice_tableau_globale = 0;
 		GameObject[] liste_gentil = GameObject.FindGameObjectsWithTag ("Player");
 		GameObject[] liste_mechant = GameObject.FindGameObjectsWithTag ("Ennemi");
-		int nb_ele = liste_gentil.Length + liste_mechant.Length;
 
-		while (compteur_liste_globale < nb_ele){																//Tant que tous les personnages ne sont pas ajoutés, continue de boucler
-			if (compteur_liste_faction<liste_gentil.Length) 													//Si le compteur est bien dans la liste
-				if(liste_gentil[compteur_liste_faction] != null)												//Si la case à cette indice n'est pas nulle
-					liste_perso[compteur_liste_globale] = liste_gentil [compteur_liste_faction];				//Ajoute un personnage à la liste
-			
-			if (compteur_liste_faction<liste_mechant.Length)
-				if(liste_mechant[compteur_liste_faction] != null)
-					liste_perso[compteur_liste_globale+1] = liste_mechant [compteur_liste_faction];
-			
-			compteur_liste_globale += 2;
-			compteur_liste_faction += 1;
+		while (indice_tableau_globale < liste_perso.Length-1) {																//Tant que tous les personnages ne sont pas ajoutés, continue de boucler
+			if (compteur_heros < liste_gentil.Length) { 																	//Si le compteur est bien dans la liste
+				if (liste_gentil [compteur_heros] != null) {																//Si la case à cette indice n'est pas nulle
+					liste_gentil [compteur_heros].name = "Hero_" + compteur_heros;											//Change le nom de l'objet
+					liste_perso [indice_tableau_globale] = liste_gentil [compteur_heros];									//Ajoute un personnage à la liste
+
+				}
+				indice_tableau_globale++;
+				compteur_heros++;
+			}
+			if (compteur_ennemies < liste_mechant.Length) {
+				if (liste_mechant [compteur_ennemies] != null) {
+					liste_mechant [compteur_ennemies].name = "Ennemi_" + compteur_ennemies;
+					liste_perso [indice_tableau_globale] = liste_mechant [compteur_ennemies];
+
+				}
+				indice_tableau_globale++;
+				compteur_ennemies++;
+			}
+			if (compteur_ennemies >= liste_mechant.Length && compteur_heros >= liste_gentil.Length ){						//S'il n'y a ni gentil, ni méchant  a ajouter on augmente le compteur jusqu'à sortir de la boucle
+				indice_tableau_globale++;
+			}
 		}
+	}
+		
+	//Fonction qui retourne la liste ordonnée des personnages
+	public GameObject[] get_liste_perso(){
+		return liste_perso;
 	}
 }

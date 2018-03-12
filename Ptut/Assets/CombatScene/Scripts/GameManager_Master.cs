@@ -10,8 +10,11 @@ public class GameManager_Master : MonoBehaviour {
 	public bool is_fight_begin;
 	public bool is_it_your_turn;
 	public bool is_fight_over;
-	private GameManager_BeginFight script_matrice;
+	private GameManager_BeginFight script_creation_map;
 	private int[,] matrice_case;
+	private GameObject[] liste_perso;
+	private int indice_playing_perso;
+
 
 	private void OnEnable(){
 		Set_initial_reference();
@@ -23,7 +26,8 @@ public class GameManager_Master : MonoBehaviour {
 		is_fight_begin = false;
 		is_it_your_turn = false;
 		is_fight_over=false;
-		script_matrice = this.GetComponent<GameManager_BeginFight>();
+		script_creation_map = this.GetComponent<GameManager_BeginFight>();
+		indice_playing_perso = 0;
 	}
 
 	public void Call_event_begin_fight(){
@@ -35,7 +39,10 @@ public class GameManager_Master : MonoBehaviour {
 			is_fight_begin = true;
 			is_it_your_turn = true;
 			event_begin_fight ();
-			matrice_case = script_matrice.get_matrice_case ();
+			matrice_case = script_creation_map.get_matrice_case ();
+			liste_perso = script_creation_map.get_liste_perso ();
+			print_liste ();
+
 		}
 	}		
 
@@ -44,6 +51,30 @@ public class GameManager_Master : MonoBehaviour {
 		{
 			is_fight_over = true;
 			event_end_fight ();
+		}
+	}
+
+
+	public void passer_le_tour(){
+		indice_playing_perso ++;																						//Passe au suivant
+
+		if (liste_perso [indice_playing_perso] == null) {																//Si la case suivante est null revient à 0
+			indice_playing_perso = 0;
+		}
+
+	}
+
+
+	//Retourne le personnage qui joue son tour
+	public GameObject get_playing_perso(){
+		return liste_perso [indice_playing_perso];
+	}
+
+	public void print_liste(){
+		int i = 0;
+		for(i=0; i<=10;i++)
+		{
+			print (liste_perso[i]);
 		}
 	}
 
