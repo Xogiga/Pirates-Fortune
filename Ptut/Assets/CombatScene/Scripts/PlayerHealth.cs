@@ -18,11 +18,7 @@ public class PlayerHealth : MonoBehaviour {
 		current_health = health_stat;
 		SetUI ();
 	}
-
-	void Start () {
-		StartCoroutine (test ());
-	}
-
+		
 	void IncreaseHealth(int health_change)
 	{
 		current_health += health_change;
@@ -44,14 +40,6 @@ public class PlayerHealth : MonoBehaviour {
 
 	void SetUI(){
 		health_text.text = current_health.ToString ();
-	}
-		
-
-	IEnumerator test(){
-		yield return new WaitForSeconds(2);
-		DeductHealth(60);
-		yield return new WaitForSeconds(2);
-		IncreaseHealth(30);
 	}
 
 	IEnumerator IncreaseBar(){

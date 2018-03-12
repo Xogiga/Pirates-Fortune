@@ -40,7 +40,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 
 	void OnEnable(){
 		Set_initial_references ();
-		game_manager_master.event_begin_fight += Begin_fight;
+		game_manager_master.event_begin_fight += Begin_fight;																	//Ajoute des scripts à l'évènement Begin_Fight
 	}
 
 	void OnDisable(){
@@ -213,7 +213,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 		while (indice_tableau_globale < liste_perso.Length-1) {																//Tant que tous les personnages ne sont pas ajoutés, continue de boucler
 			if (compteur_heros < liste_gentil.Length) { 																	//Si le compteur est bien dans la liste
 				if (liste_gentil [compteur_heros] != null) {																//Si la case à cette indice n'est pas nulle
-					liste_gentil [compteur_heros].name = "Hero_" + compteur_heros;											//Change le nom de l'objet
+					liste_gentil [compteur_heros].name = "Hero_" + indice_tableau_globale;											//Change le nom de l'objet
 					liste_perso [indice_tableau_globale] = liste_gentil [compteur_heros];									//Ajoute un personnage à la liste
 
 				}
@@ -222,7 +222,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 			}
 			if (compteur_ennemies < liste_mechant.Length) {
 				if (liste_mechant [compteur_ennemies] != null) {
-					liste_mechant [compteur_ennemies].name = "Ennemi_" + compteur_ennemies;
+					liste_mechant [compteur_ennemies].name = "Ennemi_" + indice_tableau_globale;
 					liste_perso [indice_tableau_globale] = liste_mechant [compteur_ennemies];
 
 				}
