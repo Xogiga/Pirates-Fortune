@@ -4,12 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Event
   - Map
   - Ennemi
   - GameManager
   - Announce
-  - Enemy_HB
+  - Hero
+  - Ennemy
   layers:
   - Default
   - TransparentFX

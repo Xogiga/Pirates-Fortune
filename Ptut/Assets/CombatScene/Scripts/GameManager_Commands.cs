@@ -7,7 +7,7 @@ public class GameManager_Commands : MonoBehaviour {
 	private GameObject hero;
 	private Hero_Master hero_master;
 	private Hero_Attack_1 script_attack;
-	private Deplacement script_deplacement;
+	private Hero_Deplacement script_deplacement;
 	private bool programmed_attack;
 	public int next_attack_code;
 	public Texture2D sprite_curseur;
@@ -29,55 +29,54 @@ public class GameManager_Commands : MonoBehaviour {
 		hero = game_master.get_playing_perso ();
 		hero_master = hero.GetComponent<Hero_Master>();
 		script_attack = hero_master.GetComponent<Hero_Attack_1> ();
-		script_deplacement = hero_master.GetComponent<Deplacement> ();
+		script_deplacement = hero_master.GetComponent<Hero_Deplacement> ();
 	}
 
 	void Update () {
-		if (game_master.is_it_your_turn == true && hero_master.is_moving == false){					//Vérifie que c'est le tour du joueur
-
-			if (Input.GetKeyDown (KeyCode.A)|| Input.GetKeyDown (KeyCode.Z))						//Gère les compétences
-			{
-				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
-				RaycastHit hit;																		//Permet de récupérer la hitbox touchée
-				if(Physics.Raycast(ray, out hit))													//Return True si le Rayon touche une hitbox à la position de la souris
-				if (hit.transform.tag == "Ennemi")
-				if (Input.GetKeyDown (KeyCode.A))													//Appel la première compétence
-					script_attack.Frappe(hit.transform);
-				if (Input.GetKeyDown (KeyCode.Z))
-					script_attack.Lancer_de_Couteau(hit.transform);									//Appel la deuxième compétence
-			}
-
+		if (game_master.is_it_your_turn == true) {													//Vérifie que c'est le tour du joueur
+			if (hero_master.is_moving == false) {													//Vérifie que le héros ne se déplace pas déjà
+				if (Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.Z)) {						//Gère les compétences
+					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
+					RaycastHit hit;																		//Permet de récupérer la hitbox touchée
+					if (Physics.Raycast (ray, out hit))													//Return True si le Rayon touche une hitbox à la position de la souris
+				if (hit.transform.tag == "Ennemy")
+					if (Input.GetKeyDown (KeyCode.A))													//Appel la première compétence
+					script_attack.Frappe (hit.transform);
+					if (Input.GetKeyDown (KeyCode.Z))
+						script_attack.Lancer_de_Couteau (hit.transform);									//Appel la deuxième compétence
+				}
 
 
 
-			if (Input.GetMouseButtonDown (0)) {														//Gère les déplacements à la souris
-				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
-				RaycastHit hit;																		//Permet de récupérer la hitbox touchée
-				if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
-					if (hit.transform.tag == "Map") {												//Vérifie que l'objet touché fait partie de la map
-						script_deplacement.try_to_move (hit.transform.position);						//Se déplace jusqu'à la case sélectionée
-					}
-
-					if (programmed_attack == true) {												//Gère les attaques à la souris
-						if (hit.transform.tag == "Ennemi")
-							switch (next_attack_code) {												//Switch qui détermine quelle attaque lancer
-						case 1:
-							script_attack.Frappe (hit.transform);
-							break;
-						case 2:
-							script_attack.Lancer_de_Couteau (hit.transform);
-							break;
+				if (Input.GetMouseButtonDown (0)) {														//Gère les déplacements à la souris
+					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
+					RaycastHit hit;																		//Permet de récupérer la hitbox touchée
+					if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
+						if (hit.transform.tag == "Map") {												//Vérifie que l'objet touché fait partie de la map
+							script_deplacement.try_to_move (hit.transform.position);						//Se déplace jusqu'à la case sélectionée
 						}
-						programmed_attack = false;													//Suprimme l'action enregistrée
-						Cursor.SetCursor (null,Vector2.zero,CursorMode.Auto);
+
+						if (programmed_attack == true) {												//Gère les attaques à la souris
+							if (hit.transform.tag == "Ennemy")
+								switch (next_attack_code) {												//Switch qui détermine quelle attaque lancer
+								case 1:
+									script_attack.Frappe (hit.transform);
+									break;
+								case 2:
+									script_attack.Lancer_de_Couteau (hit.transform);
+									break;
+								}
+							programmed_attack = false;													//Suprimme l'action enregistrée
+							Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);
+						}
 					}
+				}
+		
+				if (Input.GetKeyDown (KeyCode.Space)) {														//Appel la fin de tour
+						game_master.passer_le_tour ();
 				}
 			}
 		}
-		if (Input.GetKeyDown (KeyCode.Space)) {														//Appel la fin de tour
-			game_master.passer_le_tour();
-		}
-
 		if (Input.GetKey ("escape")) 																//Ferme l'application
 		{
 			Application.Quit ();

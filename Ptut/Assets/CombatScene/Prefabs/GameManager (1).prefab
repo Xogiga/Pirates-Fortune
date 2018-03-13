@@ -53,10 +53,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af10eb0274aaae0478a67b2dd8090eb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  empty_tile: {fileID: 1472448750779328, guid: 4080d4f6a61ce1244840bf16be933dfa, type: 2}
-  obstacle: {fileID: 1364595545333460, guid: 61990ba17a855904d894fbc71d6e0d60, type: 2}
+  empty_tile: {fileID: 1899966726870598, guid: df20c5335e515c545ba160cd57ddfdfa, type: 2}
+  obstacle: {fileID: 1498541545845272, guid: 61990ba17a855904d894fbc71d6e0d60, type: 2}
   player: {fileID: 1681042431284302, guid: 64d21dbfe94d8504a8308967400d9eef, type: 2}
-  ennemi: {fileID: 1896411845429136, guid: 6c3c528efde539f4b90a08e981f98d40, type: 2}
+  ennemi: {fileID: 1350641033659568, guid: 3d13ad15cd24d9741a20a3250408e50b, type: 2}
   combat_HUD: {fileID: 223076755832872794, guid: d0856032a5a91a8408839e87dc476502,
     type: 2}
   width: 18
@@ -89,5 +89,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac49c46d710953a469b14bcf778a52a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  next_attack_code: 0
+  next_attack_code: 1
   sprite_curseur: {fileID: 2800000, guid: 991c73394470e3b4b9f228894fafa862, type: 3}

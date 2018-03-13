@@ -322,10 +322,10 @@ GameObject:
   - component: {fileID: 212229077147175474}
   - component: {fileID: 65513332429265540}
   - component: {fileID: 114802140195101570}
-  - component: {fileID: 114084717496645948}
-  - component: {fileID: 114283471367460676}
-  - component: {fileID: 114952105479026894}
+  - component: {fileID: 114548362654361154}
   - component: {fileID: 114734140587458526}
+  - component: {fileID: 114934875771449838}
+  - component: {fileID: 114228299923462194}
   m_Layer: 8
   m_Name: Hero
   m_TagString: Player
@@ -531,17 +531,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114084717496645948
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1681042431284302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c368bf518574d348bc072cd5cd4f337, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114118319028553474
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -671,6 +660,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: A
+--- !u!114 &114228299923462194
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1681042431284302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d753621f97feba94ebc69ee778124807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classic: {fileID: 21300000, guid: f73cdd5717b9d294586e8e998917ee01, type: 3}
+  mouseover: {fileID: 21300000, guid: 91d9a14da4f8aae498279036daee5867, type: 3}
 --- !u!114 &114238674740482442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -758,19 +760,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114283471367460676
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1681042431284302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bf3d9bf04e7e6f48bb860659abf7b97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  classic: {fileID: 21300000, guid: f73cdd5717b9d294586e8e998917ee01, type: 3}
-  mouseover: {fileID: 21300000, guid: 91d9a14da4f8aae498279036daee5867, type: 3}
 --- !u!114 &114306449196192620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1233,6 +1222,17 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
+--- !u!114 &114548362654361154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1681042431284302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d02c5c458838c76408afa0933ee375e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114621087173215476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1665,7 +1665,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Movement Point = 6
---- !u!114 &114952105479026894
+--- !u!114 &114934875771449838
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1673,7 +1673,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1681042431284302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a4ee64db6b4a64bb601a52da490e65, type: 3}
+  m_Script: {fileID: 11500000, guid: a25536203a5bb1d4ba74b6444c2c24c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health_text: {fileID: 114701096786760488}

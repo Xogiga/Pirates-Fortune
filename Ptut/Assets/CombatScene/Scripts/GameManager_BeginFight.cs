@@ -207,8 +207,8 @@ public class GameManager_BeginFight : MonoBehaviour {
 		int compteur_ennemies = 0;
 		int compteur_heros = 0;
 		int indice_tableau_globale = 0;
-		GameObject[] liste_gentil = GameObject.FindGameObjectsWithTag ("Player");
-		GameObject[] liste_mechant = GameObject.FindGameObjectsWithTag ("Ennemi");
+		GameObject[] liste_gentil = GameObject.FindGameObjectsWithTag ("Hero");
+		GameObject[] liste_mechant = GameObject.FindGameObjectsWithTag ("Ennemy");
 
 		while (indice_tableau_globale < liste_perso.Length-1) {																//Tant que tous les personnages ne sont pas ajoutés, continue de boucler
 			if (compteur_heros < liste_gentil.Length) { 																	//Si le compteur est bien dans la liste

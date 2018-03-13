@@ -39,7 +39,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 		int range = Range (ennemy);
 		if (range <= 1) {
 			if (Is_Action_Possible (3)) {
-				EnemyHealth ennemy_health = ennemy.GetComponent<EnemyHealth> ();
+				Ennemy_Health ennemy_health = ennemy.GetComponent<Ennemy_Health> ();
 				ennemy_health.DeductHealth (30);
 			}
 		} else {
@@ -53,7 +53,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 		if (range <= 5) 
 		{
 			if (Is_Action_Possible (1)) {
-				EnemyHealth ennemy_health = ennemy.GetComponent<EnemyHealth> ();
+				Ennemy_Health ennemy_health = ennemy.GetComponent<Ennemy_Health> ();
 				ennemy_health.DeductHealth (10);
 			}
 		} else {

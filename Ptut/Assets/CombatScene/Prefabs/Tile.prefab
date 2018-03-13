@@ -9,30 +9,57 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1498541545845272}
+  m_RootGameObject: {fileID: 1899966726870598}
   m_IsPrefabParent: 1
---- !u!1 &1498541545845272
+--- !u!1 &1899966726870598
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 224768425216641342}
-  - component: {fileID: 212341256660065122}
+  - component: {fileID: 224063285873605658}
+  - component: {fileID: 212124639184557396}
+  - component: {fileID: 65303123464116724}
+  - component: {fileID: 114613104062624830}
   m_Layer: 9
-  m_Name: Barrel
-  m_TagString: Untagged
+  m_Name: Tile
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!212 &212341256660065122
+--- !u!65 &65303123464116724
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1899966726870598}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.56, y: 2.56, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114613104062624830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1899966726870598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41ae1e2693904684695265821e051774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classic: {fileID: 21300000, guid: f73cdd5717b9d294586e8e998917ee01, type: 3}
+  mouseover: {fileID: 21300000, guid: 2fd382ff388524f4cb8dde30f6a6289f, type: 3}
+--- !u!212 &212124639184557396
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1498541545845272}
+  m_GameObject: {fileID: 1899966726870598}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -59,31 +86,31 @@ SpriteRenderer:
   m_SortingLayerID: 1311675127
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 269cd2d320b506b44b86c1cedabd6cc9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f73cdd5717b9d294586e8e998917ee01, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.56, y: 1.8}
+  m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!224 &224768425216641342
+--- !u!224 &224063285873605658
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1498541545845272}
+  m_GameObject: {fileID: 1899966726870598}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.638, y: 0.55, z: 1}
+  m_LocalScale: {x: 0.383, y: 0.383, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: -0}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -0.495}
-  m_SizeDelta: {x: 1.0623599, y: 0.495}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 12.28987, y: 5.5353246}
+  m_SizeDelta: {x: 2.56, y: 2.56}
+  m_Pivot: {x: 0.99999964, y: 0.9999998}
