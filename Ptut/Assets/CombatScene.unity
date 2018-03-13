@@ -108,7 +108,7 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &1797905
+--- !u!1001 &253114755
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -146,6 +146,11 @@ Prefab:
     - target: {fileID: 4531897856526406, guid: d0535b9fc139fc94895171c80936dbab, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114040686877454856, guid: d0535b9fc139fc94895171c80936dbab,
+        type: 2}
+      propertyPath: nb_elem_rand
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d0535b9fc139fc94895171c80936dbab, type: 2}

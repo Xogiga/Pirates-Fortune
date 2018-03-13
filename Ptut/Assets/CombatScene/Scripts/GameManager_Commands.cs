@@ -55,9 +55,7 @@ public class GameManager_Commands : MonoBehaviour {
 				RaycastHit hit;																		//Permet de récupérer la hitbox touchée
 				if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
 					if (hit.transform.tag == "Map") {												//Vérifie que l'objet touché fait partie de la map
-						game_master.set_matrice_case (Mathf.RoundToInt(hit.transform.position.x), Mathf.RoundToInt(hit.transform.position.y), 1);					//Change la case de destination en 1
-						game_master.set_matrice_case (Mathf.RoundToInt(hero.transform.position.x), Mathf.RoundToInt(hero.transform.position.y), 0);					//Change la case de départ en 0
-						script_deplacement.justmove (hit.transform.position);						//Se déplace jusqu'à la case sélectionée
+						script_deplacement.try_to_move (hit.transform.position);						//Se déplace jusqu'à la case sélectionée
 					}
 
 					if (programmed_attack == true) {												//Gère les attaques à la souris

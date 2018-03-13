@@ -34,7 +34,7 @@ public class Clickablee : MonoBehaviour {
 			&& hero_master.is_moving == false 																									//Si le héros n'est pas déjà entrain de bouger
 			&& game_master.get_matrice_case(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y)) == 0){	//Si la case de la matrice est égale à 0
 				Vector3 distance = this.transform.position - player.transform.position;
-				if(Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.point_de_deplacement){						// arrondi car les calculs de floats bug
+				if(Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.point_de_deplacement){							// arrondi car les calculs de floats bug
 					this.GetComponent<SpriteRenderer> ().sprite = mouseover;
 				}
 			}

@@ -81,39 +81,52 @@ public class GameManager_Master : MonoBehaviour {
 
 
 		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage précédent est un héros
-			get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On désactive son Canvas
-			get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();												//On lui redonne ses points
+			end_hero_turn();
 		}
-
 			
 		if (liste_perso [indice_playing_perso + 1] == null) {															//Si la case suivante est null revient à 0
 			indice_playing_perso = 0;
 		} else {
-			indice_playing_perso++;																						//Passe au suivant
+			indice_playing_perso++;																						//Passe au personnage suivant
 		}
 
 
 		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage suivant est un héros
-			is_it_your_turn = true;																						//On donne la main au joueur
-			get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On affiche son Canvas
-			script_commande.Set_new_references();																		//On donne les références du nouveaux personnage aux commandes
-			list_case = GameObject.FindGameObjectsWithTag ("Map");														//On donne les références du nouveaux personnage aux cases
-			foreach (GameObject m in list_case) {
-				m.GetComponent<Clickablee> ().Set_new_references ();
-			}
-			annonce.Announce ("Your Turn !");																			//Annonce le tour allié
-			bouton_fin_de_tour.SetActive (true);																		//Désactive le bouton
-			get_playing_perso ().GetComponent<Hero_Master> ().Its_me_mario_FlipFlap ();
+			begin_hero_turn();
 		}
 
 		if (get_playing_perso ().name == "Ennemi_" + indice_playing_perso) {											//Si le personnage suivant est un ennemi
-			is_it_your_turn = false;																					//On ne donne plus la main au joueur
-			annonce.Announce ("Ennemy Turn !");																			//Annonce le tour ennemi
-			bouton_fin_de_tour.SetActive (false);																		//Désactive le bouton
-			get_playing_perso ().GetComponent<Ennemi_Master> ().Comportement ();										//Appel son comportement
+			begin_ennemy_turn();
 		}
 	}
 
+	//Gère la fin de tour allié
+	private void end_hero_turn(){
+		get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On désactive son Canvas
+		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();												//On lui redonne ses points
+	}
+
+	//Gère le début de tour allié
+	private void begin_hero_turn(){
+		is_it_your_turn = true;																						//On donne la main au joueur
+		get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On affiche son Canvas
+		script_commande.Set_new_references();																		//On donne les références du nouveaux personnage aux commandes
+		list_case = GameObject.FindGameObjectsWithTag ("Map");														//On donne les références du nouveaux personnage aux cases
+		foreach (GameObject m in list_case) {																		//Redonne la matrice à toutes les cases
+			m.GetComponent<Clickablee> ().Set_new_references ();
+		}
+		annonce.Announce ("Your Turn !");																			//Annonce le tour allié
+		bouton_fin_de_tour.SetActive (true);																		//Désactive le bouton
+		get_playing_perso ().GetComponent<Hero_Master> ().Its_me_mario_FlipFlap ();
+	}
+
+	//Gère le début de tour ennemi
+	private void begin_ennemy_turn(){
+		is_it_your_turn = false;																					//On ne donne plus la main au joueur
+		annonce.Announce ("Ennemy Turn !");																			//Annonce le tour ennemi
+		bouton_fin_de_tour.SetActive (false);																		//Désactive le bouton
+		get_playing_perso ().GetComponent<Ennemi_Master> ().Comportement ();										//Appel son comportement
+	}
 
 	//Retourne le personnage qui joue son tour
 	public GameObject get_playing_perso(){

@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4531897856526406}
   - component: {fileID: 114045389138914586}
   - component: {fileID: 114040686877454856}
-  - component: {fileID: 114562374413132722}
   - component: {fileID: 114452889857451790}
   m_Layer: 0
   m_Name: GameManager (1)
@@ -92,14 +91,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   next_attack_code: 0
   sprite_curseur: {fileID: 2800000, guid: 991c73394470e3b4b9f228894fafa862, type: 3}
---- !u!114 &114562374413132722
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1741072507528192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 985dbe124b55595468b8036c7a895e9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
