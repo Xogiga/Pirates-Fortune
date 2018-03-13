@@ -16,6 +16,11 @@ public class GameManager_Master : MonoBehaviour {
 	private GameObject[] liste_perso;
 	private GameObject[] list_case;
 	private int indice_playing_perso;
+	private GameObject bouton_fin_de_tour ;
+	private Announce_Script annonce;
+	private bool are_references_set;
+
+
 
 
 	private void OnEnable(){
@@ -31,7 +36,16 @@ public class GameManager_Master : MonoBehaviour {
 		script_creation_map = this.GetComponent<GameManager_BeginFight>();
 		script_commande = this.GetComponent<GameManager_Commands> ();
 		indice_playing_perso = 0;
+		are_references_set = false;
 	}
+
+	//Trouve les références qui n'existent pas à l'initialisation
+	private void Set_new_reference(){
+		bouton_fin_de_tour = GameObject.Find ("CombatHUD(Clone)/Button").gameObject;			
+		annonce = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Announce").gameObject.GetComponentInChildren<Announce_Script>();
+	}
+
+
 
 	//Event qui se déclenche unitquement en début de combat
 	public void Call_event_begin_fight(){
@@ -60,11 +74,17 @@ public class GameManager_Master : MonoBehaviour {
 
 
 	public void passer_le_tour(){
+		if (are_references_set == false) {
+			Set_new_reference ();
+			are_references_set = true;
+		}
+
+
 		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage précédent est un héros
 			get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On désactive son Canvas
 			get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();												//On lui redonne ses points
-			is_it_your_turn = false;																					//On ne donne plus la main au joueur
 		}
+
 			
 		if (liste_perso [indice_playing_perso + 1] == null) {															//Si la case suivante est null revient à 0
 			indice_playing_perso = 0;
@@ -73,7 +93,7 @@ public class GameManager_Master : MonoBehaviour {
 		}
 
 
-		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage suivant est un hero
+		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage suivant est un héros
 			is_it_your_turn = true;																						//On donne la main au joueur
 			get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On affiche son Canvas
 			script_commande.Set_new_references();																		//On donne les références du nouveaux personnage aux commandes
@@ -81,7 +101,16 @@ public class GameManager_Master : MonoBehaviour {
 			foreach (GameObject m in list_case) {
 				m.GetComponent<Clickablee> ().Set_new_references ();
 			}
+			annonce.Announce ("Your Turn !");																			//Annonce le tour allié
+			bouton_fin_de_tour.SetActive (true);																		//Désactive le bouton
 			get_playing_perso ().GetComponent<Hero_Master> ().Its_me_mario_FlipFlap ();
+		}
+
+		if (get_playing_perso ().name == "Ennemi_" + indice_playing_perso) {											//Si le personnage suivant est un ennemi
+			is_it_your_turn = false;																					//On ne donne plus la main au joueur
+			annonce.Announce ("Ennemy Turn !");																			//Annonce le tour ennemi
+			bouton_fin_de_tour.SetActive (false);																		//Désactive le bouton
+			get_playing_perso ().GetComponent<Ennemi_Master> ().Comportement ();										//Appel son comportement
 		}
 	}
 
