@@ -11,7 +11,6 @@ public class GameManager_BeginFight : MonoBehaviour {
 	public GameObject obstacle;
 	public GameObject player;
 	public GameObject ennemi;
-	public Canvas combat_HUD;
 	public int width;
 	public int height;
 	public int nb_elem_rand;
@@ -52,7 +51,6 @@ public class GameManager_BeginFight : MonoBehaviour {
 		instantiate_matrice ();
 		Pop_allié (nb_allies);
 		Pop_ennemi (nb_ennemies);
-		Display_HUD ();
 		rempli_liste_perso();
 	}
 
@@ -195,10 +193,6 @@ public class GameManager_BeginFight : MonoBehaviour {
 			Instantiate (ennemi, new Vector3 (x, y, 0f), Quaternion.identity); 
 			cpt_enn++;
 		}
-	}
-
-	void Display_HUD(){
-		Instantiate(combat_HUD);
 	}
 		
 

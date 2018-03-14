@@ -24,11 +24,11 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	public void OnMouseEnter(){
 		if (game_master.get_playing_perso().name == this.name) {
 			if (hero_master.is_moving == false) {
-				collidersList = Physics.OverlapSphere (this.transform.position, (hero_master.point_de_deplacement));
+				collidersList = Physics.OverlapSphere (this.transform.position, (hero_master.Get_Movement_Point()));
 				foreach (Collider c in collidersList) {
 					Vector3 distance = c.transform.position - this.transform.position;
 					if (c.CompareTag ("Map")) {																							 	//Si l'objet touche fait partie de la map
-						if (Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.point_de_deplacement) {				// si la distance total en x et en y est inférieure au point de déplacement du joueur + arrondi car les calculs de floats bug
+						if (Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.Get_Movement_Point()) {				// si la distance total en x et en y est inférieure au point de déplacement du joueur + arrondi car les calculs de floats bug
 							if (game_master.get_matrice_case(Mathf.RoundToInt(c.transform.position.x), Mathf.RoundToInt(c.transform.position.y))==0) {  	// si l'objet n'est pas sous le joueur ou l'ennemi
 								c.GetComponent<SpriteRenderer> ().sprite = mouseover;													
 							}

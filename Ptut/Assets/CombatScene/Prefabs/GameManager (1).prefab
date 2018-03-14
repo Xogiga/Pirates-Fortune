@@ -57,8 +57,6 @@ MonoBehaviour:
   obstacle: {fileID: 1498541545845272, guid: 61990ba17a855904d894fbc71d6e0d60, type: 2}
   player: {fileID: 1681042431284302, guid: 64d21dbfe94d8504a8308967400d9eef, type: 2}
   ennemi: {fileID: 1350641033659568, guid: 3d13ad15cd24d9741a20a3250408e50b, type: 2}
-  combat_HUD: {fileID: 223076755832872794, guid: d0856032a5a91a8408839e87dc476502,
-    type: 2}
   width: 18
   height: 10
   nb_elem_rand: 5
@@ -84,10 +82,9 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1741072507528192}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac49c46d710953a469b14bcf778a52a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  next_attack_code: 1
   sprite_curseur: {fileID: 2800000, guid: 991c73394470e3b4b9f228894fafa862, type: 3}

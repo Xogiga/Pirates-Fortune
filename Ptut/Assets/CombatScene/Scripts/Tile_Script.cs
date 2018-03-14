@@ -16,25 +16,21 @@ public class Tile_Script : MonoBehaviour {
 
 	void Set_initial_references(){
 		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master>();
-		are_references_set = false;
 	}
 
 	public void Set_new_references(){																											//On reprend les références des cases et des personnages à chaque tour allié
 		player = game_master.get_playing_perso ();
 		hero_master = player.GetComponent<Hero_Master> ();
-		are_references_set = true;
 	}		
 
 
 	public void OnMouseEnter(){
-		if (are_references_set == false) {
-			Set_new_references ();
-		}
+		Set_new_references ();
 		if (game_master.is_it_your_turn == true 																							//Si c'est au tour du joueur de jouer
 			&& hero_master.is_moving == false 																									//Si le héros n'est pas déjà entrain de bouger
 			&& game_master.get_matrice_case(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y)) == 0){	//Si la case de la matrice est égale à 0
 			Vector3 distance = this.transform.position - player.transform.position;
-			if(Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.point_de_deplacement){							// arrondi car les calculs de floats bug
+			if(Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.Get_Movement_Point()){							// arrondi car les calculs de floats bug
 				this.GetComponent<SpriteRenderer> ().sprite = mouseover;
 			}
 		}

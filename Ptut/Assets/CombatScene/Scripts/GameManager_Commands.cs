@@ -21,7 +21,6 @@ public class GameManager_Commands : MonoBehaviour {
 		game_master = this.GetComponent<GameManager_Master>();
 		programmed_attack = false;
 		next_attack_code = -1;
-		Set_new_references ();
 	}
 
 	//Référence amené à changer en fonction du tour (du personnage)
@@ -38,14 +37,15 @@ public class GameManager_Commands : MonoBehaviour {
 				if (Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.Z)) {						//Gère les compétences
 					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
 					RaycastHit hit;																		//Permet de récupérer la hitbox touchée
-					if (Physics.Raycast (ray, out hit))													//Return True si le Rayon touche une hitbox à la position de la souris
-				if (hit.transform.tag == "Ennemy")
-					if (Input.GetKeyDown (KeyCode.A))													//Appel la première compétence
-						script_attack.Frappe (hit.transform);
-					if (Input.GetKeyDown (KeyCode.Z))
-						script_attack.Lancer_de_Couteau (hit.transform);								//Appel la deuxième compétence
+					if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
+						if (hit.transform.tag == "Ennemy") {
+							if (Input.GetKeyDown (KeyCode.A))											//Appel la première compétence
+								script_attack.Frappe (hit.transform);
+							if (Input.GetKeyDown (KeyCode.Z))
+								script_attack.Lancer_de_Couteau (hit.transform);						//Appel la deuxième compétence
+						}
+					}
 				}
-
 
 
 				if (Input.GetMouseButtonDown (0)) {														//Gère les déplacements à la souris

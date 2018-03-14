@@ -16,12 +16,7 @@ public class GameManager_Master : MonoBehaviour {
 	private GameObject[] liste_perso;
 	private GameObject[] list_case;
 	private int indice_playing_perso;
-	private GameObject bouton_fin_de_tour ;
-	private Announce_Script annonce;
-	private bool are_references_set;
-
-
-
+	private CombatHUD_Master combatHUD_master ;
 
 	private void OnEnable(){
 		Set_initial_reference();
@@ -36,15 +31,8 @@ public class GameManager_Master : MonoBehaviour {
 		script_creation_map = this.GetComponent<GameManager_BeginFight>();
 		script_commande = this.GetComponent<GameManager_Commands> ();
 		indice_playing_perso = 0;
-		are_references_set = false;
+		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();			
 	}
-
-	//Trouve les références qui n'existent pas à l'initialisation
-	private void Set_new_reference(){
-		bouton_fin_de_tour = GameObject.Find ("CombatHUD(Clone)/Button").gameObject;			
-		annonce = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Announce").gameObject.GetComponentInChildren<Announce_Script>();
-	}
-
 
 
 	//Event qui se déclenche unitquement en début de combat
@@ -55,12 +43,11 @@ public class GameManager_Master : MonoBehaviour {
 		if (event_begin_fight != null && is_fight_begin == false)
 		{
 			is_fight_begin = true;																						//Déclare le combat commencé
-			is_it_your_turn = true;																						//Déclare que c'est au joueur de jouer (et non l'IA)
 			event_begin_fight ();																						//Lance les fonctions de l'event begin_fight :
 			matrice_case = script_creation_map.get_matrice_case ();														//Récupère la matrice
 			liste_perso = script_creation_map.get_liste_perso ();														//Récupère la liste des personnages dans l'ordre des tours
-			liste_perso [indice_playing_perso].GetComponent<Hero_Master> ().activer_desactiver_canvas ();				//Active le canvas du premier héro qui joue
-			get_playing_perso ().GetComponent<Hero_Master>().Its_me_mario_FlipFlap();									//FlipFlap
+			this.GetComponent<GameManager_Commands>().enabled = true;													//Active le script des commandes
+			begin_hero_turn();
 		}
 	}		
 
@@ -74,12 +61,6 @@ public class GameManager_Master : MonoBehaviour {
 
 
 	public void passer_le_tour(){
-		if (are_references_set == false) {
-			Set_new_reference ();
-			are_references_set = true;
-		}
-
-
 		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage précédent est un héros
 			end_hero_turn();
 		}
@@ -102,30 +83,27 @@ public class GameManager_Master : MonoBehaviour {
 
 	//Gère la fin de tour allié
 	private void end_hero_turn(){
-		get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On désactive son Canvas
-		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();												//On lui redonne ses points
+		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
+		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();													//On lui redonne ses points
 	}
 
 	//Gère le début de tour allié
 	private void begin_hero_turn(){
-		is_it_your_turn = true;																						//On donne la main au joueur
-		get_playing_perso ().GetComponent<Hero_Master>().activer_desactiver_canvas ();								//On affiche son Canvas
-		script_commande.Set_new_references();																		//On donne les références du nouveaux personnage aux commandes
-		list_case = GameObject.FindGameObjectsWithTag ("Map");														//On donne les références du nouveaux personnage aux cases
-		foreach (GameObject m in list_case) {																		//Redonne la matrice à toutes les cases
-			m.GetComponent<Tile_Script> ().Set_new_references ();
-		}
-		annonce.Announce ("Your Turn !");																			//Annonce le tour allié
-		bouton_fin_de_tour.SetActive (true);																		//Désactive le bouton
+		combatHUD_master.Announce ("Your Turn !");																		//Annonce le tour allié
+		combatHUD_master.Set_Hero_Points (get_playing_perso());															//On affiche ses stats
+		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
+		script_commande.Set_new_references();																			//On donne les références du nouveaux personnage aux commandes
+
 		get_playing_perso ().GetComponent<Hero_Master> ().Its_me_mario_FlipFlap ();
+		is_it_your_turn = true;																							//On donne la main au joueur
+
 	}
 
 	//Gère le début de tour ennemi
 	private void begin_ennemy_turn(){
-		is_it_your_turn = false;																					//On ne donne plus la main au joueur
-		annonce.Announce ("Ennemy Turn !");																			//Annonce le tour ennemi
-		bouton_fin_de_tour.SetActive (false);																		//Désactive le bouton
-		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();										//Appel son comportement
+		is_it_your_turn = false;																						//On ne donne plus la main au joueur
+		combatHUD_master.Announce ("Ennemy Turn !");																	//Annonce le tour ennemi
+		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();											//Appel son comportement
 	}
 
 	//Retourne le personnage qui joue son tour
@@ -142,7 +120,7 @@ public class GameManager_Master : MonoBehaviour {
 		matrice_case[x,y]=val;
 	}
 
-	public int get_matrice_case(int x,int y){																	//Modifie la valeur d'une case de la matrice passé en paramètre
+	public int get_matrice_case(int x,int y){																			//Modifie la valeur d'une case de la matrice passé en paramètre
 		return matrice_case[x,y];
 	}
 

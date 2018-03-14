@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Hero_Attack_1 : MonoBehaviour {
-	private Announce_Script annonce;
+	private CombatHUD_Master combatHUD_Master;
 	private Hero_Master hero_master;
 
 	// Use this for initialization
@@ -12,7 +12,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 	}
 
 	void Set_references(){
-		annonce = GameObject.Find ("CombatHUD(Clone)").transform.Find ("Announce").gameObject.GetComponentInChildren<Announce_Script>();
+		combatHUD_Master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
 		hero_master = this.GetComponent<Hero_Master> ();
 	}		
 
@@ -29,7 +29,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 			return true;
 		}
 		else {
-			annonce.Announce ("Not enough Action Point !");	
+			combatHUD_Master.Announce ("Not enough Action Point !");	
 			return false;
 			}
 	}
@@ -43,7 +43,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 				ennemy_health.DeductHealth (30);
 			}
 		} else {
-			annonce.Announce ("You're too far !");																								//Ajouter  un son
+			combatHUD_Master.Announce ("You're too far !");																								//Ajouter  un son
 		}
 	}
 
@@ -57,7 +57,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 				ennemy_health.DeductHealth (10);
 			}
 		} else {
-			annonce.Announce ("You're too far !");																								//Ajouter un son
+			combatHUD_Master.Announce ("You're too far !");																								//Ajouter un son
 		}
 	}
 }
