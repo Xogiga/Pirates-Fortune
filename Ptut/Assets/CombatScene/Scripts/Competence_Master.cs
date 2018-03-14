@@ -8,7 +8,25 @@ public class Competence_Master : MonoBehaviour {
 	private GameManager_Master game_master;
 
 	public void OnEnable(){
+		Set_initial_references ();
+	}
+
+	//Reférences fixes
+	private void Set_initial_references () {																		
 		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master> ();
+		Bind_buttons ();
+	}
+
+	private void Bind_buttons(){																																		//PROBLEME, comment changer le paramètre ?
+		UnityEngine.Events.UnityAction set_attack = () => {																												//Crée un évènement qui contient la fonction Set_next_attack
+			game_master.GetComponent<GameManager_Commands> ().Set_Next_Attack (1);
+		};
+
+		Button[] buttons_list = this.GetComponentsInChildren<Button> ();																								//Trouve la liste des boutons
+		foreach (Button b in buttons_list) {
+			
+			b.onClick.AddListener (set_attack);																															//Lie chaque bouton à l'évènement
+		}
 	}
 
 	private void Find_Infobulle(int Numero_competence){
