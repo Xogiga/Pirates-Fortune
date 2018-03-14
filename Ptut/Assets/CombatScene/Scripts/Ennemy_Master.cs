@@ -20,6 +20,7 @@ public class Ennemy_Master : MonoBehaviour {
 	public void Comportement(){
 		GameObject hero_target = Target_Choice_by_distance ();								//Trouve la cible
 		Vector3 end_position = Choice_side (hero_target);									//Choisi sa destination
+		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);			//Change la case de de départ en 0 dans la matrice
 		StartCoroutine (Deplacement (end_position));										//Se déplace
 	}
 
@@ -68,6 +69,13 @@ public class Ennemy_Master : MonoBehaviour {
 		return end_position;
 	}
 
+
+	//Fonction qui gère la  fin de déplacement
+	private void End_Deplacement(){
+		moveDone = 0;
+		game_master.passer_le_tour (); 
+		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 1);			//Change la case de d'arrivé en 1 dans la matrice
+	}
 
 	//Fonction qui déplace l'ennemi
 	IEnumerator Deplacement(Vector3 endposition)
@@ -241,7 +249,6 @@ public class Ennemy_Master : MonoBehaviour {
 				}
 			}
 		}
-		moveDone = 0;
-		game_master.passer_le_tour ();
+		End_Deplacement();
 	}
 }
