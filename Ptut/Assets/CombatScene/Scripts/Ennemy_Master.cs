@@ -7,14 +7,59 @@ public class Ennemy_Master : MonoBehaviour {
 	private GameManager_Master game_master;
 	private int  pointDeDeplacementEnnemi = 3;
 	private int moveDone = 0;
+	private int health_stat = 100;
+	private int current_health;
+	private CombatHUD_Master combatHUD_master;
 
-	private void OnEnable(){
-		Set_initial_reference();;
+	void OnEnable()
+	{
+		Set_initial_reference();
 	}
 
-
 	private void Set_initial_reference(){
+		current_health = health_stat;
 		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master> ();
+		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
+	}
+
+	//Active les stats de l'ennemi
+	void OnMouseEnter()
+	{
+		combatHUD_master.Set_Ennemy_Health (this.gameObject);
+		combatHUD_master.enable_disable_ennemy_stats ();
+	}
+
+	//Désctive les stats de l'ennemi
+	void OnMouseExit()
+	{
+		combatHUD_master.enable_disable_ennemy_stats ();
+	}
+
+	public int Get_Health_Stats(){
+		return health_stat;
+	}
+
+	public int Get_Current_Health(){
+		return current_health;
+	}
+
+	public void IncreaseHealth(int health_change)
+	{
+		int previous_health = current_health;
+		current_health += health_change;
+		if (current_health > health_stat) {
+			current_health = health_stat;
+		}
+		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);
+	}
+
+	public void DeductHealth(int health_change){
+		int previous_health = current_health;
+		current_health -= health_change;
+		if (current_health < 0) {
+			current_health = 0;
+		}
+		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);
 	}
 
 	public void Comportement(){

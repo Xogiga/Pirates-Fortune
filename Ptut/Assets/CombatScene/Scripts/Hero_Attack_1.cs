@@ -39,8 +39,8 @@ public class Hero_Attack_1 : MonoBehaviour {
 		int range = Range (ennemy);
 		if (range <= 1) {
 			if (Is_Action_Possible (3)) {
-				Ennemy_Health ennemy_health = ennemy.GetComponent<Ennemy_Health> ();
-				ennemy_health.DeductHealth (30);
+				Ennemy_Master ennemy_master = ennemy.GetComponent<Ennemy_Master> ();
+				ennemy_master.DeductHealth (30);
 			}
 		} else {
 			combatHUD_Master.Announce ("You're too far !");																								//Ajouter  un son
@@ -53,8 +53,8 @@ public class Hero_Attack_1 : MonoBehaviour {
 		if (range <= 5) 
 		{
 			if (Is_Action_Possible (1)) {
-				Ennemy_Health ennemy_health = ennemy.GetComponent<Ennemy_Health> ();
-				ennemy_health.DeductHealth (10);
+				Ennemy_Master ennemy_master = ennemy.GetComponent<Ennemy_Master> ();
+				ennemy_master.DeductHealth (10);
 			}
 		} else {
 			combatHUD_Master.Announce ("You're too far !");																								//Ajouter un son
