@@ -1,12 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\CombatHUD_Master.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\GameManager_Master.cs">
     <Files>
-      <File FileName="Assets\CombatScene\Scripts\CombatHUD_Master.cs" Line="87" Column="3" />
-      <File FileName="Assets\CombatScene\Scripts\Hero_Master.cs" Line="34" Column="17" />
-      <File FileName="Assets\CombatScene\Scripts\Ennemy_Master.cs" Line="28" Column="1" />
-      <File FileName="Assets\CombatScene\Scripts\Hero_Attack_1.cs" Line="43" Column="19" />
-      <File FileName="Assets\CombatScene\Scripts\GameManager_Master.cs" Line="93" Column="35" />
+      <File FileName="Assets\CombatScene\Scripts\CombatHUD_Master.cs" Line="159" Column="69" />
+      <File FileName="Assets\CombatScene\Scripts\Ennemy_Master.cs" Line="114" Column="94" />
+      <File FileName="Assets\CombatScene\Scripts\Hero_Master.cs" Line="65" Column="29" />
+      <File FileName="Assets\CombatScene\Scripts\GameManager_Master.cs" Line="95" Column="33" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

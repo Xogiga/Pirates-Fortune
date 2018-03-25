@@ -64,6 +64,10 @@ public class GameManager_Master : MonoBehaviour {
 		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage précédent est un héros
 			end_hero_turn();
 		}
+
+		if (get_playing_perso ().name == "Ennemi_" + indice_playing_perso) {											//Si le personnage précédent est un ennemi
+			end_ennemy_turn();
+		}
 			
 		if (liste_perso [indice_playing_perso + 1] == null) {															//Si la case suivante est null revient à 0
 			indice_playing_perso = 0;
@@ -85,6 +89,11 @@ public class GameManager_Master : MonoBehaviour {
 	private void end_hero_turn(){
 		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
 		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();													//On lui redonne ses points
+	}
+
+	//Gère la fin de tour ennemi
+	private void end_ennemy_turn(){
+		get_playing_perso ().GetComponent<Ennemy_Master>().Reset_Point();
 	}
 
 	//Gère le début de tour allié

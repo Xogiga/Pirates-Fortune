@@ -55,9 +55,14 @@ public class CombatHUD_Master : MonoBehaviour {
 		Set_Hero_Health (hero);
 	}
 
-	//Fonction qui active/desactive le bouton fin de tour
+	//Fonction qui active/desactive le bouton fin de tour et les informations du héros
 	public void enable_disable_button_and_stats(){
 		button_end_turn.SetActive (!button_end_turn.activeInHierarchy);
+		enable_disable_stats ();
+	}
+
+	//Fonction qui active désactive les informations du héros
+	public void enable_disable_stats(){
 		hero_stats_canvas.SetActive (!hero_stats_canvas.activeInHierarchy);
 	}
 
@@ -117,21 +122,22 @@ public class CombatHUD_Master : MonoBehaviour {
 	}
 
 	//Fonction qui augmente la barre de vie du héros
-	IEnumerator Increase_Hero_Bar(int new_hero_health, int max_health){
+	IEnumerator Increase_Hero_Bar(float new_hero_health, float max_health){
 		while (health_image.fillAmount < new_hero_health / max_health) {
 			yield return new WaitForSeconds (Time.deltaTime);
 			health_image.fillAmount += 0.01f;
 		}
 		health_image.fillAmount = new_hero_health / max_health;
+		yield return new WaitForSeconds (0.5f);
 	}
 
 	//Fonction qui diminue la barre de vie du héros
-	IEnumerator Decrease_Hero_Bar(int new_hero_health, int max_health){
+	IEnumerator Decrease_Hero_Bar(float new_hero_health, float max_health){
 		while (health_image.fillAmount > new_hero_health / max_health) {
 			yield return new WaitForSeconds (Time.deltaTime);
 			health_image.fillAmount -= 0.01f;
 		}
-		health_image.fillAmount = new_hero_health / max_health;  									
+		health_image.fillAmount = new_hero_health / max_health;  	
 	}
 
 	//Fonction qui augmente la barre de vie de l'ennemi
@@ -141,6 +147,7 @@ public class CombatHUD_Master : MonoBehaviour {
 			ennemy_health_image.fillAmount += 0.01f;
 		}
 		ennemy_health_image.fillAmount = new_ennemy_health / max_health;
+		yield return new WaitForSeconds (Time.deltaTime);
 	}
 
 	//Fonction qui diminue la barre de vie de l'ennemi
@@ -150,10 +157,6 @@ public class CombatHUD_Master : MonoBehaviour {
 			ennemy_health_image.fillAmount -= 0.01f;
 		}
 		ennemy_health_image.fillAmount = new_ennemy_health / max_health;  
-
-		if (new_ennemy_health == 0) {															//Si sa vie atteint 0
-			enable_disable_ennemy_stats();														//Fait disparaitre son ATH
-		}
 	}
 
 	//Fonction qui change le message de l'annonce

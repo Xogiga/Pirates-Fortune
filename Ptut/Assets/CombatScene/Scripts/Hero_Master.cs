@@ -39,27 +39,34 @@ public class Hero_Master : MonoBehaviour {
 		this.GetComponent<SpriteRenderer>().flipY = !this.GetComponent<SpriteRenderer>().flipY;
 	}
 
+	//Fonction qui remet les points au max (fin de tour)
 	public void Reset_Point()
 	{
 		movement_point = stats_de_deplacement;
 		action_point = stats_daction;
 	}
 
-	void IncreaseHealth(int health_change)
+	//Fonction qui augmente la vie
+	public void IncreaseHealth(int health_change)
 	{
+		combatHUD_master.Set_Hero_Health(this.gameObject);
+		int previous_health = current_health;
 		current_health += health_change;
 		if (current_health > health_stat) {
 			current_health = health_stat;
 		}
-		combatHUD_master.Set_Hero_Health(this.gameObject);
+		combatHUD_master.Change_Hero_Health(previous_health, current_health, health_stat);
 	}
 
-	void DeductHealth(int health_change){
+	//Fonction qui réduit la vie
+	public void DeductHealth(int health_change){
+		int previous_health = current_health;
 		current_health -= health_change;
-		if (current_health < 0) {
+		if (current_health <= 0) {
 			current_health = 0;
+			this.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
 		}
-		combatHUD_master.Set_Hero_Health(this.gameObject);
+		combatHUD_master.Change_Hero_Health(previous_health, current_health, health_stat);
 	}
 
 	public int Get_Movement_Point(){
