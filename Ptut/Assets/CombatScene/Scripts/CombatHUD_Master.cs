@@ -124,17 +124,16 @@ public class CombatHUD_Master : MonoBehaviour {
 	//Fonction qui augmente la barre de vie du héros
 	IEnumerator Increase_Hero_Bar(float new_hero_health, float max_health){
 		while (health_image.fillAmount < new_hero_health / max_health) {
-			yield return new WaitForSeconds (Time.deltaTime);
+			yield return new WaitForSeconds (Time.deltaTime*2);
 			health_image.fillAmount += 0.01f;
 		}
 		health_image.fillAmount = new_hero_health / max_health;
-		yield return new WaitForSeconds (0.5f);
 	}
 
 	//Fonction qui diminue la barre de vie du héros
 	IEnumerator Decrease_Hero_Bar(float new_hero_health, float max_health){
 		while (health_image.fillAmount > new_hero_health / max_health) {
-			yield return new WaitForSeconds (Time.deltaTime);
+			yield return new WaitForSeconds (Time.deltaTime*2);
 			health_image.fillAmount -= 0.01f;
 		}
 		health_image.fillAmount = new_hero_health / max_health;  	
@@ -143,17 +142,16 @@ public class CombatHUD_Master : MonoBehaviour {
 	//Fonction qui augmente la barre de vie de l'ennemi
 	IEnumerator Increase_Ennemy_Bar(float new_ennemy_health, float max_health){
 		while (ennemy_health_image.fillAmount < new_ennemy_health / max_health) {
-			yield return new WaitForSeconds (Time.deltaTime);
+			yield return new WaitForSeconds (Time.deltaTime*2);
 			ennemy_health_image.fillAmount += 0.01f;
 		}
 		ennemy_health_image.fillAmount = new_ennemy_health / max_health;
-		yield return new WaitForSeconds (Time.deltaTime);
 	}
 
 	//Fonction qui diminue la barre de vie de l'ennemi
 	IEnumerator Decrease_Ennemy_Bar(float new_ennemy_health, float max_health){
 		while (ennemy_health_image.fillAmount > new_ennemy_health / max_health) {
-			yield return new WaitForSeconds (Time.deltaTime);
+			yield return new WaitForSeconds (Time.deltaTime*2);
 			ennemy_health_image.fillAmount -= 0.01f;
 		}
 		ennemy_health_image.fillAmount = new_ennemy_health / max_health;  
