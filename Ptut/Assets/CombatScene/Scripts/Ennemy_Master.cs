@@ -82,7 +82,7 @@ public class Ennemy_Master : MonoBehaviour {
 	//Fonction qui fait agir l'IA
 	public void Comportement(){
 		int distance;
-		GameObject hero_target = Target_Choice_by_distance (out distance);								//Trouve la cible
+		GameObject hero_target = Target_Choice_by_distance (out distance);									//Trouve la cible
 
 		if (distance > 1) {																					//Si la cible est déjà au corps à corps on ne bouge pas
 			Vector3 end_position = Choice_side (hero_target);												//Choisi sa destination
