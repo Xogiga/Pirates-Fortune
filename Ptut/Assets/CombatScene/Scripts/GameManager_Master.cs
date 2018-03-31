@@ -12,7 +12,7 @@ public class GameManager_Master : MonoBehaviour {
 	public bool is_fight_over;
 	private GameManager_BeginFight script_creation_map;
 	private GameManager_Commands script_commande;
-	private int[,] matrice_case;
+	private Tile[,] matrice_case;
 	private GameObject[] liste_perso;
 	private GameObject[] list_case;
 	private int indice_playing_perso;
@@ -31,7 +31,7 @@ public class GameManager_Master : MonoBehaviour {
 		script_creation_map = this.GetComponent<GameManager_BeginFight>();
 		script_commande = this.GetComponent<GameManager_Commands> ();
 		indice_playing_perso = 0;
-		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();			
+		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();	
 	}
 
 
@@ -126,11 +126,11 @@ public class GameManager_Master : MonoBehaviour {
 	}
 
 	public void set_matrice_case(int x,int y,int val){																	//Modifie la valeur d'une case de la matrice passé en paramètre
-		matrice_case[x,y]=val;
+		matrice_case[x,y].state = val;
 	}
 
-	public int get_matrice_case(int x,int y){																			//Modifie la valeur d'une case de la matrice passé en paramètre
-		return matrice_case[x,y];
+	public int get_matrice_case(int x,int y){																			//Renvoie la valeur d'une case de la matrice passé en paramètre
+		return matrice_case[x,y].state;
 	}
 
 			

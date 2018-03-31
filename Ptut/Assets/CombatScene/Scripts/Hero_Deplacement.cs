@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Hero_Deplacement : MonoBehaviour {
 	private Hero_Master hero_master;
 	private GameManager_Master game_master;
+	private GameManager_Pathfinding game_pathfinding;
 
 	void OnEnable(){
 		Set_initial_references ();
@@ -14,6 +15,7 @@ public class Hero_Deplacement : MonoBehaviour {
 	void Set_initial_references()
 	{		
 		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master> ();
+		game_pathfinding = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
 		hero_master = this.GetComponent<Hero_Master> ();
 		hero_master.is_moving = false;
 
@@ -23,8 +25,10 @@ public class Hero_Deplacement : MonoBehaviour {
 	{
 		if (verify_distance (endposition)) {																										//Si le héros a assez de point de déplacement
 			game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);			//Change la case de départ en 0 dans la matrice
+			game_pathfinding.Find_Path (this.transform.position, endposition);																		//Détermine le chemin avec le script de PathFinding
+			List<Tile> path = game_pathfinding.Get_Path ();																							//Récupère le chemin
+			StartCoroutine (Move2 (path));																											//Déplace le héros
 			game_master.set_matrice_case (Mathf.RoundToInt (endposition.x), Mathf.RoundToInt (endposition.y), 1);									//Change la case de destination en 1 dans la matrice
-			StartCoroutine (Move (endposition));																									//Déplace le héros
 		}
 	}
 
@@ -34,7 +38,7 @@ public class Hero_Deplacement : MonoBehaviour {
 		int xparcours = Mathf.RoundToInt(distance.x);																								//Arrondit xparcours car récupérer le X Y Z directement d'un vecteur bug souvent
 		int yparcours = Mathf.RoundToInt(distance.y);
 
-		if ((Mathf.Abs (xparcours) + Mathf.Abs (yparcours)) > hero_master.Get_Movement_Point()) { 													//Vérifie que le joueurr a assez de point de déplacement
+		if ((Mathf.Abs (xparcours) + Mathf.Abs (yparcours)) > hero_master.Get_Movement_Point()) { 													//Vérifie que le joueur a assez de point de déplacement
 			return false;
 		} else {
 			hero_master.Set_Movement_Point(hero_master.Get_Movement_Point() - Mathf.Abs (xparcours) - Mathf.Abs (yparcours));						//Réduit les points de déplacement du héros
@@ -43,168 +47,21 @@ public class Hero_Deplacement : MonoBehaviour {
 	}
 
 
-
-	IEnumerator Move(Vector3 endposition)
+	IEnumerator Move2(List<Tile> path)
 	{
 		hero_master.is_moving = true;   																											// Booléen qui empêche d'engager un nouveau déplacement, de rappeller la fonction, avant que le précédent soit fini
-
-		Vector3 newpos; 																															// Arrivée du déplacement de 1 case
-		Vector3 parcours = endposition - this.transform.position; 																					//Récupère la distance entre le joueur et la case
-		float xparcours = Mathf.Round(parcours.x);																									//Arrondit xparcours car récupérer le X Y Z directement d'un vecteur bug souvent
-		float yparcours = Mathf.Round(parcours.y);
-
 		float waittime = 0.04f; 																													//Temps entre chaque micro-déplacement de MoveToward
 		float step = 4*waittime; 																													//Vitesse*Temps = distance de MoveTowards
+		for (int i = 0; i < path.Count ; i++) {																										//Parcours la liste de case tant qu'il n'est pas arrivé
+			Vector3 next_position = new Vector3(path[i].x,path[i].y,0f);																			//Récupère la position de la case suivante
 
-		if (Mathf.Abs (xparcours) == Mathf.Abs (yparcours)) {              					 														//Tous les deplacements en diagonale
-			while (this.transform.position != endposition) {
-
-				if (xparcours > 0) {
-					newpos = this.transform.position + Vector3.right;
-					while (this.transform.position != newpos) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					} else if (yparcours < 0) {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					}
-				} else if (xparcours < 0) {
-
-					newpos = this.transform.position + Vector3.left;
-					while (this.transform.position != newpos) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					} else if (yparcours < 0) {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					}
-				}
-
-			}
-		}
-
-
-		if (xparcours == 0 || yparcours == 0) {                     					// Toutes les lignes droites
-			while (this.transform.position != endposition) { 
-				if (xparcours != 0) {
-					if (xparcours > 0) {
-						newpos = this.transform.position + Vector3.right;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					} else {
-						newpos = this.transform.position + Vector3.left;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					}
-				}
-				if (yparcours != 0) {
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					} else {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					}
-				}
-			}
-		}
-
-		if (xparcours > 0 && yparcours != 0 && Mathf.Abs (xparcours) != Mathf.Abs (yparcours)) {          									//Tous les mouvements à droite sauf ligne droite et diagonale
-			while (this.transform.position != endposition) {
-				for (int i = 0; i < xparcours; i++) {
-					newpos = this.transform.position + Vector3.right;
-					while (this.transform.position != newpos) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-				}
-
-				for (int i = 0; i < Mathf.Abs (yparcours); i++) {
-					if (yparcours > 0) {
-
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-
-					}
-					if (yparcours < 0) {
-
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-
-					}
-				}
-			}
-		}
-
-
-		if (xparcours <0 && yparcours != 0 && Mathf.Abs (xparcours) != Mathf.Abs (yparcours)) {          										//Tous les mouvements à gauche sauf ligne droite et diagonale
-			while (this.transform.position != endposition) {
-				for (int i = 0; i < Mathf.Abs(xparcours); i++) {
-					newpos = this.transform.position + Vector3.left;
-					while (this.transform.position != newpos) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-				}
-
-				for (int i = 0; i < Mathf.Abs(yparcours); i++) {
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-
-					}
-					if (yparcours < 0) {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-					}
-				}
+			while (this.transform.position != next_position) {																						//Tant que le héros n'est pas passer à la case suivante
+				yield return new WaitForSeconds (waittime);																							
+				this.transform.position = Vector3.MoveTowards (this.transform.position, next_position, step);										//Avance vers la case 
 			}
 		}
 		hero_master.is_moving = false;																										 // Booléen qui autorise un nouveau déplacement
 	}
-
 }
 
 

@@ -22,7 +22,7 @@ public class Hero_Master : MonoBehaviour {
 	{
 		current_health = health_stat;
 		is_moving = false;
-		stats_de_deplacement = 4;
+		stats_de_deplacement = 120;
 		stats_daction = 5;
 		action_point = stats_daction;
 		movement_point = stats_de_deplacement;

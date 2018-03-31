@@ -16,26 +16,12 @@ public class GameManager_BeginFight : MonoBehaviour {
 	public int nb_elem_rand;
 	public int nb_ennemies;
 	public int nb_allies; 
+	private Tile[,] grid;
 
-	private int[,] matrice_case;
-
-	private List<Tuples> case_spawn_equipe_alies ;																			//Liste des cases d'apparition possible des personnages alliés
-	private List<Tuples> case_spawn_equipe_ennemy;																			//Liste des cases d'apparition possible des personnages ennemis
+	private List<Tile> case_spawn_equipe_alies ;																			//Liste des cases d'apparition possible des personnages alliés
+	private List<Tile> case_spawn_equipe_ennemy;																			//Liste des cases d'apparition possible des personnages ennemis
 
 	private GameObject[] liste_perso = new GameObject[16];
-
-	public class Tuples																										//Permet de créer une sous-classe de type Tuples (int,int)
-	{
-		public int x;
-		public int y;
-
-		public Tuples(int i, int j){
-			x=i;
-			y=j;
-		}				
-	}
-
-
 
 	void OnEnable(){
 		Set_initial_references ();
@@ -57,17 +43,15 @@ public class GameManager_BeginFight : MonoBehaviour {
 	void Set_initial_references()
 	{
 		game_manager_master = GetComponent<GameManager_Master> ();
-		matrice_case = new int[width, height];
 		create_list_spawn_alies ();
 		create_list_spawn_ennemy ();
-
 	}
 
 	private void create_list_spawn_alies(){																			//Remplie la liste des cases de spawn alliés
-		case_spawn_equipe_alies = new List<Tuples>();
+		case_spawn_equipe_alies = new List<Tile>();
 		for (int x = 3; x <= 4; x++) {
 			for (int y = 3; y <= 6; y++) {
-				case_spawn_equipe_alies.Add(new Tuples(x, y));
+				case_spawn_equipe_alies.Add(new Tile(x, y));
 			}
 
 		}
@@ -75,27 +59,28 @@ public class GameManager_BeginFight : MonoBehaviour {
 	}
 
 	private void create_list_spawn_ennemy(){																			//Remplie la liste des cases de spawn ennemis
-		case_spawn_equipe_ennemy = new List<Tuples>();
+		case_spawn_equipe_ennemy = new List<Tile>();
 		for (int x = 13; x <= 14; x++) {
 			for (int y = 3; y <= 6; y++) {
-				case_spawn_equipe_ennemy.Add(new Tuples(x, y));
+				case_spawn_equipe_ennemy.Add(new Tile(x, y));
 			}
 		}
 
 	}
 
-	public int[,] get_matrice_case(){																					//Retourne la matrice
-		return matrice_case;
+	public Tile[,] get_matrice_case(){																					//Retourne la matrice
+		return grid;
 	}
 		
 
 	public void create_matrice(){																						//Crée une matrice de 0 et de 1
+		grid = new Tile[width,height];
 		for (int x = 0; x < width; x++) {
 			for (int y = 0;y<height; y++) {
 				if (x == 0 || y == 0 || x == width-1 || y == height-1) {
-					matrice_case [x, y] = 1;
+					grid [x, y] = new Tile(x, y, 1);
 				} else {
-					matrice_case [x, y] = 0;
+					grid [x, y] = new Tile(x, y, 0);
 				}
 			}
 		}
@@ -104,12 +89,12 @@ public class GameManager_BeginFight : MonoBehaviour {
 
 	private bool is_it_in_list(int random_x,int random_y){																//Fonction qui chercher à savoir si un couple x,y fait partie des cases de spawn
 		bool Inlist = false;
-		foreach (Tuples t in case_spawn_equipe_alies) {
+		foreach (Tile t in case_spawn_equipe_alies) {
 			if (t.x == random_x && t.y == random_y) {
 				Inlist = true;
 			}
 		}
-		foreach (Tuples t in case_spawn_equipe_ennemy) {
+		foreach (Tile t in case_spawn_equipe_ennemy) {
 			if (t.x == random_x && t.y == random_y) {
 				Inlist = true;
 			}
@@ -125,9 +110,9 @@ public class GameManager_BeginFight : MonoBehaviour {
 		for (int k = 0; k < nb_elem_rand; k++) {																		//Boucle qui met des obstacles de manière aléatoire
 			random_x = Random.Range (1, width-1);
 			random_y = Random.Range (1, height-1);
-			if (matrice_case [random_x, random_y] == 0 && is_it_in_list(random_x,random_y) == false)					//Si la case est vide et qu'elle n'est pas dans la liste de case des spawn
+			if (grid [random_x, random_y].state == 0 && is_it_in_list(random_x,random_y) == false)						//Si la case est vide et qu'elle n'est pas dans la liste de case des spawn
 			{
-				matrice_case [random_x, random_y] = 1;
+				grid [random_x, random_y].state = 1;
 			} else {
 				k--;
 			}
@@ -140,7 +125,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 		int x, y;
 		for (x = 0; x <width; x++) {
 			for (y = 0;y< height; y++) {
-				if (matrice_case [x, y] == 0) {
+				if (grid [x, y].state == 0) {
 					Instantiate (empty_tile, new Vector3 (x, y, 0f), Quaternion.identity);
 				} else {
 					Instantiate (obstacle, new Vector3 (x, y, 0f), Quaternion.identity);
@@ -150,14 +135,14 @@ public class GameManager_BeginFight : MonoBehaviour {
 	}
 		
 
-	void Pop_allié(int nb_al)
+	void Pop_allié(int nb_allies)
 	{
-		int x =0, y=0, cpt, cpt_al =0, i;																		//cpt_al : répétitions de la boucle pour chaque spawn
-		while (cpt_al < nb_al) {
+		int x =0, y=0, cpt, cpt_allies =0, i;																		//cpt_allies : répétitions de la boucle pour chaque spawn
+		while (cpt_allies < nb_allies) {
 			do {
 				cpt=0;
 				i = Random.Range (0, case_spawn_equipe_alies.Count);
-				foreach (Tuples t in case_spawn_equipe_alies) {
+				foreach (Tile t in case_spawn_equipe_alies) {
 					if (cpt == i) {
 						x = t.x;
 						y = t.y;
@@ -165,21 +150,21 @@ public class GameManager_BeginFight : MonoBehaviour {
 					cpt++;
 				}
 
-			} while (matrice_case [x, y] == 1); 
+			} while (grid [x, y].state == 1); 
 
-			matrice_case [x, y] = 1;
+			grid [x, y].state = 1;
 			Instantiate (player, new Vector3 (x, y, 0f), Quaternion.identity); 
-			cpt_al++;
+			cpt_allies++;
 		}
 	}
 
 	void Pop_ennemi(int nb_enn){
-		int x =0, y=0, cpt, cpt_enn =0, i;																		//cpt_al : répétitions de la boucle pour chaque spawn
+		int x =0, y=0, cpt, cpt_enn =0, i;																		//cpt_allies : répétitions de la boucle pour chaque spawn
 		while (cpt_enn < nb_enn) {
 			do {
 				cpt=0;
 				i = Random.Range (0, case_spawn_equipe_ennemy.Count);
-				foreach (Tuples t in case_spawn_equipe_ennemy) {
+				foreach (Tile t in case_spawn_equipe_ennemy) {
 					if (cpt == i) {
 						x = t.x;
 						y = t.y;
@@ -187,9 +172,9 @@ public class GameManager_BeginFight : MonoBehaviour {
 					cpt++;
 				}
 
-			} while (matrice_case [x, y] == 1); 
+			} while (grid [x, y].state == 1); 
 
-			matrice_case [x, y] = 1;
+			grid [x, y].state = 1;
 			Instantiate (ennemi, new Vector3 (x, y, 0f), Quaternion.identity); 
 			cpt_enn++;
 		}
@@ -232,5 +217,13 @@ public class GameManager_BeginFight : MonoBehaviour {
 	//Fonction qui retourne la liste ordonnée des personnages
 	public GameObject[] get_liste_perso(){
 		return liste_perso;
+	}
+
+	public int Get_Width(){
+		return width;
+	}
+
+	public int Get_Height(){
+		return height;
 	}
 }

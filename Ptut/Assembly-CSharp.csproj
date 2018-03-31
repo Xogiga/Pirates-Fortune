@@ -51,12 +51,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CombatScene\Scripts\Class\Tile.cs" />
      <Compile Include="Assets\CombatScene\Scripts\CombatHUD_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Competence_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Ennemy_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\GameManager_BeginFight.cs" />
      <Compile Include="Assets\CombatScene\Scripts\GameManager_Commands.cs" />
      <Compile Include="Assets\CombatScene\Scripts\GameManager_Master.cs" />
+     <Compile Include="Assets\CombatScene\Scripts\GameManager_Pathfinding.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Hero_Attack_1.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Hero_Deplacement.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Hero_Master.cs" />
