@@ -6,13 +6,14 @@ public class Ennemy_Master : MonoBehaviour {
 
 	private GameManager_Master game_master;
 	private int ennemy_movement_point;
-	private int move_done;
 	private int max_range;
 	private int health_stat;
 	private int current_health;
 	private int action_stat;
 	private int action_point;
 	private CombatHUD_Master combatHUD_master;
+	private GameManager_Pathfinding game_pathfinding;
+
 
 	void OnEnable()
 	{
@@ -22,13 +23,13 @@ public class Ennemy_Master : MonoBehaviour {
 	private void Set_initial_reference(){
 		health_stat = 100;
 		current_health = health_stat;
-		ennemy_movement_point = 3;
-		move_done = 0;
+		ennemy_movement_point = 4;
 		max_range = 5;
 		action_stat = 5;
 		action_point = action_stat;
 		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master> ();
 		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
+		game_pathfinding = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
 	}
 
 	//Active les stats de l'ennemi
@@ -80,10 +81,15 @@ public class Ennemy_Master : MonoBehaviour {
 
 	//Fonction qui fait agir l'IA
 	public void Comportement(){
-		GameObject hero_target = Target_Choice_by_distance ();											//Trouve la cible
-		Vector3 end_position = Choice_side (hero_target);												//Choisi sa destination
-		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);			//Change la case de de départ en 0 dans la matrice
-		StartCoroutine (Deplacement (end_position));													//Se déplace
+		int distance;
+		GameObject hero_target = Target_Choice_by_distance (out distance);								//Trouve la cible
+
+		if (distance > 1) {																					//Si la cible est déjà au corps à corps on ne bouge pas
+			Vector3 end_position = Choice_side (hero_target);												//Choisi sa destination
+			try_to_move (end_position);																		//Se déplace
+		} else {
+			Comportement_Suite ();
+		}
 	}
 
 	//Fonction qui fait agir l'IA après le déplacement
@@ -97,6 +103,69 @@ public class Ennemy_Master : MonoBehaviour {
 			game_master.passer_le_tour (); 
 		}
 	}
+
+	//Fonction qui fait déplacer l'ennemi
+	public void try_to_move (Vector3 endposition)
+	{
+		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);			//Change la case de départ en 0 dans la matrice
+		game_pathfinding.Find_Path (this.transform.position, endposition);																		//Détermine le chemin avec le script de PathFinding
+		List<Tile> path = game_pathfinding.Get_Path ();																							//Récupère le chemin
+		StartCoroutine (Move2 (path));																											//Déplace le héros
+	}
+
+	IEnumerator Move2(List<Tile> path)
+	{																																			// Booléen qui empêche d'engager un nouveau déplacement, de rappeller la fonction, avant que le précédent soit fini
+		float waittime = 0.04f; 																												//Temps entre chaque micro-déplacement de MoveToward
+		float step = 4*waittime; 																												//Vitesse*Temps = distance de MoveTowards
+		for (int i = 0; i < ennemy_movement_point && i<path.Count; i++) {																		//Parcours la liste de case tant qu'il n'est pas arrivé ou tant qu'il a des points de déplacement
+			Vector3 next_position = new Vector3(path[i].x,path[i].y,0f);																		//Récupère la position de la case suivante
+
+			while (this.transform.position != next_position) {																					//Tant que le héros n'est pas passer à la case suivante
+				yield return new WaitForSeconds (waittime);																							
+				this.transform.position = Vector3.MoveTowards (this.transform.position, next_position, step);									//Avance vers la case 
+			}
+		}																										 								// Booléen qui autorise un nouveau déplacement
+		End_Deplacement();
+	}
+
+	//Fonction qui gère la  fin de déplacement
+	private void End_Deplacement(){
+		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 1);			//Change la case de d'arrivé en 1 dans la matrice
+		Comportement_Suite();
+	}
+
+
+	//Fonction qui détermine la cible de l'attaque
+	private GameObject Target_Choice_by_distance(out int distance_min){
+		GameObject[] heros = GameObject.FindGameObjectsWithTag ("Hero");  								//Trouve la liste des héros
+		GameObject hero = null;																			//Cible de l'attaque
+		Vector3 total_path;
+		distance_min = 1000;
+		int distance_comparé;
+
+		foreach (GameObject h in heros) {																//Compare les distances entre l'ennemi et les héros
+			total_path = h.transform.position - this.transform.position;
+			distance_comparé = Mathf.Abs(Mathf.RoundToInt(total_path.x)) + Mathf.Abs(Mathf.RoundToInt(total_path.y));
+			if (distance_comparé < distance_min) {
+				distance_min = distance_comparé;
+				hero = h;
+			}
+		}
+
+		return hero;
+	}
+
+	//Détermine de quel côté l'ennemi va se placer
+	private Vector3 Choice_side(GameObject hero){
+		Vector3 end_position = hero.transform.position;																//Choisi le héros cible comme destination
+		game_master.set_matrice_case (Mathf.RoundToInt (end_position.x), Mathf.RoundToInt (end_position.y), 0);		//Change TEMPORAIREMENT la case de l'ennemi en 0
+		game_pathfinding.Find_Path (this.transform.position, end_position);											//Détermine le chemin avec le script de PathFinding
+		List<Tile> path = game_pathfinding.Get_Path ();																//Récupère le chemin
+		game_master.set_matrice_case (Mathf.RoundToInt (end_position.x), Mathf.RoundToInt (end_position.y), 1);		//Remet la case de l'ennemi en 1
+		end_position = new Vector3(path[path.Count - 2].x,path[path.Count - 2].y,0f);								//Récupère l'avant dernière case du chemin
+		return end_position;
+	}
+
 
 	//Fonction qui attaque l'ennemi a porté
 	IEnumerator Attack(int int_distance,GameObject target){
@@ -118,244 +187,12 @@ public class Ennemy_Master : MonoBehaviour {
 
 	//Fonction qui détermine si l'ennemi à la range pour attaquer
 	private bool Can_I_Attack(out int int_distance, out GameObject target){						
-		target = Target_Choice_by_distance ();															//Trouve le héros le plus proche
-
-		Vector3 distance = target.transform.position - this.transform.position;							//Détermine la distance qui le sépare de sa cible en case
-		int_distance = Mathf.Abs(Mathf.RoundToInt(distance.x)) +
-			Mathf.Abs(Mathf.RoundToInt(distance.y));
+		target = Target_Choice_by_distance (out int_distance);											//Trouve le héros le plus proche et la distance qui les sépare
 
 		if (int_distance <= max_range) {																//Retourne la distance qui les sépare ou 0
 			return true;
 		} else {
 			return false;
 		}
-	}
-
-	//Fonction qui détermine la cible de l'attaque
-	private GameObject Target_Choice_by_distance(){
-		GameObject[] heros = GameObject.FindGameObjectsWithTag ("Hero");  								//Trouve la liste des héros
-		GameObject hero = null;																			//Cible de l'attaque
-		Vector3 total_path;
-		int distance_min = 1000;
-		int distance_comparé;
-
-		foreach (GameObject h in heros) {																//Compare les distances entre l'ennemi et les héros
-			total_path = h.transform.position - this.transform.position;
-			distance_comparé = Mathf.Abs(Mathf.RoundToInt(total_path.x)) + Mathf.Abs(Mathf.RoundToInt(total_path.y));
-			if (distance_comparé < distance_min) {
-				distance_min = distance_comparé;
-				hero = h;
-			}
-		}
-
-		return hero;
-	}
-
-	//Détermine de quel côté l'ennemi va se placer
-	private Vector3 Choice_side(GameObject hero){
-		Vector3 total_path = hero.transform.position - this.transform.position;		//Vecteur de distance entre l'ennemi et le héros
-		Vector3 end_position;
-
-		float xtotal_path = Mathf.Round (total_path.x);
-		float ytotal_path = Mathf.Round (total_path.y);
-
-
-		if (xtotal_path != 0) {
-			if (xtotal_path > 0) {													// détermine de quel coté du joueur l'ennemi doit aller
-				end_position = hero.transform.position - Vector3.right;				//si l'ennemi doit aller à droite on enlève un mouvement à droite
-			} else {
-				end_position = hero.transform.position - Vector3.left;
-			}
-		} else {
-			if (ytotal_path > 0) {											
-				end_position = hero.transform.position - Vector3.up;
-			} else {
-				end_position = hero.transform.position - Vector3.down;
-			}
-		}
-		return end_position;
-	}
-
-
-	//Fonction qui gère la  fin de déplacement
-	private void End_Deplacement(){
-		move_done = 0;
-		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 1);			//Change la case de d'arrivé en 1 dans la matrice
-		Comportement_Suite();
-	}
-
-	//Fonction qui déplace l'ennemi
-	IEnumerator Deplacement(Vector3 endposition)
-	{
-		float waittime = 0.04f; //Temps entre chaque micro-déplacement de MoveToward
-		float step = 4*waittime; //Vitesse*Temps = distance de MoveTowards				
-
-		Vector3 parcours =  endposition - this.transform.position;
-		float xparcours = Mathf.Round(parcours.x);
-		float yparcours = Mathf.Round(parcours.y);
-
-		Vector3 newpos; // Arrivée du déplacement de 1 case
-
-		move_done = 0;
-
-		if (Mathf.Abs (xparcours) == Mathf.Abs (yparcours)) {              					 //Tout les deplacements en diagonale
-			while (move_done < ennemy_movement_point && this.transform.position != endposition) {
-
-				if (xparcours > 0) {
-					newpos = this.transform.position + Vector3.right;
-					while (this.transform.position != newpos) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-					move_done++;
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					} else if (yparcours < 0) {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);	
-						}
-						move_done++;
-					}
-				} else if (xparcours < 0) {
-
-					newpos = this.transform.position + Vector3.left;
-					while (this.transform.position != newpos) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-					move_done++;
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					} else if (yparcours < 0) {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					}
-				}
-
-			}
-		}
-
-
-		if (xparcours == 0 || yparcours == 0) {                     					// Toutes les lignes droites
-			while (move_done < ennemy_movement_point && this.transform.position != endposition) { 
-				if (xparcours != 0) {
-					if (xparcours > 0) {
-						newpos = this.transform.position + Vector3.right;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					} else {
-						newpos = this.transform.position + Vector3.left;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);	
-						}
-						move_done++;
-					}
-				}
-				if (yparcours != 0) {
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					} else {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					}
-				}
-			}
-		}
-
-		if (xparcours > 0 && yparcours != 0 && Mathf.Abs (xparcours) != Mathf.Abs (yparcours)) {          //Tous les mouvements à droite sauf ligne droite et diagonale
-			while (move_done < ennemy_movement_point && this.transform.position != endposition) {
-				for (int i = 0; i < xparcours && move_done < ennemy_movement_point; i++) {
-					newpos = this.transform.position + Vector3.right;
-					while (this.transform.position != newpos) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-					move_done++;
-				}
-
-				for (int i = 0; i < Mathf.Abs (yparcours) && move_done < ennemy_movement_point; i++) {
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					}
-					if (yparcours < 0) {
-
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					}
-				}
-			}
-		}
-
-
-		if (xparcours <0 && yparcours != 0 && Mathf.Abs (xparcours) != Mathf.Abs (yparcours)) {          //tous les mouvements à gauche sauf ligne droite et diagonale
-			while (move_done < ennemy_movement_point && this.transform.position != endposition) {
-				for (int i = 0; i < Mathf.Abs(xparcours) && move_done < ennemy_movement_point; i++) {
-					newpos = this.transform.position + Vector3.left;
-					while (this.transform.position != newpos && move_done < ennemy_movement_point) {
-						yield return new WaitForSeconds (waittime);
-						this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-					}
-					move_done++;
-				}
-
-				for (int i = 0; i < Mathf.Abs(yparcours) && move_done < ennemy_movement_point; i++) {
-					if (yparcours > 0) {
-						newpos = this.transform.position + Vector3.up;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					}
-					if (yparcours < 0) {
-						newpos = this.transform.position + Vector3.down;
-						while (this.transform.position != newpos) {
-							yield return new WaitForSeconds (waittime);
-							this.transform.position = Vector3.MoveTowards (this.transform.position, newpos, step);
-						}
-						move_done++;
-					}
-				}
-			}
-		}
-		End_Deplacement();
 	}
 }
