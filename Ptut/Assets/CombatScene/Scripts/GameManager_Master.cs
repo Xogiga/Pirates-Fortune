@@ -112,6 +112,7 @@ public class GameManager_Master : MonoBehaviour {
 	private void begin_ennemy_turn(){
 		is_it_your_turn = false;																						//On ne donne plus la main au joueur
 		combatHUD_master.Announce ("Ennemy Turn !");																	//Annonce le tour ennemi
+		get_playing_perso ().GetComponent<Ennemy_Master> ().Its_me_mario_FlipFlap ();
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();											//Appel son comportement
 	}
 

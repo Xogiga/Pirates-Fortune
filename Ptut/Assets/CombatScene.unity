@@ -583,12 +583,12 @@ Prefab:
     - target: {fileID: 114040686877454856, guid: d0535b9fc139fc94895171c80936dbab,
         type: 2}
       propertyPath: nb_elem_rand
-      value: 50
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 114040686877454856, guid: d0535b9fc139fc94895171c80936dbab,
         type: 2}
       propertyPath: nb_allies
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114040686877454856, guid: d0535b9fc139fc94895171c80936dbab,
         type: 2}

@@ -79,31 +79,55 @@ public class Ennemy_Master : MonoBehaviour {
 		action_point = action_stat;
 	}
 
+	public void Its_me_mario_FlipFlap(){														//Pas envie de faire une flèche au dessus de la tête
+		this.GetComponent<SpriteRenderer>().flipY = !this.GetComponent<SpriteRenderer>().flipY;
+		StartCoroutine (FlipFlap ());
+	}
+
+	IEnumerator FlipFlap(){																		//Du trolling certes, mais du trolling travaillé
+		yield return new WaitForSeconds (0.5f);
+		this.GetComponent<SpriteRenderer>().flipY = !this.GetComponent<SpriteRenderer>().flipY;
+	}
+
 	//Fonction qui fait agir l'IA
 	public void Comportement(){
+		GameObject[] heros;
+		GameObject hero_target;
+		Vector3 end_position = Vector3.zero;
+		bool action_done = false;
 		int distance;
-		GameObject hero_target = Target_Choice_by_distance (out distance);									//Trouve la cible
+		int nb_try = 0;
 
-		if (distance > 1) {																					//Si la cible n'est pas déjà au corps à corps
-			Vector3 end_position = Choice_side (hero_target);												//Choisi sa destination
-			if (end_position != Vector3.zero) {																//Si la destination est accessible
-				try_to_move (end_position);																	//Se déplace
-			} else {
-				Comportement_Suite();
+		heros = Sort_Target_By_Distance ();																	//Récupère la liste des héros dans l'ordre de leur éloignement
+
+		for (int i = 0; i < heros.Length && action_done == false; i++) {									//Tant qu'il y a des héros dans la liste et qu'aucune action n'a été effectuée
+			hero_target = heros [nb_try];																	//Choisit sa cible
+			distance = Get_Distance_From_Target (hero_target.transform.position);							//Détermine la distance qui le sépare de la case à côté de la cible
+			if (distance > 1 && distance < 10000) {															//Si elle est éloignée
+				end_position = Choice_side (hero_target);													//Trouve sa prochaine position
+				if (end_position != Vector3.zero) {															//Si sa prochaine destination est accessible
+					try_to_move (end_position);																//Se déplace
+					action_done = true;
+				}
+			} else if (distance == 1) {																		//Si la cible est déjà au corps à corps
+				Comportement_Suite ();
+				action_done = true;
 			}
-		} else {
-			Comportement_Suite ();
+			nb_try++;
+		}
+		if (action_done == false) {																			//Si aucun rapprochement n'est possible
+			Comportement_Suite ();																			//Passe à la suite
 		}
 	}
 
 	//Fonction qui fait agir l'IA après le déplacement
 	private void Comportement_Suite(){
-		int int_distance;
+		int distance;
 		GameObject target;
-		if (Can_I_Attack (out int_distance, out target)) {												//Vérifie qu'il y a un ennemi a porté
-			combatHUD_master.Set_Hero_Health(target.gameObject);										//Affiche la barre de vie de la cible
-			StartCoroutine(Attack (int_distance, target));												//Attaque la cible
-		} else {
+		if (Can_I_Attack (out distance, out target)) {														//Vérifie qu'il y a un ennemi a porté
+			combatHUD_master.Set_Hero_Health(target.gameObject);											//Affiche la barre de vie de la cible
+			StartCoroutine(Attack (distance, target));														//Attaque la cible
+		} else {																							//Sinon, passe le tour
 			game_master.passer_le_tour (); 
 		}
 	}
@@ -139,39 +163,55 @@ public class Ennemy_Master : MonoBehaviour {
 	}
 
 
-	//Fonction qui détermine la cible de l'attaque
-	private GameObject Target_Choice_by_distance(out int distance_min){
-		GameObject[] heros = GameObject.FindGameObjectsWithTag ("Hero");  								//Trouve la liste des héros
-		GameObject hero = null;																			//Cible de l'attaque
-		Vector3 total_path;
-		distance_min = 1000;
-		int distance_comparé;
+	//Fonction qui détermine les cible dans l'ordre de distance
+	public GameObject[] Sort_Target_By_Distance(){
+		GameObject[] heros = GameObject.FindGameObjectsWithTag ("Hero");  													//Trouve la liste des héros
+		GameObject hero_temp = null;																						//Cible de l'attaque
+		int distance;
+		int distance_ref;
 
-		foreach (GameObject h in heros) {																//Compare les distances entre l'ennemi et les héros
-			total_path = h.transform.position - this.transform.position;
-			distance_comparé = Mathf.Abs(Mathf.RoundToInt(total_path.x)) + Mathf.Abs(Mathf.RoundToInt(total_path.y));
-			if (distance_comparé < distance_min) {
-				distance_min = distance_comparé;
-				hero = h;
+		for (int i=0; i<heros.Length-1;i++){
+			distance_ref = Get_Distance_From_Target (heros [i].transform.position);											//Choisit une distance de référence
+			for(int j = i+1; j<heros.Length; j++) {																			//Parcours les autres héros																	
+				distance = Get_Distance_From_Target (heros [j].transform.position);											//Définit le nombre de mouvement nécessaire pour s'y rendre
+				if (distance < distance_ref) {																				//Si ce nombre de mouvement est inférieur au nombre de référence
+					distance_ref = distance;																				//Definit la nouvelle référence
+					hero_temp = heros [i];																					//Echange les places dans le tableau
+					heros [i] = heros [j];
+					heros [j] = hero_temp;
+				}
 			}
 		}
-
-		return hero;
+		return heros;
 	}
 
-	//Détermine de quel côté l'ennemi va se placer
-	private Vector3 Choice_side(GameObject hero){
-		Vector3 end_position = hero.transform.position;																//Choisi le héros cible comme destination
-		game_master.set_matrice_case (Mathf.RoundToInt (end_position.x), Mathf.RoundToInt (end_position.y), 0);		//Change TEMPORAIREMENT la case de l'ennemi en 0
-		game_pathfinding.Find_Path (this.transform.position, end_position);											//Détermine le chemin avec le script de PathFinding
-		List<Tile> path = game_pathfinding.Get_Path ();																//Récupère le chemin
-		game_master.set_matrice_case (Mathf.RoundToInt (end_position.x), Mathf.RoundToInt (end_position.y), 1);		//Remet la case de l'ennemi en 1
-		if (path != null) {																							//S'il existe un chemin
-			end_position = new Vector3 (path [path.Count - 2].x, path [path.Count - 2].y, 0f);						//Récupère l'avant dernière case du chemin
-			return end_position;
-		} else {
-			return Vector3.zero;
+	//Fonction qui détermine le chemin à prendre pour se rendre sur la case de l'ennemi
+	private List<Tile> Get_Path_From_Target(Vector3 target_position){
+		game_master.set_matrice_case (Mathf.RoundToInt (target_position.x), Mathf.RoundToInt (target_position.y), 0);		//Change TEMPORAIREMENT la case de l'ennemi en 0
+		game_pathfinding.Find_Path (this.transform.position, target_position);												//Détermine le chemin avec le script de PathFinding
+		List<Tile> path = game_pathfinding.Get_Path ();																		//Récupère le chemin
+		game_master.set_matrice_case (Mathf.RoundToInt (target_position.x), Mathf.RoundToInt (target_position.y), 1);		//Remet la case de l'ennemi en 1
+		return path;
+	}
+
+	//Fonction qui retourne la distance qui sépare l'ennemi d'une cible
+	private int Get_Distance_From_Target(Vector3 target_position){
+		int distance;
+		List<Tile> path = Get_Path_From_Target(target_position);															//Récupère le chemin
+		if (path != null) {																									//Si le chemin n'est pas null
+			distance = path.Count;																							//Retourne la distance entre lui et la cible
+		} else {																											//Sinon, retourne 1000
+			distance = 10000;
 		}
+		return distance;
+	}
+
+	//Détermine de quel côté l'ennemi va se placer par rapport à sa cible
+	private Vector3 Choice_side(GameObject hero){
+		Vector3 end_position = hero.transform.position;																		//Choisi le héros cible comme destination
+		List<Tile> path = Get_Path_From_Target(end_position);																//Récupère le chemin pour se rendre sur la case de la cible
+		end_position = new Vector3 (path [path.Count - 2].x, path [path.Count - 2].y, 0f);									//Récupère l'avant dernière case du chemin
+		return end_position;
 	}
 
 
@@ -194,12 +234,13 @@ public class Ennemy_Master : MonoBehaviour {
 
 
 	//Fonction qui détermine si l'ennemi à la range pour attaquer
-	private bool Can_I_Attack(out int int_distance, out GameObject target){						
-		target = Target_Choice_by_distance (out int_distance);											//Trouve le héros le plus proche et la distance qui les sépare
-
-		if (int_distance <= max_range) {																//Retourne la distance qui les sépare ou 0
-			return true;
-		} else {
+	private bool Can_I_Attack(out int distance, out GameObject target){						
+		GameObject[] targets = Sort_Target_By_Distance();													//Récupère la liste des héros dans l'ordre d'éloignement			
+		target = targets[0];																				//Trouve le héros le plus proche
+		distance = Get_Distance_From_Target(target.transform.position);										//Trouve la distance qui le sépare de sa cible
+		if (distance <= max_range) {																		//Si la cible est à portée
+			return true;																					//Retourne la distance qui les sépare et la cible
+		} else {																							//Sinon, ne retourne rien
 			return false;
 		}
 	}
