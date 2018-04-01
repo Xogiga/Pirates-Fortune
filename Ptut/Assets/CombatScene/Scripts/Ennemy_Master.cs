@@ -27,9 +27,9 @@ public class Ennemy_Master : MonoBehaviour {
 		max_range = 5;
 		action_stat = 5;
 		action_point = action_stat;
-		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master> ();
+		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
 		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
-		game_pathfinding = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
+		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
 	}
 
 	//Active les stats de l'ennemi

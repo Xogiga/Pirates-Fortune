@@ -7,60 +7,74 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	public Sprite mouseover;
 	private GameObject game_manager;
 	private GameManager_Master game_master;
-	private Collider[] collidersList;
 	private Hero_Master hero_master;
+	private GameManager_BeginFight script_creation_map;
+	private GameManager_Pathfinding game_pathfinding;
+	private Tile[,] grid;
+	private List<SpriteRenderer> sprite_list;
+
 
 	void OnEnable(){
 		Set_initial_reference ();
 	}
 
 	void Set_initial_reference(){
-		collidersList=null;
-		game_manager = GameObject.FindGameObjectWithTag ("GameManager");
+		sprite_list = null;
+		script_creation_map = GameObject.FindWithTag("GameManager").GetComponent<GameManager_BeginFight>();
+		game_manager = GameObject.FindWithTag("GameManager");
 		game_master = game_manager.GetComponent<GameManager_Master>();
 		hero_master = this.GetComponent<Hero_Master> ();
+		grid = script_creation_map.get_matrice_case();
+		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
 	}
 
+	//Fonction qui affiche les cases atteignable par le héros
 	public void OnMouseEnter(){
-		if (game_master.get_playing_perso().name == this.name) {
-			if (hero_master.is_moving == false) {
-				collidersList = Physics.OverlapSphere (this.transform.position, (hero_master.Get_Movement_Point()));
-				foreach (Collider c in collidersList) {
-					Vector3 distance = c.transform.position - this.transform.position;
-					if (c.CompareTag ("Map")) {																							 	//Si l'objet touche fait partie de la map
-						if (Mathf.Round(Mathf.Abs (distance.x) + Mathf.Abs (distance.y)) <= hero_master.Get_Movement_Point()) {				// si la distance total en x et en y est inférieure au point de déplacement du joueur + arrondi car les calculs de floats bug
-							if (game_master.get_matrice_case(Mathf.RoundToInt(c.transform.position.x), Mathf.RoundToInt(c.transform.position.y))==0) {  	// si l'objet n'est pas sous le joueur ou l'ennemi
-								c.GetComponent<SpriteRenderer> ().sprite = mouseover;													
-							}
-						}
-					}
+		if (game_master.get_playing_perso().name == this.name && hero_master.is_moving == false) {											//Si le héros survolé ne se déplace pas et que c'est son tour
+			Get_Tile_List();																												//Actualise la liste de case
+			foreach (SpriteRenderer s in sprite_list) {																						//Pour chaque case
+				s.sprite = mouseover;																										//Change de sprite									
+			}
+		}
+	}
+
+	//Fonction qui récupère la liste de case libre autour du joueur
+	private void Get_Tile_List(){
+		sprite_list = new List<SpriteRenderer>();
+		int movement_points = hero_master.Get_Movement_Point();
+
+		Collider[] collidersList = Physics.OverlapSphere (this.transform.position, movement_points);									//On récupère les objets autour de lui en fonction de ses points de déplacement
+
+		foreach (Collider c in collidersList) {																								//Pour chacun des objets touchés
+			int tileX = Mathf.RoundToInt(c.transform.position.x);
+			int tileY =  Mathf.RoundToInt(c.transform.position.y);
+			if (c.CompareTag ("Map") && game_master.get_matrice_case(tileX,tileY) == 0) {													//Si l'objet touché est une case de la Map et qu'elle est vide
+				game_pathfinding.Find_Path (this.transform.position, c.transform.position);													//Détermine le chemin avec le script de PathFinding
+				List<Tile> path = game_pathfinding.Get_Path ();																				//Récupère le chemin
+				if (path != null && path.Count <= movement_points) {																			//Si le chemin existe et est accessible avec les points de mouvements disponibles
+					sprite_list.Add(c.GetComponent<SpriteRenderer> ());																		//Ajoute le sprite à la liste
 				}
 			}
 		}
 	}
 
-	public void OnMouseExit(){																												//Permet de réinitialiser les sprites si l'utilisateur enlève sa souris de la case
-		if (collidersList != null) {
-			foreach (Collider c in collidersList) {
-				if (c.CompareTag ("Map")) {
-					c.GetComponent<SpriteRenderer> ().sprite = classic;
-				}
+	//Fonction qui permet de réinitialiser les sprites si l'utilisateur enlève sa souris de la case
+	public void OnMouseExit(){																												
+		if (sprite_list != null) {
+			foreach (SpriteRenderer s in sprite_list) {
+				s.sprite = classic;
 			}
-			collidersList = null;
+			sprite_list = null;
 		}
-
 	}
 
-	void Update(){																															//Permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
-		if (collidersList != null) {
-			if (game_master.is_it_your_turn == false) {
-				foreach (Collider c in collidersList) {
-					if (c.CompareTag ("Map")) {
-						c.GetComponent<SpriteRenderer> ().sprite = classic;
-					}
+	//Permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
+	void Update(){																															
+		if (game_master.is_it_your_turn == false && sprite_list != null) {
+			foreach (SpriteRenderer s in sprite_list) {
+					s.sprite = classic;
 				}
-				collidersList = null;
-			}
+			sprite_list = null;
 		}
 	}
 }

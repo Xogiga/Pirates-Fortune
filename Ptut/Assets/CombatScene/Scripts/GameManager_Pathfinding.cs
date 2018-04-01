@@ -47,7 +47,7 @@ public class GameManager_Pathfinding : MonoBehaviour {
 			open_set.Remove (current_tile);																		//Supprime la case avec le meilleur coût de la liste de case à inspecter
 			closed_set.Add (current_tile);																		//Ajoute cette case à la liste des cases déjà traitée
 
-			if (current_tile.x == target_tile.x && current_tile.y == target_tile.y) {							//Si la case que l'on traite est la case d'arrivée
+			if (current_tile == target_tile) {																	//Si la case que l'on traite est la case d'arrivée
 				is_path_find = true;																			//Booléen qui permet de savoir si la fonction a trouvé un chemin cette fois-ci
 				path = Retrace_Path(start_tile,target_tile);													//Enregistre le chemin dans la valeur path
 				return;																							//Sort de la fonction
