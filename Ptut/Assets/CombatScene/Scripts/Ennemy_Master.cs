@@ -39,7 +39,7 @@ public class Ennemy_Master : MonoBehaviour {
 		combatHUD_master.enable_disable_ennemy_stats ();
 	}
 
-	//Désctive les stats de l'ennemi
+	//Désactive les stats de l'ennemi
 	void OnMouseExit()
 	{
 		combatHUD_master.enable_disable_ennemy_stats ();
@@ -66,10 +66,16 @@ public class Ennemy_Master : MonoBehaviour {
 	public void DeductHealth(int health_change){
 		int previous_health = current_health;
 		current_health -= health_change;
-		if (current_health < 0) {
+		if (current_health <= 0) {																//Si la vie du personnage atteint 0 ou inférieur
 			current_health = 0;
+			combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);//Change la vie du personnage sur l'ATH
+			game_master.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
+			game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
+			combatHUD_master.enable_disable_ennemy_stats ();									//Fait disparaître les stats du personnage
+			Destroy (this.gameObject);															//Détruit le gameObject
+		} else {
+			combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);//Sinon change du personnage sur l'ATH
 		}
-		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);
 	}
 
 

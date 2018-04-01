@@ -59,13 +59,29 @@ public class GameManager_Master : MonoBehaviour {
 		}
 	}
 
+	//Fonction qui supprime un personnage de la liste
+	public void Remove_From_List(string name){		
+		int dead_indice = -1;
+		for (int i = 0; i < liste_perso.Length && liste_perso[i] != null; i++) {										//Parcours toute la liste jusqu'à la fin ou jusqu'à une case vide
+			if (dead_indice == -1 && liste_perso[i].name == name) {														//Si le nom dans la liste correspond au mort
+				dead_indice = i;																						//Définit l'indice du mort
+			}
+			if (dead_indice != -1) {																					//Une fois que l'indice du mort est trouvé
+				liste_perso [i] = liste_perso [i + 1];																	//"Recule" toute les cases de 1 à partir de cette indice
+			}
+		}
 
+		if (indice_playing_perso > dead_indice) {																		//Si l'indice du personnage qui joue est supérieur à l'indice du mort
+			indice_playing_perso--;																						//Baisse l'indice du personnage de 1
+		}
+	}
+		
 	public void passer_le_tour(){
-		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage précédent est un héros
+		if (get_playing_perso ().tag == "Hero") {																		//Si le personnage précédent est un héros
 			end_hero_turn();
 		}
 
-		if (get_playing_perso ().name == "Ennemi_" + indice_playing_perso) {											//Si le personnage précédent est un ennemi
+		if (get_playing_perso ().tag == "Ennemy") {																		//Si le personnage précédent est un ennemi
 			end_ennemy_turn();
 		}
 			
@@ -76,17 +92,18 @@ public class GameManager_Master : MonoBehaviour {
 		}
 
 
-		if (get_playing_perso ().name == "Hero_" + indice_playing_perso) {												//Si le personnage suivant est un héros
+		if (get_playing_perso ().tag == "Hero") {																		//Si le personnage suivant est un héros
 			begin_hero_turn();
 		}
 
-		if (get_playing_perso ().name == "Ennemi_" + indice_playing_perso) {											//Si le personnage suivant est un ennemi
+		if (get_playing_perso ().tag == "Ennemy") {																		//Si le personnage suivant est un ennemi
 			begin_ennemy_turn();
 		}
 	}
 
 	//Gère la fin de tour allié
 	private void end_hero_turn(){
+		is_it_your_turn = false;																						//On ne donne plus la main au joueur
 		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
 		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();													//On lui redonne ses points
 	}
@@ -98,19 +115,18 @@ public class GameManager_Master : MonoBehaviour {
 
 	//Gère le début de tour allié
 	private void begin_hero_turn(){
+		is_it_your_turn = true;																							//On donne la main au joueur
 		combatHUD_master.Announce ("Your Turn !");																		//Annonce le tour allié
 		combatHUD_master.Set_Hero_Points (get_playing_perso());															//On affiche ses stats
 		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
 		script_commande.Set_new_references();																			//On donne les références du nouveaux personnage aux commandes
 
 		get_playing_perso ().GetComponent<Hero_Master> ().Its_me_mario_FlipFlap ();
-		is_it_your_turn = true;																							//On donne la main au joueur
 
 	}
 
 	//Gère le début de tour ennemi
 	private void begin_ennemy_turn(){
-		is_it_your_turn = false;																						//On ne donne plus la main au joueur
 		combatHUD_master.Announce ("Ennemy Turn !");																	//Annonce le tour ennemi
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Its_me_mario_FlipFlap ();
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();											//Appel son comportement

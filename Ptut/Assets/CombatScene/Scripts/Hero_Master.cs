@@ -12,6 +12,7 @@ public class Hero_Master : MonoBehaviour {
 	private int health_stat = 100;
 	private int current_health;
 	private CombatHUD_Master combatHUD_master;
+	private GameManager_Master game_master;
 
 	void OnEnable()
 	{
@@ -26,6 +27,7 @@ public class Hero_Master : MonoBehaviour {
 		stats_daction = 5;
 		action_point = stats_daction;
 		movement_point = stats_de_deplacement;
+		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
 		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
 	}
 
@@ -64,9 +66,13 @@ public class Hero_Master : MonoBehaviour {
 		current_health -= health_change;
 		if (current_health <= 0) {
 			current_health = 0;
-			this.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+			combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
+			game_master.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
+			game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
+			Destroy (this.gameObject);															//Détruit le gameObject
+		} else {
+			combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);
 		}
-		combatHUD_master.Change_Hero_Health(previous_health, current_health, health_stat);
 	}
 
 	public int Get_Movement_Point(){

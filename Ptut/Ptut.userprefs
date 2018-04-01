@@ -1,29 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\Ennemy_Master.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\GameManager_Master.cs">
     <Files>
-      <File FileName="Assets\CombatScene\Scripts\GameManager_Master.cs" Line="1" Column="1" />
-      <File FileName="Assets\CombatScene\Scripts\GameManager_Pathfinding.cs" Line="38" Column="32" />
-      <File FileName="Assets\CombatScene\Scripts\Hero_Deplacement.cs" Line="28" Column="46" />
-      <File FileName="Assets\CombatScene\Scripts\Ennemy_Master.cs" Line="89" Column="34" />
-      <File FileName="Assets\CombatScene\Scripts\Class\Tile.cs" Line="15" Column="10" />
+      <File FileName="Assets\CombatScene\Scripts\GameManager_Master.cs" Line="75" Column="85" />
+      <File FileName="Assets\CombatScene\Scripts\GameManager_Pathfinding.cs" Line="1" Column="1" />
+      <File FileName="Assets\CombatScene\Scripts\Hero_Deplacement.cs" Line="1" Column="1" />
+      <File FileName="Assets\CombatScene\Scripts\Ennemy_Master.cs" Line="237" Column="94" />
+      <File FileName="Assets\CombatScene\Scripts\Hero_Master.cs" Line="72" Column="1" />
+      <File FileName="Assets\CombatScene\Scripts\CombatHUD_Master.cs" Line="138" Column="4" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Ptut" expanded="True">
-            <Node name="Assembly-CSharp" expanded="True">
-              <Node name="CombatScene" expanded="True">
-                <Node name="Scripts" expanded="True">
-                  <Node name="Class" expanded="True" />
-                  <Node name="Ennemy_Master.cs" selected="True" />
-                </Node>
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
