@@ -250,4 +250,11 @@ public class Ennemy_Master : MonoBehaviour {
 			return false;
 		}
 	}
+
+	//Vérifie si le combat est terminé
+	public void Update(){
+		if (game_master.is_fight_over == true) {
+			StopAllCoroutines();
+		}
+	}
 }

@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager_Master : MonoBehaviour {
 	public delegate void GameManager_EventHandler();  //Gestionnaire d'évènement
 	public event GameManager_EventHandler event_begin_fight;
-	public event GameManager_EventHandler event_end_fight;
 
 	public bool is_fight_begin;
 	public bool is_it_your_turn;
@@ -50,15 +50,7 @@ public class GameManager_Master : MonoBehaviour {
 			begin_hero_turn();
 		}
 	}		
-
-	public void Call_event_end_fight(){
-		if (event_end_fight != null && is_fight_begin == true)
-		{
-			is_fight_over = true;
-			event_end_fight ();
-		}
-	}
-
+		
 	//Fonction qui supprime un personnage de la liste
 	public void Remove_From_List(string name){		
 		int dead_indice = -1;
@@ -74,6 +66,39 @@ public class GameManager_Master : MonoBehaviour {
 		if (indice_playing_perso > dead_indice) {																		//Si l'indice du personnage qui joue est supérieur à l'indice du mort
 			indice_playing_perso--;																						//Baisse l'indice du personnage de 1
 		}
+
+		Is_Fight_Done();																								//Vérifie que les deux camps soit toujours vivant
+	}
+
+	//Fonction qui vérifie si le combat n'est pas terminé
+	private void Is_Fight_Done(){
+		bool is_any_hero_alive = false;
+		bool is_any_ennemy_alive = false;
+
+		foreach (GameObject g in liste_perso) {																			//Parcours la liste des personnage								
+			if (g != null) {
+				if (g.tag == "Hero") {																					//Vérifie s'il reste un héros vivant
+					is_any_hero_alive = true;
+				} else if (g.tag == "Ennemy") {																			//Vérifie s'il reste un ennemi vivant
+					is_any_ennemy_alive = true;
+				}
+			}
+		}
+
+		if(is_any_hero_alive == false || is_any_ennemy_alive == false){
+			if (is_any_ennemy_alive == false) {
+				End_Fight (true);
+			} else {
+				End_Fight (false);
+			}
+
+		}
+	}
+
+	//Fonction qui termine le combat
+	private void End_Fight(bool victory){
+		is_fight_over = true;																							//Déclare le combat terminé
+		combatHUD_master.Show_End_Screen(victory);																		//Affiche l'écran de fin
 	}
 		
 	public void passer_le_tour(){
@@ -154,4 +179,8 @@ public class GameManager_Master : MonoBehaviour {
 		return matrice_case;
 	}	
 
+	//Fonction qui redémarre la scène
+	public void Restart_Level(){
+		SceneManager.LoadScene (0);
+	}
 }

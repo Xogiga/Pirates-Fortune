@@ -19,6 +19,10 @@ public class CombatHUD_Master : MonoBehaviour {
 	private Image ennemy_health_image;
 	private Text ennemy_health_text;
 
+	private GameObject end_screen;
+	public Sprite victory_sprite;
+	public Sprite defeat_sprite;
+
 
 	// Use this for initialization
 	void OnEnable () {
@@ -46,6 +50,9 @@ public class CombatHUD_Master : MonoBehaviour {
 		ennemy_health_text = ennemy_health_bar.GetComponentInChildren<Text> ();
 	
 		enable_disable_ennemy_stats ();
+
+		end_screen = GameObject.Find (this.name + "/End_screen");
+		end_screen.SetActive (false);
 	}
 
 	//Fonction qui met à jour les infos du personnage
@@ -168,5 +175,29 @@ public class CombatHUD_Master : MonoBehaviour {
 	IEnumerator Disable_Announce(){
 		yield return new WaitForSeconds (1);
 		announce.gameObject.SetActive (false);
+	}
+
+	//Affiche l'écran de fin
+	public void Show_End_Screen(bool victory){
+		Image image = end_screen.GetComponentInChildren<Image> ();
+		if (victory) {
+			image.sprite = victory_sprite;
+		} else {
+			image.sprite = defeat_sprite;
+		}
+		StartCoroutine (Slow_Show_End_Screen (image));
+	}
+
+	//Réalise un fondu pour l'apparition de l'écran de fin
+	IEnumerator Slow_Show_End_Screen(Image i){
+		end_screen.SetActive (true);
+		byte transparence = 0;
+		while (transparence < 255) {																//Change frame par frame la transparence de l'image
+			yield return new WaitForSeconds (Time.deltaTime);
+			i.color = new Color32(255,255,255,transparence);
+			transparence += 3;
+		}
+		button_end_turn = GameObject.Find (this.name+"/End_screen/Button");							//A la fin de l'animation affiche le bouton pour rejouer
+		button_end_turn.SetActive(true);
 	}
 }
