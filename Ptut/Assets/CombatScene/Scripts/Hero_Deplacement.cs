@@ -7,6 +7,7 @@ public class Hero_Deplacement : MonoBehaviour {
 	private Hero_Master hero_master;
 	private GameManager_Master game_master;
 	private GameManager_Pathfinding game_pathfinding;
+	private CombatHUD_Master combatHUD_master;
 
 	void OnEnable(){
 		Set_initial_references ();
@@ -16,6 +17,7 @@ public class Hero_Deplacement : MonoBehaviour {
 	{		
 		game_master = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Master> ();
 		game_pathfinding = GameObject.FindGameObjectWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
+		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();	
 		hero_master = this.GetComponent<Hero_Master> ();
 		hero_master.is_moving = false;
 
@@ -36,11 +38,15 @@ public class Hero_Deplacement : MonoBehaviour {
 		game_pathfinding.Find_Path (this.transform.position, endposition);																			//Détermine le chemin avec le script de PathFinding
 		List<Tile> path = game_pathfinding.Get_Path ();
 
-		if (path != null && path.Count <= hero_master.Get_Movement_Point()) {
-			hero_master.Set_Movement_Point(hero_master.Get_Movement_Point() - path.Count);															//Réduit les points de déplacement du héros
-			return true;
-		}  else {
+		if (path == null) {
+			combatHUD_master.Announce ("You can't go there");
 			return false;
+		} else if (path.Count > hero_master.Get_Movement_Point ()) {
+			combatHUD_master.Announce ("Not enought Movement Points");
+			return false;
+		} else {																																	//Si le chemin existe et que le héros possède assez de point de déplacement
+			hero_master.Set_Movement_Point (hero_master.Get_Movement_Point () - path.Count);														//Réduit les points de déplacement du héros
+			return true;
 		}
 	}
 

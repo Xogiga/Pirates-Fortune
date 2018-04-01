@@ -120,7 +120,6 @@ public class GameManager_Pathfinding : MonoBehaviour {
 		if (is_path_find == true) {																				//Si un chemin a été trouvé
 			return path;
 		} else {
-			Debug.Log ("Aucun chemin disponible");
 			return null;
 		}
 	}

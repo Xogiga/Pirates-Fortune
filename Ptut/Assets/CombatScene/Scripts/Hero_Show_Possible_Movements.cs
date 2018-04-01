@@ -8,9 +8,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	private GameObject game_manager;
 	private GameManager_Master game_master;
 	private Hero_Master hero_master;
-	private GameManager_BeginFight script_creation_map;
 	private GameManager_Pathfinding game_pathfinding;
-	private Tile[,] grid;
 	private List<SpriteRenderer> sprite_list;
 
 
@@ -20,12 +18,10 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 
 	void Set_initial_reference(){
 		sprite_list = null;
-		script_creation_map = GameObject.FindWithTag("GameManager").GetComponent<GameManager_BeginFight>();
 		game_manager = GameObject.FindWithTag("GameManager");
 		game_master = game_manager.GetComponent<GameManager_Master>();
 		hero_master = this.GetComponent<Hero_Master> ();
-		grid = script_creation_map.get_matrice_case();
-		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
+		game_pathfinding = game_manager.GetComponent<GameManager_Pathfinding> ();
 	}
 
 	//Fonction qui affiche les cases atteignable par le héros

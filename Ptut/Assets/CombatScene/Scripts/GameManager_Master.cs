@@ -133,7 +133,8 @@ public class GameManager_Master : MonoBehaviour {
 		return matrice_case[x,y].state;
 	}
 
-			
-
+	public Tile[,] get_matrice_case(){																					//Retourne la matrice
+		return matrice_case;
+	}	
 
 }
