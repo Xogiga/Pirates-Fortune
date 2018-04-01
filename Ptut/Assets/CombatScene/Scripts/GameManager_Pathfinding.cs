@@ -8,6 +8,7 @@ public class GameManager_Pathfinding : MonoBehaviour {
 	private Tile[,] matrice_case;
 	private GameManager_BeginFight script_creation_map;
 	private List<Tile> path;
+	private bool is_path_find;
 
 	private void OnEnable(){
 		Set_initial_reference ();
@@ -27,6 +28,7 @@ public class GameManager_Pathfinding : MonoBehaviour {
 
 	//Fonction qui cherche la prochaine case avec la meilleur valeur possible
 	public void Find_Path(Vector3 startPos, Vector3 endPos){
+		is_path_find = false;
 		Tile start_tile = Get_Tile_From_Vector3 (startPos);														//Case de départ
 		Tile target_tile = Get_Tile_From_Vector3 (endPos);														//Case d'arrivée
 
@@ -46,6 +48,7 @@ public class GameManager_Pathfinding : MonoBehaviour {
 			closed_set.Add (current_tile);																		//Ajoute cette case à la liste des cases déjà traitée
 
 			if (current_tile.x == target_tile.x && current_tile.y == target_tile.y) {							//Si la case que l'on traite est la case d'arrivée
+				is_path_find = true;																			//Booléen qui permet de savoir si la fonction a trouvé un chemin cette fois-ci
 				path = Retrace_Path(start_tile,target_tile);													//Enregistre le chemin dans la valeur path
 				return;																							//Sort de la fonction
 			}
@@ -114,6 +117,11 @@ public class GameManager_Pathfinding : MonoBehaviour {
 
 	//Fonction qui retourne le chemin de case à parcourir
 	public List<Tile> Get_Path(){
-		return path;
+		if (is_path_find == true) {																				//Si un chemin a été trouvé
+			return path;
+		} else {
+			Debug.Log ("Aucun chemin disponible");
+			return null;
+		}
 	}
 }

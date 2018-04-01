@@ -84,9 +84,13 @@ public class Ennemy_Master : MonoBehaviour {
 		int distance;
 		GameObject hero_target = Target_Choice_by_distance (out distance);									//Trouve la cible
 
-		if (distance > 1) {																					//Si la cible est déjà au corps à corps on ne bouge pas
+		if (distance > 1) {																					//Si la cible n'est pas déjà au corps à corps
 			Vector3 end_position = Choice_side (hero_target);												//Choisi sa destination
-			try_to_move (end_position);																		//Se déplace
+			if (end_position != Vector3.zero) {																//Si la destination est accessible
+				try_to_move (end_position);																	//Se déplace
+			} else {
+				Comportement_Suite();
+			}
 		} else {
 			Comportement_Suite ();
 		}
@@ -162,8 +166,12 @@ public class Ennemy_Master : MonoBehaviour {
 		game_pathfinding.Find_Path (this.transform.position, end_position);											//Détermine le chemin avec le script de PathFinding
 		List<Tile> path = game_pathfinding.Get_Path ();																//Récupère le chemin
 		game_master.set_matrice_case (Mathf.RoundToInt (end_position.x), Mathf.RoundToInt (end_position.y), 1);		//Remet la case de l'ennemi en 1
-		end_position = new Vector3(path[path.Count - 2].x,path[path.Count - 2].y,0f);								//Récupère l'avant dernière case du chemin
-		return end_position;
+		if (path != null) {																							//S'il existe un chemin
+			end_position = new Vector3 (path [path.Count - 2].x, path [path.Count - 2].y, 0f);						//Récupère l'avant dernière case du chemin
+			return end_position;
+		} else {
+			return Vector3.zero;
+		}
 	}
 
 

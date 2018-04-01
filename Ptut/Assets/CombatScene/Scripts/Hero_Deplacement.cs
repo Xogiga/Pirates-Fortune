@@ -25,24 +25,22 @@ public class Hero_Deplacement : MonoBehaviour {
 	{
 		if (verify_distance (endposition)) {																										//Si le héros a assez de point de déplacement
 			game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);			//Change la case de départ en 0 dans la matrice
-			game_pathfinding.Find_Path (this.transform.position, endposition);																		//Détermine le chemin avec le script de PathFinding
 			List<Tile> path = game_pathfinding.Get_Path ();																							//Récupère le chemin
 			StartCoroutine (Move2 (path));																											//Déplace le héros
-			game_master.set_matrice_case (Mathf.RoundToInt (endposition.x), Mathf.RoundToInt (endposition.y), 1);									//Change la case de destination en 1 dans la matrice
+			game_master.set_matrice_case (Mathf.RoundToInt (endposition.x), Mathf.RoundToInt (endposition.y), 1);									//Change la case d'arrivée en 1 dans la matrice
 		}
 	}
 
 	//Fonction qui vérifie que le joueur a assez de point de déplacement
 	private bool verify_distance(Vector3 endposition){
-		Vector3 distance = endposition - this.transform.position; 																					//Récupère la distance entre le joueur et la case
-		int xparcours = Mathf.RoundToInt(distance.x);																								//Arrondit xparcours car récupérer le X Y Z directement d'un vecteur bug souvent
-		int yparcours = Mathf.RoundToInt(distance.y);
+		game_pathfinding.Find_Path (this.transform.position, endposition);																			//Détermine le chemin avec le script de PathFinding
+		List<Tile> path = game_pathfinding.Get_Path ();
 
-		if ((Mathf.Abs (xparcours) + Mathf.Abs (yparcours)) > hero_master.Get_Movement_Point()) { 													//Vérifie que le joueur a assez de point de déplacement
-			return false;
-		} else {
-			hero_master.Set_Movement_Point(hero_master.Get_Movement_Point() - Mathf.Abs (xparcours) - Mathf.Abs (yparcours));						//Réduit les points de déplacement du héros
+		if (path != null && path.Count <= hero_master.Get_Movement_Point()) {
+			hero_master.Set_Movement_Point(hero_master.Get_Movement_Point() - path.Count);															//Réduit les points de déplacement du héros
 			return true;
+		}  else {
+			return false;
 		}
 	}
 
