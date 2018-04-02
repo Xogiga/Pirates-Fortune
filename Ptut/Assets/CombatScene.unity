@@ -519,6 +519,16 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 114723282380665484, guid: d0856032a5a91a8408839e87dc476502,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1642574405}
+    - target: {fileID: 114723282380665484, guid: d0856032a5a91a8408839e87dc476502,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: passer_le_tour
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d0856032a5a91a8408839e87dc476502, type: 2}
   m_IsPrefabParent: 0
@@ -564,17 +574,17 @@ Prefab:
     - target: {fileID: 114040686877454856, guid: d0535b9fc139fc94895171c80936dbab,
         type: 2}
       propertyPath: nb_elem_rand
-      value: 40
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 114040686877454856, guid: d0535b9fc139fc94895171c80936dbab,
         type: 2}
       propertyPath: nb_allies
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114040686877454856, guid: d0535b9fc139fc94895171c80936dbab,
         type: 2}
       propertyPath: nb_ennemies
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d0535b9fc139fc94895171c80936dbab, type: 2}

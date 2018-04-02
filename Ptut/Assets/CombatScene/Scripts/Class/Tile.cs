@@ -9,6 +9,7 @@ public class Tile {
 	public Tile parent;
 	public int gCost;															//Coût qui représente la distance entre cette case et la case de départ
 	public int hCost;															//Coût qui représente la distance entre cette case et la case d'arrivée
+	public GameObject obj;
 
 	public Tile(int _x, int _y, int _state){
 		x = _x;

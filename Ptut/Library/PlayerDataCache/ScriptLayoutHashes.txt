@@ -112,9 +112,10 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Hero_Deplacement
 41680c891fd720cf55efa0c5e3831253 Assembly-CSharp.dll:.Tile_Script
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.S_Canvas
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.CombatHUD_Master
+a8fcb8fdc655ae80b8b48831e2603652 Assembly-CSharp.dll:.CombatHUD_Master
 ebd50d753c52bc3f4aee1d079787326d Assembly-CSharp.dll:.Spawn
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.scri
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.GameManager_Pathfinding
 549888c68c4f2e8111e66966c9bf0c17 Assembly-CSharp.dll:.GameManager_Master
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour
