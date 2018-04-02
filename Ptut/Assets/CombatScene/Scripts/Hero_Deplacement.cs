@@ -53,18 +53,29 @@ public class Hero_Deplacement : MonoBehaviour {
 
 	IEnumerator Move2(List<Tile> path)
 	{
+		
 		hero_master.is_moving = true;   																											// Booléen qui empêche d'engager un nouveau déplacement, de rappeller la fonction, avant que le précédent soit fini
 		float waittime = 0.04f; 																													//Temps entre chaque micro-déplacement de MoveToward
 		float step = 4*waittime; 																													//Vitesse*Temps = distance de MoveTowards
 		for (int i = 0; i < path.Count ; i++) {																										//Parcours la liste de case tant qu'il n'est pas arrivé
 			Vector3 next_position = new Vector3(path[i].x,path[i].y,0f);																			//Récupère la position de la case suivante
+			Side_flip (next_position);																												//Fonction qui le fait pivoter dans sa direction
 
 			while (this.transform.position != next_position) {																						//Tant que le héros n'est pas passer à la case suivante
 				yield return new WaitForSeconds (waittime);																							
 				this.transform.position = Vector3.MoveTowards (this.transform.position, next_position, step);										//Avance vers la case 
 			}
 		}
-		hero_master.is_moving = false;																										 // Booléen qui autorise un nouveau déplacement
+		hero_master.is_moving = false;																												// Booléen qui autorise un nouveau déplacement
+	}
+
+	//Fonction qui tourne le personnage en fonction de sa direction
+	private void Side_flip(Vector3 next_position){
+		if (this.transform.position.x < next_position.x) {																							//Si sa direction est à droite
+			this.gameObject.GetComponent<SpriteRenderer> ().flipX = false;																			//Regarde à drotie
+		} else if (this.transform.position.x > next_position.x) {																					//Sinon l'inverse
+			this.gameObject.GetComponent<SpriteRenderer> ().flipX = true;
+		}
 	}
 }
 
