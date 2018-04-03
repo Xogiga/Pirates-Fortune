@@ -13,6 +13,7 @@ public class CombatHUD_Master : MonoBehaviour {
 	private Text health_text;
 	private GameObject action_point_text;
 	private GameObject movement_point_text;
+	private GameObject hero_skill_bar;
 
 	private GameObject ennemy_stats_canvas;
 	private GameObject ennemy_health_bar;
@@ -41,6 +42,7 @@ public class CombatHUD_Master : MonoBehaviour {
 		health_text = health_bar.GetComponentInChildren<Text> ();
 		movement_point_text = GameObject.Find (this.name + "/Hero Stats Canvas/InfoJoueur/Deplacement");
 		action_point_text = GameObject.Find (this.name + "/Hero Stats Canvas/InfoJoueur/Action Point");
+		hero_skill_bar = GameObject.Find (this.name + "/Hero Stats Canvas/Barre des competences");
 
 		enable_disable_button_and_stats ();
 
@@ -71,6 +73,12 @@ public class CombatHUD_Master : MonoBehaviour {
 	//Fonction qui active désactive les informations du héros
 	public void enable_disable_stats(){
 		hero_stats_canvas.SetActive (!hero_stats_canvas.activeInHierarchy);
+	}
+
+	//Fonction qui affiche la vie de l'allié quand un ennemi l'attaque
+	public void enable_disable_stats_for_ennemy(){
+		enable_disable_stats ();
+		hero_skill_bar.SetActive (!hero_stats_canvas.activeInHierarchy);
 	}
 
 	//Fonction qui active/desactive les informations de l'ennemi

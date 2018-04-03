@@ -94,6 +94,11 @@ public class Competence_Master : MonoBehaviour {
 			}
 		}
 	}
+
+	//Quand le HUD est désactivé (en fin de tour) enlève l'infobulle et le marquage des cases
+	void OnDisable(){
+		Hide_Attack_Info ();
+	}
 }
 
 
