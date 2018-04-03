@@ -86,7 +86,9 @@ public class Competence_Master : MonoBehaviour {
 				if (i> 0 && i <17 && j>0 && j <9) {																							//On vérifie que la case se situe bien dans la grille
 					int distance = Mathf.Abs(i - HeroX) + Mathf.Abs(j - HeroY);
 					if (distance <= range_max && distance >= range_min) {																	//On vérifie que la distance à la case est bien inférieure dans l'intervalle de la portée de la compétence
-						sprite_list.Add (grid [i, j].obj.GetComponent<SpriteRenderer> ());													//Ajoute le sprite de la case à la liste
+						if (grid [i, j].state != -1) {																						//On vérifie que la case n'est pas un mur
+							sprite_list.Add (grid [i, j].obj.GetComponent<SpriteRenderer> ());												//Ajoute le sprite de la case à la liste
+						}
 					}
 				}
 			}

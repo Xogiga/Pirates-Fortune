@@ -54,7 +54,7 @@ public class GameManager_Pathfinding : MonoBehaviour {
 			}
 
 			foreach (Tile neighbour in Get_Neighbours(current_tile)) {											//Boucle qui parcours les cases voisines de la case étudiée
-				if (neighbour.state == 1 || closed_set.Contains (neighbour))									//Ne tient pas compte des cases "obstacles" ou déjà traitées
+				if (neighbour.state != 0 || closed_set.Contains (neighbour))									//Ne tient pas compte des cases "obstacles" ou déjà traitées
 					continue;
 
 				int movement_cost_to_neighbour = current_tile.gCost + Get_Distance (current_tile, neighbour);	//Calcule la distance entre la case voisine et la case de départ en passant par la case étudiée

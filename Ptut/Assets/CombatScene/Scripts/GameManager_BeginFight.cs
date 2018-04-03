@@ -53,9 +53,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 			for (int y = 3; y <= 6; y++) {
 				case_spawn_equipe_alies.Add(new Tile(x, y));
 			}
-
 		}
-
 	}
 
 	private void create_list_spawn_ennemy(){																			//Remplie la liste des cases de spawn ennemis
@@ -78,7 +76,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0;y<height; y++) {
 				if (x == 0 || y == 0 || x == width-1 || y == height-1) {
-					grid [x, y] = new Tile(x, y, 1);
+					grid [x, y] = new Tile(x, y, -1);
 				} else {
 					grid [x, y] = new Tile(x, y, 0);
 				}
@@ -112,7 +110,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 			random_y = Random.Range (1, height-1);
 			if (grid [random_x, random_y].state == 0 && is_it_in_list(random_x,random_y) == false)						//Si la case est vide et qu'elle n'est pas dans la liste de case des spawn
 			{
-				grid [random_x, random_y].state = 1;
+				grid [random_x, random_y].state = -1;
 			} else {
 				k--;
 			}
