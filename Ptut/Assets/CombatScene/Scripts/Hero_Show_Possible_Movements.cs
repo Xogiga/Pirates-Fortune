@@ -25,7 +25,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 		if (game_master.get_playing_perso().name == this.name && hero_master.is_moving == false) {											//Si le héros survolé ne se déplace pas et que c'est son tour
 			Get_Tile_List();																												//Actualise la liste de case
 			foreach (SpriteRenderer s in sprite_list) {																						//Pour chaque case
-				s.color =  new Color32(255,45,36,255);																						//Change la couleur
+				s.color =  new Color32(35,236,64,255);																						//Change la couleur
 			}
 		}
 	}

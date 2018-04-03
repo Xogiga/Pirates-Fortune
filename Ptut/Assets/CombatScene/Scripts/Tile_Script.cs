@@ -35,7 +35,7 @@ public class Tile_Script : MonoBehaviour {
 				path = game_pathfinding.Get_Path ();																							//Récupère le chemin
 				if (path != null && path.Count <=  hero_master.Get_Movement_Point()) {															//Si le chemin existe et est accessible avec les points de mouvements disponibles
 					foreach (Tile t in path) {																									//Change les sprite
-						t.obj.GetComponent<SpriteRenderer> ().color = new Color32(255,45,36,255);
+					t.obj.GetComponent<SpriteRenderer> ().color = new Color32(35,236,64,255);
 						}
 				}
 		}

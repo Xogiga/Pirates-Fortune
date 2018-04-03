@@ -239,7 +239,7 @@ public class Ennemy_Master : MonoBehaviour {
 			if (int_distance == 1 && action_point >= 3) {													//Choisi l'attaque en fonction de la distance et de ses points d'action
 				action_point -= 3;																			//Réduit ses points d'action
 				target.GetComponent<Hero_Master> ().DeductHealth (30);										//Blesse le héros ciblé
-			} else if (int_distance >= 2 && int_distance <= 5 && action_point >= 1) {
+			} else if (int_distance >= 2 && int_distance <= 4 && action_point >= 1) {
 				action_point -= 1;
 				target.GetComponent<Hero_Master> ().DeductHealth (6);
 			} else {																						//Si il n'a la range pour aucune attaque

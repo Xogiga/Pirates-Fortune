@@ -1074,7 +1074,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Throw a dager to an ennemy. Deal 10 damages.
+  m_Text: Throw a dager to an ennemy. Deal 6 damages.
 --- !u!114 &114316467259853378
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2252,7 +2252,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Cost : 1 Range : 2-5'
+  m_Text: "Cost : 1 \nRange : 2-4"
 --- !u!114 &114890378531536768
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2346,7 +2346,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 114532898215870518}
-          m_MethodName: Show_infobulle
+          m_MethodName: Show_Attack_Info
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -2363,12 +2363,12 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 114532898215870518}
-          m_MethodName: Hide_infobulle
-          m_Mode: 3
+          m_MethodName: Hide_Attack_Info
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
+            m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -2499,7 +2499,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 114532898215870518}
-          m_MethodName: Show_infobulle
+          m_MethodName: Show_Attack_Info
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -2516,12 +2516,12 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 114532898215870518}
-          m_MethodName: Hide_infobulle
-          m_Mode: 3
+          m_MethodName: Hide_Attack_Info
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 2
+            m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -3115,7 +3115,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -5}
-  m_SizeDelta: {x: -10, y: 100}
+  m_SizeDelta: {x: -10, y: 115}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224128890790031014
 RectTransform:
@@ -3646,8 +3646,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30}
+  m_AnchoredPosition: {x: -0.000045776367, y: 0}
+  m_SizeDelta: {x: -10, y: 61.79}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!224 &224878019574326832
 RectTransform:
