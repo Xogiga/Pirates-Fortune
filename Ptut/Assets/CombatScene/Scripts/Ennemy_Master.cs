@@ -233,18 +233,21 @@ public class Ennemy_Master : MonoBehaviour {
 
 	//Fonction qui attaque l'ennemi a porté
 	IEnumerator Attack(int int_distance,GameObject target){
-		combatHUD_master.enable_disable_stats ();														//Affiche les informations de la cible
-		while (action_point >= 1) {																		//Tant que l'ennemi a des points d'action, il attaque																		
-			if (int_distance == 1 && action_point >= 3) {												//Choisi l'attaque en fonction de la distance et de ses points d'action
-				action_point -= 3;																		//Réduit ses points d'action
-				target.GetComponent<Hero_Master> ().DeductHealth (30);									//Blesse le héros ciblé
-			} else if (int_distance <= 5 && action_point >= 1) {
+		bool attack_possibility = true;
+		combatHUD_master.enable_disable_stats ();															//Affiche les informations de la cible
+		while (action_point >= 1 && attack_possibility == true) {											//Tant que l'ennemi a des points d'action, il attaque																		
+			if (int_distance == 1 && action_point >= 3) {													//Choisi l'attaque en fonction de la distance et de ses points d'action
+				action_point -= 3;																			//Réduit ses points d'action
+				target.GetComponent<Hero_Master> ().DeductHealth (30);										//Blesse le héros ciblé
+			} else if (int_distance >= 2 && int_distance <= 5 && action_point >= 1) {
 				action_point -= 1;
-				target.GetComponent<Hero_Master> ().DeductHealth (10);
+				target.GetComponent<Hero_Master> ().DeductHealth (6);
+			} else {																						//Si il n'a la range pour aucune attaque
+				attack_possibility = false;
 			}
-			yield return new WaitForSeconds (0.5f);														//Attend la fin des animations
+			yield return new WaitForSeconds (0.5f);															//Attend la fin des animations
 		}
-		combatHUD_master.enable_disable_stats ();														//Cache les informations de la cible
+		combatHUD_master.enable_disable_stats ();															//Cache les informations de la cible
 		game_master.passer_le_tour (); 
 	}
 

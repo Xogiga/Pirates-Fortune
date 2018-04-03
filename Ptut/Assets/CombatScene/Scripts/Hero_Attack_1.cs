@@ -50,14 +50,14 @@ public class Hero_Attack_1 : MonoBehaviour {
 	public void Lancer_de_Couteau(Transform ennemy)
 	{
 		int range = Range (ennemy);
-		if (range <= 5) 
+		if (range >= 2 && range <= 5) 
 		{
 			if (Is_Action_Possible (1)) {
 				Ennemy_Master ennemy_master = ennemy.GetComponent<Ennemy_Master> ();
-				ennemy_master.DeductHealth (10);
+				ennemy_master.DeductHealth (6);
 			}
 		} else {
-			combatHUD_Master.Announce ("You're too far !");																								//Ajouter un son
+			combatHUD_Master.Announce ("You're not in range !");																						//Ajouter un son
 		}
 	}
 }
