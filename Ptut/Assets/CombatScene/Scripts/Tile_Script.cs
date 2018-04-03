@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile_Script : MonoBehaviour {
-	public Sprite classic;
-	public Sprite mouseover;
 	private GameManager_Master game_master;
 	private GameObject player;									
 	private Hero_Master hero_master;
@@ -37,7 +35,7 @@ public class Tile_Script : MonoBehaviour {
 				path = game_pathfinding.Get_Path ();																							//Récupère le chemin
 				if (path != null && path.Count <=  hero_master.Get_Movement_Point()) {															//Si le chemin existe et est accessible avec les points de mouvements disponibles
 					foreach (Tile t in path) {																									//Change les sprite
-						t.obj.GetComponent<SpriteRenderer> ().sprite = mouseover;
+						t.obj.GetComponent<SpriteRenderer> ().color = new Color32(255,45,36,255);
 						}
 				}
 		}
@@ -47,19 +45,17 @@ public class Tile_Script : MonoBehaviour {
 	public void OnMouseExit(){
 		if (game_master.is_it_your_turn == true && path != null) {
 			foreach (Tile t in path) {																											//Change tous les sprites du chemin
-				t.obj.GetComponent<SpriteRenderer> ().sprite = classic;
+				t.obj.GetComponent<SpriteRenderer> ().color = new Color32(255,255,255,255);
 			}
 			path = null;
 		}
-
-		print ("delete");
 	}
 
 	//Fonction qui permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
 	void Update(){																														
 		if (game_master.is_it_your_turn == false && path != null) {
 			foreach (Tile t in path) {																											//Change tous les sprites du chemin
-				t.obj.GetComponent<SpriteRenderer> ().sprite = classic;
+				t.obj.GetComponent<SpriteRenderer> ().color = new Color32(255,255,255,255);
 			}
 			path = null;
 		}

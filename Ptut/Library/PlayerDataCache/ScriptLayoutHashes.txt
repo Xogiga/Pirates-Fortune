@@ -110,7 +110,7 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.SpatialMappingRenderer
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Hero_Deplacement
-41680c891fd720cf55efa0c5e3831253 Assembly-CSharp.dll:.Tile_Script
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Tile_Script
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.S_Canvas
 a8fcb8fdc655ae80b8b48831e2603652 Assembly-CSharp.dll:.CombatHUD_Master
 ebd50d753c52bc3f4aee1d079787326d Assembly-CSharp.dll:.Spawn
@@ -147,4 +147,4 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.VR.WSA.Spa
 39f3b53b2d28021243e9f1165f796194 Assembly-CSharp.dll:.Music
 524a7009614e5ff9bdb882b055214c41 Assembly-CSharp.dll:.S_Event2
 dd5481137759597d614818793c90a7fe Assembly-CSharp.dll:.Bouger
-41680c891fd720cf55efa0c5e3831253 Assembly-CSharp.dll:.Hero_Show_Possible_Movements
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Hero_Show_Possible_Movements

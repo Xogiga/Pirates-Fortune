@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Hero_Show_Possible_Movements : MonoBehaviour {
-	public Sprite classic;
-	public Sprite mouseover;
 	private GameObject game_manager;
 	private GameManager_Master game_master;
 	private Hero_Master hero_master;
@@ -29,7 +27,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 		if (game_master.get_playing_perso().name == this.name && hero_master.is_moving == false) {											//Si le héros survolé ne se déplace pas et que c'est son tour
 			Get_Tile_List();																												//Actualise la liste de case
 			foreach (SpriteRenderer s in sprite_list) {																						//Pour chaque case
-				s.sprite = mouseover;																										//Change de sprite									
+				s.color =  new Color32(255,45,36,255);																						//Change la couleur
 			}
 		}
 	}
@@ -39,7 +37,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 		sprite_list = new List<SpriteRenderer>();
 		int movement_points = hero_master.Get_Movement_Point();
 
-		Collider[] collidersList = Physics.OverlapSphere (this.transform.position, movement_points);									//On récupère les objets autour de lui en fonction de ses points de déplacement
+		Collider[] collidersList = Physics.OverlapSphere (this.transform.position, movement_points);										//On récupère les objets autour de lui en fonction de ses points de déplacement
 
 		foreach (Collider c in collidersList) {																								//Pour chacun des objets touchés
 			int tileX = Mathf.RoundToInt(c.transform.position.x);
@@ -47,7 +45,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 			if (c.CompareTag ("Map") && game_master.get_matrice_case(tileX,tileY) == 0) {													//Si l'objet touché est une case de la Map et qu'elle est vide
 				game_pathfinding.Find_Path (this.transform.position, c.transform.position);													//Détermine le chemin avec le script de PathFinding
 				List<Tile> path = game_pathfinding.Get_Path ();																				//Récupère le chemin
-				if (path != null && path.Count <= movement_points) {																			//Si le chemin existe et est accessible avec les points de mouvements disponibles
+				if (path != null && path.Count <= movement_points) {																		//Si le chemin existe et est accessible avec les points de mouvements disponibles
 					sprite_list.Add(c.GetComponent<SpriteRenderer> ());																		//Ajoute le sprite à la liste
 				}
 			}
@@ -58,7 +56,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	public void OnMouseExit(){																												
 		if (sprite_list != null) {
 			foreach (SpriteRenderer s in sprite_list) {
-				s.sprite = classic;
+				s.color =  new Color32(255,255,255,255);
 			}
 			sprite_list = null;
 		}
@@ -68,7 +66,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	void Update(){																															
 		if (game_master.is_it_your_turn == false && sprite_list != null) {
 			foreach (SpriteRenderer s in sprite_list) {
-					s.sprite = classic;
+					s.color = new Color32(255,255,255,255);
 				}
 			sprite_list = null;
 		}
