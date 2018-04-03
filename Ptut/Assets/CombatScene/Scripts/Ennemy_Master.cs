@@ -235,7 +235,7 @@ public class Ennemy_Master : MonoBehaviour {
 	IEnumerator Attack(int int_distance,GameObject target){
 		bool attack_possibility = true;
 		combatHUD_master.enable_disable_stats ();															//Affiche les informations de la cible
-		while (action_point >= 1 && attack_possibility == true) {											//Tant que l'ennemi a des points d'action, il attaque																		
+		while (target != null && action_point >= 1 && attack_possibility == true) {							//Tant que la cible est en vie, que l'ennemi a des points d'action et qu'il est a portée, il attaque																		
 			if (int_distance == 1 && action_point >= 3) {													//Choisi l'attaque en fonction de la distance et de ses points d'action
 				action_point -= 3;																			//Réduit ses points d'action
 				target.GetComponent<Hero_Master> ().DeductHealth (30);										//Blesse le héros ciblé
