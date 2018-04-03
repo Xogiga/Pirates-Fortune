@@ -6,7 +6,6 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	private GameObject game_manager;
 	private GameManager_Master game_master;
 	private Hero_Master hero_master;
-	private GameManager_Pathfinding game_pathfinding;
 	private List<SpriteRenderer> sprite_list;
 
 
@@ -19,7 +18,6 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 		game_manager = GameObject.FindWithTag("GameManager");
 		game_master = game_manager.GetComponent<GameManager_Master>();
 		hero_master = this.GetComponent<Hero_Master> ();
-		game_pathfinding = game_manager.GetComponent<GameManager_Pathfinding> ();
 	}
 
 	//Fonction qui affiche les cases atteignable par le héros
@@ -36,17 +34,19 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	private void Get_Tile_List(){
 		sprite_list = new List<SpriteRenderer>();
 		int movement_points = hero_master.Get_Movement_Point();
+		Tile[,] grid = game_master.get_matrice ();
 
-		Collider[] collidersList = Physics.OverlapSphere (this.transform.position, movement_points);										//On récupère les objets autour de lui en fonction de ses points de déplacement
-
-		foreach (Collider c in collidersList) {																								//Pour chacun des objets touchés
-			int tileX = Mathf.RoundToInt(c.transform.position.x);
-			int tileY =  Mathf.RoundToInt(c.transform.position.y);
-			if (c.CompareTag ("Map") && game_master.get_matrice_case(tileX,tileY) == 0) {													//Si l'objet touché est une case de la Map et qu'elle est vide
-				game_pathfinding.Find_Path (this.transform.position, c.transform.position);													//Détermine le chemin avec le script de PathFinding
-				List<Tile> path = game_pathfinding.Get_Path ();																				//Récupère le chemin
-				if (path != null && path.Count <= movement_points) {																		//Si le chemin existe et est accessible avec les points de mouvements disponibles
-					sprite_list.Add(c.GetComponent<SpriteRenderer> ());																		//Ajoute le sprite à la liste
+		int HeroX = Mathf.RoundToInt (this.transform.position.x);
+		int HeroY =  Mathf.RoundToInt(this.transform.position.y);
+		for (int i = HeroX - movement_points; i <= HeroX + movement_points; i++) {															//On récupère les cases autour de lui en fonction de ses points de déplacement
+			for (int j = HeroY - movement_points; j <= HeroY + movement_points; j++) {
+				if (i> 0 && i <17 && j>0 && j <9) {																							//On vérifie que la case se situe bien dans la grille
+					int distance = Mathf.Abs(i - HeroX) + Mathf.Abs(j - HeroY) ;
+					if (distance <= movement_points) {																						//On vérifie que la distance à la case est bien inférieure à ses points de mouvement
+						if (grid [i, j].state == 0) {																						//On vérifie que la case est innocupé
+							sprite_list.Add (grid [i, j].obj.GetComponent<SpriteRenderer> ());												//Ajoute le sprite de la case à la liste
+						}
+					}
 				}
 			}
 		}
