@@ -129,12 +129,14 @@ public class GameManager_Master : MonoBehaviour {
 	//Gère la fin de tour allié
 	private void end_hero_turn(){
 		is_it_your_turn = false;																						//On ne donne plus la main au joueur
+		get_playing_perso ().GetComponent<Hero_Master> ().Point_Character();											//Désactive la flèche au dessus du personnage
 		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
 		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();													//On lui redonne ses points
 	}
 
 	//Gère la fin de tour ennemi
 	private void end_ennemy_turn(){
+		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Désactive la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master>().Reset_Point();
 	}
 
@@ -145,15 +147,13 @@ public class GameManager_Master : MonoBehaviour {
 		combatHUD_master.Set_Hero_Points (get_playing_perso());															//On affiche ses stats
 		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
 		script_commande.Set_new_references();																			//On donne les références du nouveaux personnage aux commandes
-
-		get_playing_perso ().GetComponent<Hero_Master> ().Its_me_mario_FlipFlap ();
-
+		get_playing_perso ().GetComponent<Hero_Master> ().Point_Character();											//Affiche la flèche au dessus du personnage
 	}
 
 	//Gère le début de tour ennemi
 	private void begin_ennemy_turn(){
 		combatHUD_master.Announce ("Ennemy Turn !");																	//Annonce le tour ennemi
-		get_playing_perso ().GetComponent<Ennemy_Master> ().Its_me_mario_FlipFlap ();
+		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Affiche la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();											//Appel son comportement
 	}
 

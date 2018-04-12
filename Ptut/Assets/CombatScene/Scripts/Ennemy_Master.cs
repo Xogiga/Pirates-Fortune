@@ -11,6 +11,7 @@ public class Ennemy_Master : MonoBehaviour {
 	private int current_health;
 	private int action_stat;
 	private int action_point;
+	private GameObject indicator;
 	private CombatHUD_Master combatHUD_master;
 	private GameManager_Pathfinding game_pathfinding;
 
@@ -30,6 +31,7 @@ public class Ennemy_Master : MonoBehaviour {
 		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
 		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
 		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
+		indicator = this.transform.GetChild (0).gameObject;															//Recupère un gameObject fils
 	}
 
 	//Active les stats de l'ennemi
@@ -85,14 +87,9 @@ public class Ennemy_Master : MonoBehaviour {
 		action_point = action_stat;
 	}
 
-	public void Its_me_mario_FlipFlap(){														//Pas envie de faire une flèche au dessus de la tête
-		this.GetComponent<SpriteRenderer>().flipY = !this.GetComponent<SpriteRenderer>().flipY;
-		StartCoroutine (FlipFlap ());
-	}
-
-	IEnumerator FlipFlap(){																		//Du trolling certes, mais du trolling travaillé
-		yield return new WaitForSeconds (0.5f);
-		this.GetComponent<SpriteRenderer>().flipY = !this.GetComponent<SpriteRenderer>().flipY;
+	//Fonction qui active/désactive la flèche au dessus du personnage
+	public void Point_Character(){														
+		indicator.SetActive (!indicator.activeInHierarchy);
 	}
 
 	//Fonction qui fait agir l'IA
