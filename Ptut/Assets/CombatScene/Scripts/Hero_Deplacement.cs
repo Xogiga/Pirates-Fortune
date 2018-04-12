@@ -71,10 +71,11 @@ public class Hero_Deplacement : MonoBehaviour {
 
 	//Fonction qui tourne le personnage en fonction de sa direction
 	private void Side_flip(Vector3 next_position){
+		SpriteRenderer sprite = this.transform.GetChild(1).GetComponent<SpriteRenderer>();
 		if (this.transform.position.x < next_position.x) {																							//Si sa direction est à droite
-			this.gameObject.GetComponent<SpriteRenderer> ().flipX = false;																			//Regarde à drotie
+			sprite.flipX  = false;																													//Regarde à drotie
 		} else if (this.transform.position.x > next_position.x) {																					//Sinon l'inverse
-			this.gameObject.GetComponent<SpriteRenderer> ().flipX = true;
+			sprite.flipX  = true;	
 		}
 	}
 }

@@ -1,10 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\Hero_Show_Possible_Movements.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\Ennemy_Master.cs">
     <Files>
-      <File FileName="Assets\CombatScene\Scripts\Hero_Show_Possible_Movements.cs" Line="51" Column="74" />
-      <File FileName="Assets\CombatScene\Scripts\Ennemy_Master.cs" Line="204" Column="53" />
-      <File FileName="Assets\CombatScene\Scripts\GameManager_Pathfinding.cs" Line="39" Column="31" />
+      <File FileName="Assets\CombatScene\Scripts\Hero_Show_Possible_Movements.cs" Line="1" Column="1" />
+      <File FileName="Assets\CombatScene\Scripts\Ennemy_Master.cs" Line="242" Column="33" />
+      <File FileName="Assets\CombatScene\Scripts\GameManager_Pathfinding.cs" Line="1" Column="1" />
+      <File FileName="Assets\CombatScene\Scripts\Hero_Deplacement.cs" Line="80" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
