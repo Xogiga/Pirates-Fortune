@@ -136,6 +136,7 @@ public class GameManager_Master : MonoBehaviour {
 
 	//Gère la fin de tour ennemi
 	private void end_ennemy_turn(){
+		combatHUD_master.enable_disable_ennemy_stats();																	//Affiche les stats du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Désactive la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master>().Reset_Point();
 	}
@@ -153,6 +154,7 @@ public class GameManager_Master : MonoBehaviour {
 	//Gère le début de tour ennemi
 	private void begin_ennemy_turn(){
 		combatHUD_master.Announce ("Ennemy Turn !");																	//Annonce le tour ennemi
+		combatHUD_master.enable_disable_ennemy_stats();																	//Affiche les stats du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Affiche la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();											//Appel son comportement
 	}

@@ -18,8 +18,8 @@ public class GameManager_BeginFight : MonoBehaviour {
 	public int nb_allies; 
 	private Tile[,] grid;
 
-	private List<Tile> case_spawn_equipe_alies ;																			//Liste des cases d'apparition possible des personnages alliés
-	private List<Tile> case_spawn_equipe_ennemy;																			//Liste des cases d'apparition possible des personnages ennemis
+	private List<Tile> case_spawn_equipe_alies ;																				//Liste des cases d'apparition possible des personnages alliés
+	private List<Tile> case_spawn_equipe_ennemy;																				//Liste des cases d'apparition possible des personnages ennemis
 
 	private GameObject[] liste_perso = new GameObject[16];
 
@@ -122,12 +122,14 @@ public class GameManager_BeginFight : MonoBehaviour {
 	private void instantiate_matrice(){																					//Crée la map en placant des cases à partir de la matrice
 		GameObject tile;
 		int x, y;
+
+		GameObject map = new GameObject("map");
 		for (x = 0; x <width; x++) {
 			for (y = 0;y< height; y++) {
 				if (grid [x, y].state == 0) {
-					tile = Instantiate (empty_tile, new Vector3 (x, y, 0f), Quaternion.identity);
+					tile = Instantiate (empty_tile, new Vector3 (x, y, 0f), Quaternion.identity,map.transform);
 				} else {
-					tile = Instantiate (obstacle, new Vector3 (x, y, 0f), Quaternion.identity);
+					tile = Instantiate (obstacle, new Vector3 (x, y, 0f), Quaternion.identity,map.transform);
 				}
 				grid [x, y].obj = tile;
 			}

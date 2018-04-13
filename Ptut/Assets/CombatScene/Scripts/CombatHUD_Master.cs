@@ -30,31 +30,25 @@ public class CombatHUD_Master : MonoBehaviour {
 		SetInitialReferences ();
 	}
 
+	//Fonction qui récupère les références en fonction de leur position hiérarchique (père/fils)
 	void SetInitialReferences()
 	{
-		announce = GameObject.Find (this.name + "/Announce");
-		announce.SetActive (false);
-		button_end_turn = GameObject.Find (this.name + "/Button");
-
-		hero_stats_canvas = GameObject.Find (this.name + "/Hero Stats Canvas");
-		health_bar = GameObject.Find (this.name+"/Hero Stats Canvas/InfoJoueur/Cadre de barre de vie/Barre de vie");
-		health_image = GameObject.Find (this.name+"/Hero Stats Canvas/InfoJoueur/Cadre de barre de vie/Barre de vie/health_bar").GetComponentInChildren<Image> ();
+		hero_stats_canvas = transform.GetChild (0).gameObject;
+		health_bar = hero_stats_canvas.transform.GetChild (0).GetChild (2).GetChild (1).gameObject;
+		health_image = health_bar.transform.GetChild(0).GetComponent<Image> ();
 		health_text = health_bar.GetComponentInChildren<Text> ();
-		movement_point_text = GameObject.Find (this.name + "/Hero Stats Canvas/InfoJoueur/Deplacement");
-		action_point_text = GameObject.Find (this.name + "/Hero Stats Canvas/InfoJoueur/Action Point");
-		hero_skill_bar = GameObject.Find (this.name + "/Hero Stats Canvas/Barre des competences");
+		movement_point_text = hero_stats_canvas.transform.GetChild (0).GetChild (1).gameObject;
+		action_point_text = hero_stats_canvas.transform.GetChild (0).GetChild (0).gameObject;
+		hero_skill_bar = hero_stats_canvas.transform.GetChild (1).gameObject;
 
-		enable_disable_button_and_stats ();
-
-		ennemy_stats_canvas = GameObject.Find (this.name + "/Enemy_stats_canvas");
-		ennemy_health_bar = GameObject.Find (this.name + "/Enemy_stats_canvas/Panel/Cadre de barre de vie/Barre de vie");
-		ennemy_health_image = GameObject.Find (this.name + "/Enemy_stats_canvas/Panel/Cadre de barre de vie/Barre de vie/health_bar").GetComponentInChildren<Image> ();
+		ennemy_stats_canvas = transform.GetChild (1).gameObject;
+		ennemy_health_bar = ennemy_stats_canvas.transform.GetChild(0).GetChild(0).GetChild (1).gameObject;
+		ennemy_health_image = ennemy_health_bar.transform.GetChild(0).GetComponent<Image> ();
 		ennemy_health_text = ennemy_health_bar.GetComponentInChildren<Text> ();
-	
-		enable_disable_ennemy_stats ();
 
-		end_screen = GameObject.Find (this.name + "/End_screen");
-		end_screen.SetActive (false);
+		button_end_turn = transform.GetChild (2).gameObject;
+		announce = transform.GetChild (3).gameObject;
+		end_screen = transform.GetChild (4).gameObject;
 	}
 
 	//Fonction qui met à jour les infos du personnage
