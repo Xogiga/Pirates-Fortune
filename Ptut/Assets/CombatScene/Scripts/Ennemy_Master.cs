@@ -14,7 +14,7 @@ public class Ennemy_Master : MonoBehaviour {
 	private GameObject indicator;
 	private CombatHUD_Master combatHUD_master;
 	private GameManager_Pathfinding game_pathfinding;
-
+	public GameObject damage_text;
 
 	void OnEnable()
 	{
@@ -63,6 +63,7 @@ public class Ennemy_Master : MonoBehaviour {
 			current_health = health_stat;
 		}
 		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);
+		Show_Floating_Text (-health_change);
 	}
 
 	public void DeductHealth(int health_change){
@@ -70,16 +71,33 @@ public class Ennemy_Master : MonoBehaviour {
 		current_health -= health_change;
 		if (current_health <= 0) {																//Si la vie du personnage atteint 0 ou inférieur
 			current_health = 0;
-			combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);//Change la vie du personnage sur l'ATH
-			game_master.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
-			game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
-			combatHUD_master.enable_disable_ennemy_stats ();									//Fait disparaître les stats du personnage
-			Destroy (this.gameObject);															//Détruit le gameObject
-		} else {
-			combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);//Sinon change du personnage sur l'ATH
+			Death ();
 		}
+		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
+		Show_Floating_Text (-health_change);
 	}
 
+	//Fonction qui gère la mort du personnage
+	private void Death(){
+		game_master.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
+		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
+		combatHUD_master.enable_disable_ennemy_stats ();									//Fait disparaître les stats du personnage
+		Destroy (this.gameObject,1);														//Détruit le gameObject après 1 seconde
+	}
+
+	//Fonction qui fait apparaître un text flotant au dessus du personnage
+	private void Show_Floating_Text(int value){
+		GameObject go = Instantiate (damage_text, transform.position, Quaternion.identity, this.transform);		//Crée un text flotant fils du GameObject
+		go.transform.localPosition += new Vector3(0,4.5f,0);													//Place ce GO au desssus du joueur
+		go.GetComponent<MeshRenderer> ().sortingLayerName = "Animation";										//Définit son sortingLayer comme celui des animations pour qu'il apparaisse devant le reste
+		if (value > 0) {																						//Change la couleur selon le montant
+			go.GetComponent<TextMesh> ().color = Color.green;													
+		} else {
+			go.GetComponent<TextMesh> ().color = Color.red;
+		}
+		go.GetComponent<TextMesh> ().text = value.ToString ();													//Définit le texte à afficher
+		Destroy (go, 1);																						//Le détruit après 1 sec
+	}
 
 	//Fonction qui remet les points au max (fin de tour)
 	public void Reset_Point()

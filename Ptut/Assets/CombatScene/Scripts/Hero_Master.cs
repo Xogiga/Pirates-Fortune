@@ -14,6 +14,7 @@ public class Hero_Master : MonoBehaviour {
 	private GameObject indicator;
 	private CombatHUD_Master combatHUD_master;
 	private GameManager_Master game_master;
+	public GameObject damage_text;
 
 	void OnEnable()
 	{
@@ -55,6 +56,7 @@ public class Hero_Master : MonoBehaviour {
 			current_health = health_stat;
 		}
 		combatHUD_master.Change_Hero_Health(previous_health, current_health, health_stat);
+		Show_Floating_Text (health_change);
 	}
 
 	//Fonction qui réduit la vie
@@ -63,13 +65,32 @@ public class Hero_Master : MonoBehaviour {
 		current_health -= health_change;
 		if (current_health <= 0) {
 			current_health = 0;
-			combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
-			game_master.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
-			game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
-			Destroy (this.gameObject);															//Détruit le gameObject
+			Death ();
+		} 
+		combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);
+
+		Show_Floating_Text (-health_change);
+	}
+
+	//Fonction qui fait apparaître un text flotant au dessus du personnage
+	private void Show_Floating_Text(int value){
+		GameObject go = Instantiate (damage_text, transform.position, Quaternion.identity, this.transform);		//Crée un text flotant fils du GameObject
+		go.transform.localPosition += new Vector3(0,4.5f,0);													//Place ce GO au desssus du joueur
+		go.GetComponent<MeshRenderer> ().sortingLayerName = "Animation";										//Définit son sortingLayer comme celui des animations pour qu'il apparaisse devant le reste
+		if (value > 0) {																						//Change la couleur selon le montant
+			go.GetComponent<TextMesh> ().color = Color.green;													
 		} else {
-			combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);
+			go.GetComponent<TextMesh> ().color = Color.red;
 		}
+		go.GetComponent<TextMesh> ().text = value.ToString ();													//Définit le texte à afficher
+		Destroy (go, 1);																						//Le détruit après 1 sec
+	}
+
+	//Fonction qui gère la mort du personnage
+	private void Death(){
+		game_master.Remove_From_List (this.gameObject.name);													//Supprime le personnage de la liste
+		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
+		Destroy (this.gameObject,1);																			//Détruit le gameObject après 1 seconde
 	}
 
 	public int Get_Movement_Point(){
