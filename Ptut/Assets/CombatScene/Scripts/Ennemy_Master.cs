@@ -13,6 +13,7 @@ public class Ennemy_Master : MonoBehaviour {
 	private int action_point;
 	private GameObject indicator;
 	private CombatHUD_Master combatHUD_master;
+	private CombatLog_Manager combatlog_master;
 	private GameManager_Pathfinding game_pathfinding;
 	public GameObject damage_text;
 
@@ -29,7 +30,9 @@ public class Ennemy_Master : MonoBehaviour {
 		action_stat = 5;
 		action_point = action_stat;
 		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
-		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
+		GameObject combatHUD = GameObject.Find ("CombatHUD");
+		combatHUD_master = combatHUD.GetComponent<CombatHUD_Master>();
+		combatlog_master = combatHUD.transform.GetChild(6).GetComponent<CombatLog_Manager>();
 		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
 		indicator = this.transform.GetChild (0).gameObject;															//Recupère un gameObject fils
 	}
@@ -63,7 +66,8 @@ public class Ennemy_Master : MonoBehaviour {
 			current_health = health_stat;
 		}
 		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);
-		Show_Floating_Text (-health_change);
+		Show_Floating_Text (health_change);
+		Send_Log_Message (health_change);
 	}
 
 	public void DeductHealth(int health_change){
@@ -75,6 +79,7 @@ public class Ennemy_Master : MonoBehaviour {
 		}
 		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
 		Show_Floating_Text (-health_change);
+		Send_Log_Message (-health_change);
 	}
 
 	//Fonction qui gère la mort du personnage
@@ -97,6 +102,18 @@ public class Ennemy_Master : MonoBehaviour {
 		}
 		go.GetComponent<TextMesh> ().text = value.ToString ();													//Définit le texte à afficher
 		Destroy (go, 1);																						//Le détruit après 1 sec
+	}
+
+	//Fonction qui fait un message pour le combat log
+	public void Send_Log_Message(int health_change){
+		string message;
+		if (health_change < 0) {
+			message = this.name + " suffer " + health_change + " damages ("+current_health+" HP left).";
+			combatlog_master.Add_Text (message,1);
+		} else  {
+			message = this.name + " recieve a heal of " + health_change + " HP ("+current_health+" HP left).";
+			combatlog_master.Add_Text (message,1);
+		}
 	}
 
 	//Fonction qui remet les points au max (fin de tour)

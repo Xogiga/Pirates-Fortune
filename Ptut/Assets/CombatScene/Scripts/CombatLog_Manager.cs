@@ -37,9 +37,6 @@ public class CombatLog_Manager : MonoBehaviour {
 		case 0:
 			final_text = "Announce : " + text;
 			break;
-		case 1:
-			final_text = "IDK YET " + text;
-			break;
 		default:
 			final_text = text;
 			break;

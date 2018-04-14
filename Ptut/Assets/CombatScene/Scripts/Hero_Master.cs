@@ -15,6 +15,7 @@ public class Hero_Master : MonoBehaviour {
 	private CombatHUD_Master combatHUD_master;
 	private GameManager_Master game_master;
 	public GameObject damage_text;
+	private CombatLog_Manager combatlog_master;
 
 	void OnEnable()
 	{
@@ -30,8 +31,10 @@ public class Hero_Master : MonoBehaviour {
 		action_point = stats_daction;
 		movement_point = stats_de_deplacement;
 		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
-		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
 		indicator = this.transform.GetChild (0).gameObject;										//Recupère un gameObject fils
+		GameObject combatHUD = GameObject.Find ("CombatHUD");
+		combatHUD_master = combatHUD.GetComponent<CombatHUD_Master>();
+		combatlog_master = combatHUD.transform.GetChild(6).GetComponent<CombatLog_Manager>();
 	}
 
 	//Fonction qui active/désactive la flèche au dessus du personnage
@@ -57,6 +60,7 @@ public class Hero_Master : MonoBehaviour {
 		}
 		combatHUD_master.Change_Hero_Health(previous_health, current_health, health_stat);
 		Show_Floating_Text (health_change);
+		Send_Log_Message (health_change);
 	}
 
 	//Fonction qui réduit la vie
@@ -70,6 +74,19 @@ public class Hero_Master : MonoBehaviour {
 		combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);
 
 		Show_Floating_Text (-health_change);
+		Send_Log_Message (-health_change);
+	}
+
+	//Fonction qui fait un message pour le combat log
+	public void Send_Log_Message(int health_change){
+		string message;
+		if (health_change < 0) {
+			message = this.name + " suffer " + health_change + " damages ("+current_health+" HP left).";
+			combatlog_master.Add_Text (message,1);
+		} else  {
+			message = this.name + " recieve a heal of " + health_change + " HP ("+current_health+" HP left).";
+			combatlog_master.Add_Text (message,1);
+		}
 	}
 
 	//Fonction qui fait apparaître un text flotant au dessus du personnage
