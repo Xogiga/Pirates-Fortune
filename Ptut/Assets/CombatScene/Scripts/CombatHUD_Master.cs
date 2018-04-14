@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class CombatHUD_Master : MonoBehaviour {
 	private GameObject announce;
+	[SerializeField]
+	private GameObject combat_log;
+
 	private GameObject button_end_turn;
 
 	private GameObject hero_stats_canvas;
@@ -49,6 +52,11 @@ public class CombatHUD_Master : MonoBehaviour {
 		button_end_turn = transform.GetChild (2).gameObject;
 		announce = transform.GetChild (3).gameObject;
 		end_screen = transform.GetChild (4).gameObject;
+	}
+
+	//Fonction qui affiche/cache le combat log
+	public void enable_disable_combat_log(){
+		combat_log.GetComponent<Canvas> ().enabled = !combat_log.GetComponent<Canvas> ().enabled;
 	}
 
 	//Fonction qui met à jour les infos du personnage
@@ -171,6 +179,7 @@ public class CombatHUD_Master : MonoBehaviour {
 		announce.gameObject.SetActive (true);
 		announce.GetComponentInChildren<Text> ().text = message;
 		StartCoroutine (Disable_Announce());
+		combat_log.GetComponent<CombatLog_Manager> ().Add_Text (message,0);
 	}
 
 	//Fait disparaitre l'annonce

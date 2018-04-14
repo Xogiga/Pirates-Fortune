@@ -51,8 +51,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CombatScene\Scripts\Class\EmptyClass.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Class\Tile.cs" />
      <Compile Include="Assets\CombatScene\Scripts\CombatHUD_Master.cs" />
+     <Compile Include="Assets\CombatScene\Scripts\CombatLog_Manager.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Competence_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Ennemy_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\GameManager_BeginFight.cs" />
@@ -63,6 +65,7 @@
      <Compile Include="Assets\CombatScene\Scripts\Hero_Deplacement.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Hero_Master.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Hero_Show_Possible_Movements.cs" />
+     <Compile Include="Assets\CombatScene\Scripts\LogText_Script.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Tile_Script.cs" />
      <Compile Include="Assets\Script_test\Bouger.cs" />
      <Compile Include="Assets\Script_test\Destroy.cs" />

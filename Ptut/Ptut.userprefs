@@ -1,8 +1,8 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\GameManager_BeginFight.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CombatScene\Scripts\CombatHUD_Master.cs">
     <Files>
-      <File FileName="Assets\CombatScene\Scripts\GameManager_BeginFight.cs" Line="126" Column="40" />
+      <File FileName="Assets\CombatScene\Scripts\CombatHUD_Master.cs" Line="57" Column="30" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
