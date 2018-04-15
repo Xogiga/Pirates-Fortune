@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Tile_Script : MonoBehaviour {
 	private GameManager_Master game_master;
@@ -27,6 +28,8 @@ public class Tile_Script : MonoBehaviour {
 
 	//Fonction qui change le sprite de la case survolée si elle est accessible
 	public void OnMouseEnter(){
+		if (EventSystem.current.IsPointerOverGameObject ())																						//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
+			return;
 		Set_new_references ();
 		if (game_master.is_it_your_turn == true 																								//Si c'est au tour du joueur de jouer
 			&& hero_master.is_moving == false 																									//Si le héros n'est pas déjà entrain de bouger

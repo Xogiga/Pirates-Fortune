@@ -4,10 +4,8 @@ using UnityEngine;
 
 
 public class CombatLog_Manager : MonoBehaviour {
-	[SerializeField]
-	private Transform log_text;
-	[SerializeField]
-	private GameObject text_prefab;
+	[SerializeField] private Transform log_text;
+	[SerializeField] private GameObject text_prefab;
 
 	private List<GameObject> text_items;
 

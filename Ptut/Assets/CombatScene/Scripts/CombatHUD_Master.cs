@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class CombatHUD_Master : MonoBehaviour {
 	private GameObject announce;
-	[SerializeField]
-	private GameObject combat_log;
+	[SerializeField] private GameObject combat_log;
 
 	private GameObject button_end_turn;
 
@@ -26,6 +25,10 @@ public class CombatHUD_Master : MonoBehaviour {
 	private GameObject end_screen;
 	public Sprite victory_sprite;
 	public Sprite defeat_sprite;
+
+	private string last_message;
+	private float time_for_next_msg;
+	private int counter;
 
 
 	// Use this for initialization
@@ -52,6 +55,10 @@ public class CombatHUD_Master : MonoBehaviour {
 		button_end_turn = transform.GetChild (2).gameObject;
 		announce = transform.GetChild (3).gameObject;
 		end_screen = transform.GetChild (4).gameObject;
+
+		last_message = null;
+		time_for_next_msg = Time.time;
+		counter = 0;
 	}
 
 	//Fonction qui affiche/cache le combat log
@@ -176,10 +183,30 @@ public class CombatHUD_Master : MonoBehaviour {
 
 	//Fonction qui change le message de l'annonce
 	public void Announce(string message){
-		announce.gameObject.SetActive (true);
-		announce.GetComponentInChildren<Text> ().text = message;
-		StartCoroutine (Disable_Announce());
-		combat_log.GetComponent<CombatLog_Manager> ().Add_Text (message,0);
+		if (Check_Message (message)) {
+			announce.gameObject.SetActive (true);
+			announce.GetComponentInChildren<Text> ().text = message;
+			StartCoroutine (Disable_Announce());
+			combat_log.GetComponent<CombatLog_Manager> ().Add_Text (message,0);
+		}
+	}
+
+	//Fonction qui vérifie que la même annonce n'apparaît pas plusieurs fois dans un délai trop court
+	private bool Check_Message(string message){
+		float time_between_same_msg = 2;
+
+		if (last_message != message){														//Si le message est différent
+			counter = 1;																	//L'affiche met le compteur 0 et réinitialise le temps avant le prochain message.
+			last_message = message;
+			time_for_next_msg = Time.time + time_between_same_msg;
+			return true;
+		} else if (last_message == message && counter < 3  									//Si le message est le même mais que cela fait moins de trois fois qu'il s'affiche
+		&& Time.time < time_for_next_msg) {													//Et qu'il est apparu, il y a moins de deux secondes
+			time_for_next_msg = Time.time + time_between_same_msg;							//L'affiche et augmente son compteur de 1
+			counter++;
+			return true;
+		}
+		return false;
 	}
 
 	//Fait disparaitre l'annonce

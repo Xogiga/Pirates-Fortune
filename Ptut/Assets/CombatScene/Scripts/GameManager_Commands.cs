@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager_Commands : MonoBehaviour {
 	private GameManager_Master game_master;
@@ -34,6 +35,8 @@ public class GameManager_Commands : MonoBehaviour {
 	void Update () {
 		if (game_master.is_it_your_turn == true) {														//Vérifie que c'est le tour du joueur
 			if (hero_master.is_moving == false) {														//Vérifie que le héros ne se déplace pas déjà
+				if (EventSystem.current.IsPointerOverGameObject ())										//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
+					return;
 				if (Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.Z)) {						//Gère les compétences
 					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
 					RaycastHit hit;																		//Permet de récupérer la hitbox touchée
