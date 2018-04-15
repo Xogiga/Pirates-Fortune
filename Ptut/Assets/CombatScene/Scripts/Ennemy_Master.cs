@@ -58,7 +58,7 @@ public class Ennemy_Master : MonoBehaviour {
 		return current_health;
 	}
 
-	public void IncreaseHealth(int health_change)
+	public void IncreaseHealth(int health_change, string caller_name)
 	{
 		int previous_health = current_health;
 		current_health += health_change;
@@ -67,10 +67,10 @@ public class Ennemy_Master : MonoBehaviour {
 		}
 		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);
 		Show_Floating_Text (health_change);
-		Send_Log_Message (health_change);
+		Send_Log_Message (health_change, caller_name);
 	}
 
-	public void DeductHealth(int health_change){
+	public void DeductHealth(int health_change, string caller_name){
 		int previous_health = current_health;
 		current_health -= health_change;
 		if (current_health <= 0) {																//Si la vie du personnage atteint 0 ou inférieur
@@ -79,7 +79,7 @@ public class Ennemy_Master : MonoBehaviour {
 		}
 		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
 		Show_Floating_Text (-health_change);
-		Send_Log_Message (-health_change);
+		Send_Log_Message (-health_change, caller_name);
 	}
 
 	//Fonction qui gère la mort du personnage
@@ -105,15 +105,18 @@ public class Ennemy_Master : MonoBehaviour {
 	}
 
 	//Fonction qui fait un message pour le combat log
-	public void Send_Log_Message(int health_change){
+	public void Send_Log_Message(int health_change, string Caller_name){
 		string message;
 		if (health_change < 0) {
-			message = this.name + " suffer " + health_change + " damages ("+current_health+" HP left).";
-			combatlog_master.Add_Text (message,1);
+			if (current_health != 0) {
+				message = Caller_name + " deal " + -health_change + " damages to " + this.name + " (" + current_health + " HP left).";
+			} else {
+				message = Caller_name + " deal " + -health_change + " damages to " + this.name + ". "+this.name+" is dead.";
+			}
 		} else  {
-			message = this.name + " recieve a heal of " + health_change + " HP ("+current_health+" HP left).";
-			combatlog_master.Add_Text (message,1);
+			message = this.name + " recieve a heal of " + health_change + " HP from "+ Caller_name+" ("+current_health+" HP left).";
 		}
+		combatlog_master.Add_Text (message, 1);
 	}
 
 	//Fonction qui remet les points au max (fin de tour)
@@ -271,10 +274,10 @@ public class Ennemy_Master : MonoBehaviour {
 		while (target != null && action_point >= 1 && attack_possibility == true) {							//Tant que la cible est en vie, que l'ennemi a des points d'action et qu'il est a portée, il attaque																		
 			if (int_distance == 1 && action_point >= 3) {													//Choisi l'attaque en fonction de la distance et de ses points d'action
 				action_point -= 3;																			//Réduit ses points d'action
-				target.GetComponent<Hero_Master> ().DeductHealth (30);										//Blesse le héros ciblé
+				target.GetComponent<Hero_Master> ().DeductHealth (30, name);								//Blesse le héros ciblé
 			} else if (int_distance >= 2 && int_distance <= 4 && action_point >= 1) {
 				action_point -= 1;
-				target.GetComponent<Hero_Master> ().DeductHealth (6);
+				target.GetComponent<Hero_Master> ().DeductHealth (6, name);
 			} else {																						//Si il n'a la range pour aucune attaque
 				attack_possibility = false;
 			}

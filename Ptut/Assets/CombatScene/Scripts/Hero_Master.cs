@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Runtime.CompilerServices;
 
 public class Hero_Master : MonoBehaviour {
 	public bool is_moving;
@@ -50,7 +51,7 @@ public class Hero_Master : MonoBehaviour {
 	}
 
 	//Fonction qui augmente la vie
-	public void IncreaseHealth(int health_change)
+	public void IncreaseHealth(int health_change, string Caller_Name)
 	{
 		combatHUD_master.Set_Hero_Health(this.gameObject);
 		int previous_health = current_health;
@@ -60,11 +61,11 @@ public class Hero_Master : MonoBehaviour {
 		}
 		combatHUD_master.Change_Hero_Health(previous_health, current_health, health_stat);
 		Show_Floating_Text (health_change);
-		Send_Log_Message (health_change);
+		Send_Log_Message (health_change, Caller_Name);
 	}
 
 	//Fonction qui réduit la vie
-	public void DeductHealth(int health_change){
+	public void DeductHealth(int health_change, string Caller_Name){
 		int previous_health = current_health;
 		current_health -= health_change;
 		if (current_health <= 0) {
@@ -74,19 +75,22 @@ public class Hero_Master : MonoBehaviour {
 		combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);
 
 		Show_Floating_Text (-health_change);
-		Send_Log_Message (-health_change);
+		Send_Log_Message (-health_change, Caller_Name);
 	}
 
 	//Fonction qui fait un message pour le combat log
-	public void Send_Log_Message(int health_change){
+	public void Send_Log_Message(int health_change, string Caller_name){
 		string message;
 		if (health_change < 0) {
-			message = this.name + " suffer " + health_change + " damages ("+current_health+" HP left).";
-			combatlog_master.Add_Text (message,1);
+			if (current_health != 0) {
+				message = Caller_name + " deal " + -health_change + " damages to " + this.name + " (" + current_health + " HP left).";
+			} else {
+				message = Caller_name + " deal " + -health_change + " damages to " + this.name + ". "+this.name+" is dead.";
+			}
 		} else  {
-			message = this.name + " recieve a heal of " + health_change + " HP ("+current_health+" HP left).";
-			combatlog_master.Add_Text (message,1);
+			message = this.name + " recieve a heal of " + health_change + " HP from "+ Caller_name+" ("+current_health+" HP left).";
 		}
+		combatlog_master.Add_Text (message, 1);
 	}
 
 	//Fonction qui fait apparaître un text flotant au dessus du personnage

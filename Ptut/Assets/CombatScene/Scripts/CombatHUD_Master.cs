@@ -201,7 +201,7 @@ public class CombatHUD_Master : MonoBehaviour {
 			time_for_next_msg = Time.time + time_between_same_msg;
 			return true;
 		} else if (last_message == message && counter < 3  									//Si le message est le même mais que cela fait moins de trois fois qu'il s'affiche
-		&& Time.time < time_for_next_msg) {													//Et qu'il est apparu, il y a moins de deux secondes
+		&& Time.time > time_for_next_msg) {													//Et qu'il est apparu, il y a moins de deux secondes
 			time_for_next_msg = Time.time + time_between_same_msg;							//L'affiche et augmente son compteur de 1
 			counter++;
 			return true;
