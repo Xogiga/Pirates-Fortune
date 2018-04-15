@@ -9,6 +9,7 @@ public class Tile_Script : MonoBehaviour {
 	private Hero_Master hero_master;
 	private GameManager_Pathfinding game_pathfinding;
 	private List<Tile> path;
+	private int actual_turn;
 
 	void OnEnable(){
 		Set_initial_references();
@@ -42,6 +43,7 @@ public class Tile_Script : MonoBehaviour {
 						}
 				}
 		}
+		actual_turn = game_master.get_turn ();																									//Récupère le numéro du tour
 	}
 
 	//Fonction qui permet de réinitialiser les sprites si l'utilisateur enlève sa souris de la case
@@ -56,7 +58,7 @@ public class Tile_Script : MonoBehaviour {
 
 	//Fonction qui permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
 	void Update(){																														
-		if (game_master.is_it_your_turn == false && path != null) {
+		if (game_master.get_turn () != actual_turn && path != null) {
 			foreach (Tile t in path) {																											//Change tous les sprites du chemin
 				t.obj.GetComponent<SpriteRenderer> ().color = new Color32(255,255,255,255);
 			}

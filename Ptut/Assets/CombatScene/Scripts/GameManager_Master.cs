@@ -16,7 +16,8 @@ public class GameManager_Master : MonoBehaviour {
 	private GameObject[] liste_perso;
 	private GameObject[] list_case;
 	private int indice_playing_perso;
-	private CombatHUD_Master combatHUD_master ;
+	private CombatHUD_Master combatHUD_master;
+	private int turn;
 
 	private void OnEnable(){
 		Set_initial_reference();
@@ -31,6 +32,7 @@ public class GameManager_Master : MonoBehaviour {
 		script_creation_map = this.GetComponent<GameManager_BeginFight>();
 		script_commande = this.GetComponent<GameManager_Commands> ();
 		indice_playing_perso = 0;
+		turn = 0;
 		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();	
 	}
 
@@ -47,7 +49,7 @@ public class GameManager_Master : MonoBehaviour {
 			matrice_case = script_creation_map.get_matrice_case ();														//Récupère la matrice
 			liste_perso = script_creation_map.get_liste_perso ();														//Récupère la liste des personnages dans l'ordre des tours
 			this.GetComponent<GameManager_Commands>().enabled = true;													//Active le script des commandes
-			begin_hero_turn();
+			StartCoroutine(begin_hero_turn());
 		}
 	}		
 		
@@ -115,14 +117,14 @@ public class GameManager_Master : MonoBehaviour {
 		} else {
 			indice_playing_perso++;																						//Passe au personnage suivant
 		}
-
+		turn++;
 
 		if (get_playing_perso ().tag == "Hero") {																		//Si le personnage suivant est un héros
-			begin_hero_turn();
+			StartCoroutine(begin_hero_turn());
 		}
 
 		if (get_playing_perso ().tag == "Ennemy") {																		//Si le personnage suivant est un ennemi
-			begin_ennemy_turn();
+			StartCoroutine(begin_ennemy_turn());
 		}
 	}
 
@@ -136,13 +138,16 @@ public class GameManager_Master : MonoBehaviour {
 
 	//Gère la fin de tour ennemi
 	private void end_ennemy_turn(){
-		combatHUD_master.enable_disable_ennemy_stats();																	//Affiche les stats du personnage
+		combatHUD_master.disable_ennemy_stats();																		//Cache les stats du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Désactive la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master>().Reset_Point();
 	}
 
 	//Gère le début de tour allié
-	private void begin_hero_turn(){
+	IEnumerator begin_hero_turn(){
+		while(combatHUD_master.Is_Animating()){
+			yield return new WaitForSeconds (0.5f);
+		}
 		is_it_your_turn = true;																							//On donne la main au joueur
 		combatHUD_master.Announce ("Your Turn !");																		//Annonce le tour allié
 		combatHUD_master.Set_Hero_Points (get_playing_perso());															//On affiche ses stats
@@ -152,9 +157,13 @@ public class GameManager_Master : MonoBehaviour {
 	}
 
 	//Gère le début de tour ennemi
-	private void begin_ennemy_turn(){
+	IEnumerator begin_ennemy_turn(){
+		while(combatHUD_master.Is_Animating()){
+			yield return new WaitForSeconds (0.5f);
+		}
 		combatHUD_master.Announce ("Ennemy Turn !");																	//Annonce le tour ennemi
-		combatHUD_master.enable_disable_ennemy_stats();																	//Affiche les stats du personnage
+		combatHUD_master.Set_Ennemy_Health(get_playing_perso());														//Fais correspondre les stats du personnage
+		combatHUD_master.enable_ennemy_stats();																			//Affiche les stats du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Affiche la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();											//Appel son comportement
 	}
@@ -165,8 +174,8 @@ public class GameManager_Master : MonoBehaviour {
 	}
 
 	//Retourne le personnage qui joue son tour
-	public int get_indice_playing_perso(){
-		return indice_playing_perso;
+	public int get_turn(){
+		return turn;
 	}
 
 	public void set_matrice_case(int x,int y,int val){																	//Modifie la valeur d'une case de la matrice passé en paramètre

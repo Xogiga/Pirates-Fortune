@@ -7,10 +7,10 @@ using System.Runtime.CompilerServices;
 public class Hero_Master : MonoBehaviour {
 	public bool is_moving;
 	private int stats_de_deplacement;
-	private int movement_point;
+	[SerializeField] [Range(0,100)] private int movement_point;
 	private int stats_daction;
-	private int action_point;
-	private int health_stat = 100;
+	[SerializeField] [Range(0,100)] private int action_point;
+	[SerializeField] [Range(0,100)] private int health_stat;
 	private int current_health;
 	private GameObject indicator;
 	private CombatHUD_Master combatHUD_master;
@@ -25,6 +25,7 @@ public class Hero_Master : MonoBehaviour {
 
 	void SetInitialReferences()
 	{
+		health_stat = 100;
 		current_health = health_stat;
 		is_moving = false;
 		stats_de_deplacement = 4;
@@ -70,7 +71,7 @@ public class Hero_Master : MonoBehaviour {
 		current_health -= health_change;
 		if (current_health <= 0) {
 			current_health = 0;
-			Death ();
+			StartCoroutine(Death ());
 		} 
 		combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);
 
@@ -108,10 +109,13 @@ public class Hero_Master : MonoBehaviour {
 	}
 
 	//Fonction qui gère la mort du personnage
-	private void Death(){
-		game_master.Remove_From_List (this.gameObject.name);													//Supprime le personnage de la liste
+	IEnumerator Death(){
 		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
-		Destroy (this.gameObject,1);																			//Détruit le gameObject après 1 seconde
+		while (combatHUD_master.Is_Animating()) {																//Attend la fin de l'annimation de la barre de vie
+			yield return new WaitForSeconds (0.5f);
+		}
+		game_master.Remove_From_List (this.gameObject.name);													//Supprime le personnage de la liste
+		Destroy (this.gameObject);																			
 	}
 
 	public int Get_Movement_Point(){

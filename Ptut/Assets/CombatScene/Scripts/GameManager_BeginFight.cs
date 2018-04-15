@@ -11,11 +11,11 @@ public class GameManager_BeginFight : MonoBehaviour {
 	public GameObject obstacle;
 	public GameObject player;
 	public GameObject ennemi;
-	public int width;
-	public int height;
-	public int nb_elem_rand;
-	public int nb_ennemies;
-	public int nb_allies; 
+	private int width;
+	private int height;
+	[Range(0,100)] public int nb_elem_rand;
+	[Range(0,8)] public int nb_ennemies;
+	[Range(0,8)] public int nb_allies; 
 	private Tile[,] grid;
 
 	private List<Tile> case_spawn_equipe_alies ;																				//Liste des cases d'apparition possible des personnages alliés
@@ -42,6 +42,8 @@ public class GameManager_BeginFight : MonoBehaviour {
 
 	void Set_initial_references()
 	{
+		width = 18;
+		height = 10;
 		game_manager_master = GetComponent<GameManager_Master> ();
 		create_list_spawn_alies ();
 		create_list_spawn_ennemy ();

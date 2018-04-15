@@ -8,6 +8,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	private Hero_Master hero_master;
 	private List<SpriteRenderer> sprite_list;
 	private GameManager_Pathfinding game_pathfinding;
+	private int actual_turn;
 
 
 	void OnEnable(){
@@ -29,6 +30,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 			foreach (SpriteRenderer s in sprite_list) {																						//Pour chaque case
 				s.color =  new Color32(35,236,64,255);																						//Change la couleur
 			}
+			actual_turn = game_master.get_turn ();																			//Récupère le numéro du tour
 		}
 	}
 
@@ -70,7 +72,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 
 	//Permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
 	void Update(){																															
-		if (game_master.is_it_your_turn == false && sprite_list != null) {
+		if (game_master.get_turn () != actual_turn && sprite_list != null) {
 			foreach (SpriteRenderer s in sprite_list) {
 					s.color = new Color32(255,255,255,255);
 				}

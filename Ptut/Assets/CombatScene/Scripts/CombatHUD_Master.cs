@@ -29,6 +29,7 @@ public class CombatHUD_Master : MonoBehaviour {
 	private string last_message;
 	private float time_for_next_msg;
 	private int counter;
+	private int is_animating;
 
 
 	// Use this for initialization
@@ -59,6 +60,17 @@ public class CombatHUD_Master : MonoBehaviour {
 		last_message = null;
 		time_for_next_msg = Time.time;
 		counter = 0;
+
+		is_animating = 0;
+	}
+
+	//
+	public bool Is_Animating(){
+		if (is_animating == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	//Fonction qui affiche/cache le combat log
@@ -90,9 +102,14 @@ public class CombatHUD_Master : MonoBehaviour {
 		hero_skill_bar.SetActive (!hero_stats_canvas.activeInHierarchy);
 	}
 
-	//Fonction qui active/desactive les informations de l'ennemi
-	public void enable_disable_ennemy_stats(){
-		ennemy_stats_canvas.SetActive (!ennemy_stats_canvas.activeInHierarchy);
+	//Fonction qui active les informations de l'ennemi
+	public void enable_ennemy_stats(){
+		ennemy_stats_canvas.SetActive (true);
+	}
+
+	//Fonction qui desactive les informations de l'ennemi
+	public void disable_ennemy_stats(){
+		ennemy_stats_canvas.SetActive (false);
 	}
 
 	//Fonction qui change les points d'actions
@@ -147,38 +164,46 @@ public class CombatHUD_Master : MonoBehaviour {
 
 	//Fonction qui augmente la barre de vie du héros
 	IEnumerator Increase_Hero_Bar(float new_hero_health, float max_health){
+		is_animating++;
 		while (health_image.fillAmount < new_hero_health / max_health) {
 			yield return new WaitForSeconds (Time.deltaTime*2);
 			health_image.fillAmount += 0.01f;
 		}
 		health_image.fillAmount = new_hero_health / max_health;
+		is_animating--;
 	}
 
 	//Fonction qui diminue la barre de vie du héros
 	IEnumerator Decrease_Hero_Bar(float new_hero_health, float max_health){
+		is_animating++;
 		while (health_image.fillAmount > new_hero_health / max_health) {
 			yield return new WaitForSeconds (Time.deltaTime*2);
 			health_image.fillAmount -= 0.01f;
 		}
-		health_image.fillAmount = new_hero_health / max_health;  	
+		health_image.fillAmount = new_hero_health / max_health;
+		is_animating--;
 	}
 
 	//Fonction qui augmente la barre de vie de l'ennemi
 	IEnumerator Increase_Ennemy_Bar(float new_ennemy_health, float max_health){
+		is_animating++;
 		while (ennemy_health_image.fillAmount < new_ennemy_health / max_health) {
 			yield return new WaitForSeconds (Time.deltaTime*2);
 			ennemy_health_image.fillAmount += 0.01f;
 		}
 		ennemy_health_image.fillAmount = new_ennemy_health / max_health;
+		is_animating--;
 	}
 
 	//Fonction qui diminue la barre de vie de l'ennemi
 	IEnumerator Decrease_Ennemy_Bar(float new_ennemy_health, float max_health){
+		is_animating++;
 		while (ennemy_health_image.fillAmount > new_ennemy_health / max_health) {
 			yield return new WaitForSeconds (Time.deltaTime*2);
 			ennemy_health_image.fillAmount -= 0.01f;
 		}
-		ennemy_health_image.fillAmount = new_ennemy_health / max_health;  
+		ennemy_health_image.fillAmount = new_ennemy_health / max_health;
+		is_animating--;
 	}
 
 	//Fonction qui change le message de l'annonce
@@ -211,8 +236,10 @@ public class CombatHUD_Master : MonoBehaviour {
 
 	//Fait disparaitre l'annonce
 	IEnumerator Disable_Announce(){
+		is_animating++;
 		yield return new WaitForSeconds (1);
 		announce.gameObject.SetActive (false);
+		is_animating--;
 	}
 
 	//Affiche l'écran de fin
@@ -228,6 +255,7 @@ public class CombatHUD_Master : MonoBehaviour {
 
 	//Réalise un fondu pour l'apparition de l'écran de fin
 	IEnumerator Slow_Show_End_Screen(Image i){
+		is_animating++;
 		end_screen.SetActive (true);
 		byte transparence = 0;
 		while (transparence < 255) {																//Change frame par frame la transparence de l'image
@@ -237,5 +265,6 @@ public class CombatHUD_Master : MonoBehaviour {
 		}
 		button_end_turn = GameObject.Find (this.name+"/End_screen/Button");							//A la fin de l'animation affiche le bouton pour rejouer
 		button_end_turn.SetActive(true);
+		is_animating--;
 	}
 }

@@ -5,12 +5,13 @@ using UnityEngine;
 public class Ennemy_Master : MonoBehaviour {
 
 	private GameManager_Master game_master;
-	private int ennemy_movement_point;
+	private int movement_stats;
+	[SerializeField] [Range(0,100)] private int movement_point;
 	private int max_range;
 	private int health_stat;
-	private int current_health;
+	[SerializeField] [Range(0,100)] private int current_health;
 	private int action_stat;
-	private int action_point;
+	[SerializeField] [Range(0,100)] private int action_point;
 	private GameObject indicator;
 	private CombatHUD_Master combatHUD_master;
 	private CombatLog_Manager combatlog_master;
@@ -25,7 +26,8 @@ public class Ennemy_Master : MonoBehaviour {
 	private void Set_initial_reference(){
 		health_stat = 100;
 		current_health = health_stat;
-		ennemy_movement_point = 4;
+		movement_stats = 4;
+		movement_point = movement_stats;
 		max_range = 5;
 		action_stat = 5;
 		action_point = action_stat;
@@ -40,14 +42,18 @@ public class Ennemy_Master : MonoBehaviour {
 	//Active les stats de l'ennemi
 	void OnMouseEnter()
 	{
-		combatHUD_master.Set_Ennemy_Health (this.gameObject);
-		combatHUD_master.enable_disable_ennemy_stats ();
+		if (!combatHUD_master.Is_Animating()) {																		//Ne fait rien si une animation du HUD est déjà en cours
+			combatHUD_master.Set_Ennemy_Health (this.gameObject);													//Si la barre de vie d'un ennemi baisse déjà
+			combatHUD_master.enable_ennemy_stats ();
+		}
 	}
 
 	//Désactive les stats de l'ennemi
 	void OnMouseExit()
 	{
-		combatHUD_master.enable_disable_ennemy_stats ();
+		if (!combatHUD_master.Is_Animating()) {
+			combatHUD_master.disable_ennemy_stats ();
+		}
 	}
 
 	public int Get_Health_Stats(){
@@ -75,7 +81,7 @@ public class Ennemy_Master : MonoBehaviour {
 		current_health -= health_change;
 		if (current_health <= 0) {																//Si la vie du personnage atteint 0 ou inférieur
 			current_health = 0;
-			Death ();
+			StartCoroutine(Death ());
 		}
 		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
 		Show_Floating_Text (-health_change);
@@ -83,11 +89,15 @@ public class Ennemy_Master : MonoBehaviour {
 	}
 
 	//Fonction qui gère la mort du personnage
-	private void Death(){
+	IEnumerator Death(){
+		GetComponent<Collider> ().enabled = false;											//Désactive sa hitbox, pour qu'on ne puisse plus le blesser à nouveau
+		while (combatHUD_master.Is_Animating()) {											//Attend la fin de l'annimation de la barre de vie
+			yield return new WaitForSeconds (0.5f);
+		}
 		game_master.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
+		combatHUD_master.disable_ennemy_stats();										//Cache ses stats
 		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
-		combatHUD_master.enable_disable_ennemy_stats ();									//Fait disparaître les stats du personnage
-		Destroy (this.gameObject,1);														//Détruit le gameObject après 1 seconde
+		Destroy (this.gameObject);															//Détruit le gameObject
 	}
 
 	//Fonction qui fait apparaître un text flotant au dessus du personnage
@@ -123,6 +133,7 @@ public class Ennemy_Master : MonoBehaviour {
 	public void Reset_Point()
 	{
 		action_point = action_stat;
+		movement_point = movement_stats;
 	}
 
 	//Fonction qui active/désactive la flèche au dessus du personnage
@@ -186,7 +197,7 @@ public class Ennemy_Master : MonoBehaviour {
 	{																																			// Booléen qui empêche d'engager un nouveau déplacement, de rappeller la fonction, avant que le précédent soit fini
 		float waittime = 0.04f; 																												//Temps entre chaque micro-déplacement de MoveToward
 		float step = 4*waittime; 																												//Vitesse*Temps = distance de MoveTowards
-		for (int i = 0; i < ennemy_movement_point && i<path.Count; i++) {																		//Parcours la liste de case tant qu'il n'est pas arrivé ou tant qu'il a des points de déplacement
+		for (int i = 0; movement_point > 0 && i<path.Count; i++) {																				//Parcours la liste de case tant qu'il n'est pas arrivé ou tant qu'il a des points de déplacement
 			Vector3 next_position = new Vector3(path[i].x,path[i].y,0f);																		//Récupère la position de la case suivante
 			Side_flip (next_position);																											//Fonction qui le fait pivoter dans sa direction
 
@@ -194,6 +205,7 @@ public class Ennemy_Master : MonoBehaviour {
 				yield return new WaitForSeconds (waittime);																							
 				this.transform.position = Vector3.MoveTowards (this.transform.position, next_position, step);									//Avance vers la case 
 			}
+			movement_point--;
 		}																										 								// Booléen qui autorise un nouveau déplacement
 		End_Deplacement();
 	}
@@ -278,10 +290,12 @@ public class Ennemy_Master : MonoBehaviour {
 			} else if (int_distance >= 2 && int_distance <= 4 && action_point >= 1) {
 				action_point -= 1;
 				target.GetComponent<Hero_Master> ().DeductHealth (6, name);
-			} else {																						//Si il n'a la range pour aucune attaque
+			} else {																						//S'il n'a la range pour aucune attaque
 				attack_possibility = false;
 			}
-			yield return new WaitForSeconds (0.5f);															//Attend la fin des animations
+			while(combatHUD_master.Is_Animating() == true){
+				yield return new WaitForSeconds (0.5f);														//Attend la fin des animations
+			}
 		}
 		combatHUD_master.enable_disable_stats_for_ennemy ();												//Cache les informations de la cible
 		game_master.passer_le_tour (); 
