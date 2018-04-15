@@ -131,6 +131,7 @@ public class GameManager_Master : MonoBehaviour {
 	//Gère la fin de tour allié
 	private void end_hero_turn(){
 		is_it_your_turn = false;																						//On ne donne plus la main au joueur
+		script_commande.Reset_cursor();																					//On change le curseur si besoin
 		get_playing_perso ().GetComponent<Hero_Master> ().Point_Character();											//Désactive la flèche au dessus du personnage
 		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
 		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();													//On lui redonne ses points

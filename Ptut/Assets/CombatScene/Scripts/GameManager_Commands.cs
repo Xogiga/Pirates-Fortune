@@ -12,6 +12,7 @@ public class GameManager_Commands : MonoBehaviour {
 	private bool programmed_attack;
 	private int next_attack_code;
 	public Texture2D sprite_curseur;
+	private CombatHUD_Master combatHUD_master;
 
 	void OnEnable(){
 		Set_initial_references ();
@@ -20,6 +21,7 @@ public class GameManager_Commands : MonoBehaviour {
 	//Reférences fixes
 	private void Set_initial_references () {																		
 		game_master = this.GetComponent<GameManager_Master>();
+		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master> ();
 		programmed_attack = false;
 		next_attack_code = -1;
 	}
@@ -35,8 +37,9 @@ public class GameManager_Commands : MonoBehaviour {
 	void Update () {
 		if (game_master.is_it_your_turn == true) {														//Vérifie que c'est le tour du joueur
 			if (hero_master.is_moving == false) {														//Vérifie que le héros ne se déplace pas déjà
-				if (EventSystem.current.IsPointerOverGameObject ())										//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
+				if (EventSystem.current.IsPointerOverGameObject ()) {									//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
 					return;
+				}
 				if (Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown (KeyCode.Z)) {						//Gère les compétences
 					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
 					RaycastHit hit;																		//Permet de récupérer la hitbox touchée
@@ -55,10 +58,6 @@ public class GameManager_Commands : MonoBehaviour {
 					Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
 					RaycastHit hit;																		//Permet de récupérer la hitbox touchée
 					if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
-						if (hit.transform.tag == "Map") {												//Vérifie que l'objet touché fait partie de la map
-							script_deplacement.try_to_move (hit.transform.position);					//Se déplace jusqu'à la case sélectionée
-						}
-							
 						if (programmed_attack == true) {												//Gère les attaques à la souris
 							if (hit.transform.tag == "Ennemy") {
 								switch (next_attack_code) {												//Switch qui détermine quelle attaque lancer
@@ -69,13 +68,16 @@ public class GameManager_Commands : MonoBehaviour {
 									script_attack.Lancer_de_Couteau (hit.transform);
 									break;
 								}
+							} else {
+								combatHUD_master.Announce ("You can't attack this.");
 							}
-							programmed_attack = false;													//Suprimme l'action enregistrée
-							Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);						//Remet le curseur classique
+						} else if (hit.transform.tag == "Map") {										//Vérifie que l'objet touché fait partie de la map
+							script_deplacement.try_to_move (hit.transform.position);					//Se déplace jusqu'à la case sélectionée
 						}
 					}
+					Reset_cursor ();
 				}
-		
+
 				if (Input.GetKeyDown (KeyCode.Space)) {													//Appel la fin de tour
 						game_master.passer_le_tour ();
 				}
@@ -87,13 +89,18 @@ public class GameManager_Commands : MonoBehaviour {
 		}
 	}
 
-
+	//Fonction qui change le curseur et définit le numéro de la prochaine compétence lancée à la souris
 	public void Set_Next_Attack(int skill_number)
 	{
 		programmed_attack = true;
 		next_attack_code = skill_number;
-		Cursor.SetCursor (sprite_curseur,Vector2.zero,CursorMode.ForceSoftware);
+		Cursor.SetCursor (sprite_curseur,new Vector2 (10,15),CursorMode.ForceSoftware);
 	}
 
-
+	public void Reset_cursor(){
+		if (programmed_attack == true) {
+			programmed_attack = false;													//Suprimme l'action enregistrée
+			Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);						//Remet le curseur classique
+		}
+	}
 }

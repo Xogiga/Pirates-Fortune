@@ -40,7 +40,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.56, y: 2.56, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 10}
 --- !u!114 &114613104062624830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -111,6 +111,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 427.2979, y: 277.4091}
+  m_AnchoredPosition: {x: 12.01562, y: 5.4065194}
   m_SizeDelta: {x: 2.56, y: 2.56}
-  m_Pivot: {x: 0.99999964, y: 0.9999998}
+  m_Pivot: {x: 0.5, y: 0.5}
