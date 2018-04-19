@@ -9,6 +9,7 @@ TagManager:
   - Announce
   - Hero
   - Ennemy
+  - Point
   layers:
   - Default
   - TransparentFX
