@@ -67,6 +67,7 @@
      <Compile Include="Assets\CombatScene\Scripts\Hero_Show_Possible_Movements.cs" />
      <Compile Include="Assets\CombatScene\Scripts\LogText_Script.cs" />
      <Compile Include="Assets\CombatScene\Scripts\Tile_Script.cs" />
+     <Compile Include="Assets\MapScene\Script\BackgroundMap_Camera_Movement.cs" />
      <Compile Include="Assets\Script_test\Bouger.cs" />
      <Compile Include="Assets\Script_test\Destroy.cs" />
      <Compile Include="Assets\Script_test\Music.cs" />
