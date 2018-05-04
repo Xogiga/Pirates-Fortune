@@ -13,8 +13,8 @@ namespace MapScene {
 		void OnEnable(){
 			map = GameObject.FindGameObjectWithTag ("Map");
 			create_point ();
+			creer_toutes_lignes ();
 			verif_map ();
-
 		}
 
 		//Fonction qui dispere aléatoirement les points d'intérêts sur la map
@@ -48,15 +48,14 @@ namespace MapScene {
 			}
 		}
 
-		private void verif_map(){
-			/*liste_point [3].GetComponent<SpriteRenderer> ().flipY = true;
-			liste_point [liste_point.Count - 3].GetComponent<SpriteRenderer> ().flipX = true;
-			liste_point [liste_point.Count - 3].GetComponent<SpriteRenderer> ().flipY = true;*/
+		private void creer_toutes_lignes(){
 
 			foreach (GameObject g in liste_point) {
 				create_line (g);
 			}
+
 		}
+
 
 		private void create_line(GameObject centre){
 			int rayon = 5;
@@ -94,8 +93,36 @@ namespace MapScene {
 			liste_lignes.Add (linerenderer.gameObject);
 			centre.GetComponent<interest_marker_script> ().liste_lignes_proche.Add (nouvelle_ligne);
 			c.gameObject.GetComponent<interest_marker_script> ().liste_lignes_proche.Add (nouvelle_ligne);
+			centre.GetComponent<interest_marker_script> ().liste_points_proche.Add (c.gameObject);
+			c.gameObject.GetComponent<interest_marker_script> ().liste_points_proche.Add (centre);
 
 			nouvelle_ligne.SetActive (true);
+		}
+
+
+		private void verif_map(){
+
+			int i = 0;
+
+			foreach (GameObject point in liste_point) {
+				if (point.GetComponent<interest_marker_script> ().couleur == 0) {
+					i++;
+					print (i);
+					point.GetComponent<interest_marker_script> ().couleur = i;
+					colorier_points (point, point.GetComponent<interest_marker_script> ().couleur);
+				}
+
+			}
+
+		}
+
+		private void colorier_points(GameObject point, int c){
+			foreach (GameObject p in point.GetComponent<interest_marker_script>().liste_points_proche) {
+				if (p.GetComponent<interest_marker_script> ().couleur != c) {
+					p.GetComponent<interest_marker_script> ().couleur = c;
+					colorier_points (p, c);
+				}
+			}
 		}
 	}
 }
