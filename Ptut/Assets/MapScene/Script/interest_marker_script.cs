@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class interest_marker_script : MonoBehaviour {
-	public List<GameObject> liste_lignes_proche;
-	public List<GameObject> liste_points_proche;
-	public int couleur;
+	public List<GameObject> local_list_line;
+	public List<GameObject> local_list_point;
+	public int color;
 
 	void OnEnable() {
-		liste_lignes_proche = new List<GameObject>();
-		liste_points_proche = new List<GameObject>();
-		couleur = 0;
+		local_list_line = new List<GameObject>();
+		local_list_point = new List<GameObject>();
+		color = 0;
 	}
 
 	void OnMouseEnter(){
@@ -22,11 +22,10 @@ public class interest_marker_script : MonoBehaviour {
 		Show_Lines ();
 	}
 
+	//Fonction qui active/desactive les lignes reliés au point
 	private void Show_Lines(){
-		foreach (GameObject g in liste_lignes_proche) {
+		foreach (GameObject g in local_list_line) {
 			g.SetActive (!g.activeSelf);
 		}
 	}
-
-
 }
