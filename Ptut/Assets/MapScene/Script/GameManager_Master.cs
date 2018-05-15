@@ -9,6 +9,7 @@ namespace MapScene {
 		public List<GameObject> global_list_point;
 		public List<GameObject> global_list_line;
 		private GameObject map;
+		private List<List<GameObject>> colors_list;
 
 		void OnEnable(){
 			Set_Initial_References ();
@@ -23,8 +24,9 @@ namespace MapScene {
 		private void Create_Map(){
 			Create_All_Points ();															//Crée les points
 			Create_All_Lines ();															//Crée les lignes
-			if (Check_Map ()) {																//Vérifie qu'il n'y a pas de point isolé
-				print ("Map parfaite");
+			colors_list = Check_Map();
+			if (colors_list != null) {
+				Correct_Map (colors_list);
 			}
 		}
 
@@ -113,32 +115,113 @@ namespace MapScene {
 			nouvelle_ligne.SetActive (false);																	//On désactive la ligne, pour qu'elle soit invisible
 		}
 
-		//Fonction qui vérifie qu'il n'y a pas de point isolé
-		private bool Check_Map(){
+		//Fonction qui vérifie qu'il n'y a pas de point isolé et les listes de point par coloration
+		private List<List<GameObject>> Check_Map(){
 			int i = 0;
+			List<List<GameObject>> colors_list = new List<List<GameObject>>();									//Liste de liste de chaque couleur de point (Les bleus, les rouges..)
 
 			foreach (GameObject point in global_list_point) {													//Pour chaque point de la map
 				if (point.GetComponent<interest_marker_script> ().color == 0) {									//S'il n'a pas de couleur
 					i++;																						//Crée une nouvelle couleur
 					point.GetComponent<interest_marker_script> ().color = i;									//Colorie le point
-					Color_Points (point, point.GetComponent<interest_marker_script> ().color);					//Et colorie tous les points qui lui sont reliés dans cette couleur
+					List<GameObject> current_color_list = new List<GameObject>();								//Crée la liste de cette couleur
+					Color_Points (point, i, current_color_list);												//Et colorie tous les points qui lui sont reliés dans cette couleur
+					colors_list.Add(current_color_list);														//Ajoute la nouvelle liste de couleur aux couleurs
 				}
 			}
 
 			if (i == 1) {																						//S'il n'y a qu'une couleur
-				return true;
+				return null;
 			}
-			print (i + " couleurs !");
-			return false;
+			return colors_list;
 		}
 
 		//Fonction qui donne une couleur à un point et à tous ses voisins récursivement
-		private void Color_Points(GameObject point, int color){
+		private void Color_Points(GameObject point, int color, List<GameObject> current_color_list){
+			current_color_list.Add (point);																		//Ajoute le point à la liste de cette couleur
 			foreach (GameObject voisin in point.GetComponent<interest_marker_script>().local_list_point) {		//Pour tous les voisins d'un point
 				if (voisin.GetComponent<interest_marker_script> ().color != color) {							//Si le voisin à une couleur différente
 					voisin.GetComponent<interest_marker_script> ().color = color;								//Le colorie de la même couleur
-					Color_Points (voisin, color);																//Et colorie ses voisins à son tour
+					Color_Points (voisin, color,current_color_list);											//Et colorie ses voisins à son tour
 				}
+			}
+		}
+
+		//Fonction qui lient toutes les groupes de point entre eux
+		private void Correct_Map(List<List<GameObject>> colors_list){
+			List<GameObject> smallest_list = null;
+			int new_color;
+
+			while (colors_list.Count > 1) {																		//Tant qu'il y a plus d'une couleur
+				foreach (List<GameObject> L in colors_list) {													//On commence par déterminer la plus petite couleur
+					if (smallest_list == null || L.Count < smallest_list.Count) {
+						smallest_list = L;
+					}
+				}
+
+				colors_list.Remove (smallest_list);																//On supprime cette couleur de la liste de couleur
+				new_color = Search_Further (smallest_list);														//On détermine la couleur la plus proche
+				Change_Color(smallest_list,new_color);															//On change la plus petite liste dans cette nouvelle couleur
+
+
+				foreach (List<GameObject> L in colors_list) {													//On cherche parmi les liste celle à fusionner											
+					if (L [0].GetComponent<interest_marker_script> ().color == new_color) {						//Si la couleur est la même
+						L.AddRange (smallest_list);																//On ajoute la plus petite liste à celle la plus proche
+					}
+				}
+				smallest_list = null;
+			}
+				
+
+		}
+
+		//Fonction qui cherche le premier voisin d'une autre couleur et retourne cette couleur
+		private int Search_Further(List<GameObject> current_list){
+			float shortest_distance = 100;
+			Collider close_point = null;
+			GameObject friendly_point = null;
+			float distance;
+			Collider[] collider_list;
+
+			int range;
+
+			foreach (GameObject point in current_list) {
+				point.GetComponent<Collider> ().enabled = false;													//Désactive les hitbox de tous les points de cette couleur
+			}
+
+			foreach (GameObject point in current_list) {															//Pour tous les points de cette couleur
+				range = 6;
+				collider_list = null;
+				do {
+					collider_list = Physics.OverlapSphere (point.transform.position, range);						//Détecte tous les points autour du centre dans un rayon
+					foreach(Collider neighbours in collider_list){
+						distance = Vector3.Distance(point.transform.position, neighbours.transform.position);		//Trouve la distance entre ces points
+						if(shortest_distance > distance){															//Si cette distance est la plus courte trouvé jusqu'à présent
+							shortest_distance = distance;															//Définit cette distance comme la plus courte
+							close_point = neighbours;																//Ce point voisin comme le plus proche
+							friendly_point = point;																	//Et ce point comme le plus en bordure
+						}
+					}
+					range++;
+				} while (collider_list == null || collider_list.Length ==0);										//Tant qu'il n'a pas trouvé un point d'une autre couleur augmante la portée de détection
+			}
+
+			if (friendly_point != null) {
+				Create_Line (friendly_point, close_point);															//Créer une ligne entre les deux points de couleurs différentes trouvés
+			} 
+
+
+			foreach (GameObject point in current_list) {
+				point.GetComponent<Collider> ().enabled = true;														//On réactive les hitbox de tous les points de cette couleur
+			}
+
+			return close_point.gameObject.GetComponent<interest_marker_script>().color;								//Retourne la couleur de la liste qui a été rejointe
+		}
+
+		//Change la couleur d'une liste
+		private void Change_Color(List<GameObject> list, int new_color){
+			foreach (GameObject g in list) {
+				g.GetComponent<interest_marker_script> ().color = new_color;
 			}
 		}
 	}
