@@ -2,7 +2,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\MapScene\Script\GameManager_Master.cs">
     <Files>
-      <File FileName="Assets\MapScene\Script\GameManager_Master.cs" Line="115" Column="35" />
+      <File FileName="Assets\MapScene\Script\GameManager_Master.cs" Line="120" Column="174" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

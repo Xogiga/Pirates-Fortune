@@ -10,6 +10,8 @@ namespace MapScene {
 		public List<GameObject> global_list_line;
 		private GameObject map;
 		private List<List<GameObject>> colors_list;
+		private GameObject start_point;
+		private GameObject end_point;
 
 		void OnEnable(){
 			Set_Initial_References ();
@@ -23,10 +25,12 @@ namespace MapScene {
 		//Fonction qui crée la Map
 		private void Create_Map(){
 			Create_All_Points ();															//Crée les points
+			Choose_Start_End();																//Détermine le debut et l'arrivée
+			Draw_Point();
 			Create_All_Lines ();															//Crée les lignes
-			colors_list = Check_Map();
-			if (colors_list != null) {
-				Correct_Map (colors_list);
+			colors_list = Check_Map();														//Fais des colorations sur le graphe de le map
+			if (colors_list != null) {														//S'il y a plusieurs couleurs
+				Correct_Map (colors_list);													//Corrige la map
 			}
 		}
 
@@ -59,6 +63,62 @@ namespace MapScene {
 				}
 				cpt_case++;
 			}
+		}
+
+		//Fonction qui détermine les points de départ et d'arrivé en prenant ceux les plus proches des angles de la carte
+		private void Choose_Start_End(){
+			Vector3 StartAngle;
+			Vector3 FinishAngle;
+			start_point = null;
+			end_point = null;
+
+			int rng = Random.Range (1, 4);
+			switch (rng)																						//Choisi l'angle de départ et d'arrivé
+			{
+			case 1:
+				StartAngle = new Vector3 (-7, 25, 0);															//Haut Gauche
+				FinishAngle = new Vector3 (21,-3, 0);															//Bas Droite
+				break;
+			case 2:
+				StartAngle = new Vector3 (21, 25, 0);															//Haut Droite
+				FinishAngle = new Vector3 (-7,-3, 0);															//Bas Gauche
+				break;
+			case 3:
+				StartAngle = new Vector3 (21,-3, 0);															//Bas Droite
+				FinishAngle = new Vector3 (-7, 25, 0);															//Haut Gauche
+				break;
+			default:
+				StartAngle = new Vector3 (-7,-3, 0);															//Bas Gauche
+				FinishAngle = new Vector3 (21, 25, 0);															//Haut Droite
+				break;
+			}
+
+			int radius = 5;
+			Collider[] list_neighbourghs;
+			while (start_point==null){																			//Trouve un point proche de l'angle
+				list_neighbourghs = Physics.OverlapSphere (StartAngle,radius);	
+				if (list_neighbourghs.Length > 0) {
+					start_point = list_neighbourghs [0].gameObject;
+				} else {
+					radius++;
+				}
+			}
+			radius = 5;
+			while (end_point==null){
+				list_neighbourghs = Physics.OverlapSphere (FinishAngle,radius);	
+				if (list_neighbourghs.Length > 0) {
+					end_point = list_neighbourghs [0].gameObject;
+				} else {
+					radius++;
+				}
+			}
+		}
+
+		//Fonction qui change le logo et la couleur des points d'intérêt selon leur type
+		private void Draw_Point(){
+			print (start_point.name + end_point.name);
+			start_point.transform.localScale = new Vector3(0.05f,0.05f,10f);									//Aggrandit les points de départ et d'arrivée (impossible de changer la couleur d'un sprite noir)												
+			end_point.transform.localScale  = new Vector3(0.05f,0.05f,10f);																
 		}
 
 		//Fonction qui relie tous les points à leurs voisins
