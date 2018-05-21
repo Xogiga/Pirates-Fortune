@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4966993367697872}
   - component: {fileID: 114940508730684446}
+  - component: {fileID: 114351786979839036}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -40,6 +41,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114351786979839036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1976218787729454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fafdd3d2b9979304a9429a1ec9f4041c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114940508730684446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -53,3 +65,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interest_point: {fileID: 1562101305962294, guid: 464dc6d093b9fd84d945072989d1c173,
     type: 2}
+  line: {fileID: 1563598724862730, guid: 49f61688536ca4d47b2af4f0bd6ee939, type: 2}
+  global_list_point: []
+  global_list_line: []

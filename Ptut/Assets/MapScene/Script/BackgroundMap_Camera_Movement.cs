@@ -29,7 +29,6 @@ public class BackgroundMap_Camera_Movement : MonoBehaviour {
 	}
 
 	void Update(){
-
 		//zoom et dézoom de la caméra
 		if (Input.GetAxis("Mouse ScrollWheel")!=0) { 
 			taille_cam = camera1.GetComponent<Camera> ().orthographicSize;

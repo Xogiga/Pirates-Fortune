@@ -108,6 +108,9 @@
     <Reference Include="UnityEngine.StandardEvents">
       <HintPath>C:\ProgramData\Unity\cache\packages\packages.unity.com\com.unity.standardevents%401.0.10\UnityEngine.StandardEvents.dll</HintPath>
     </Reference>
+    <Compile Include="Assets\MapScene\Script\GameManager_Create_Map.cs" />
+    <Compile Include="Assets\MapScene\Script\GameManager_Commands.cs" />
+    <Compile Include="Assets\MapScene\Script\Ship_Master.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

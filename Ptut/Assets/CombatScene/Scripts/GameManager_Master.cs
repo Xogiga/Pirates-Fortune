@@ -191,8 +191,20 @@ public class GameManager_Master : MonoBehaviour {
 		return matrice_case;
 	}	
 
-	//Fonction qui redémarre la scène
-	public void Restart_Level(){
-		SceneManager.LoadScene (0);
+	//Fonction qui retourne à la scène de la carte
+	public void Load_Map(){
+		StartCoroutine(Load_Next_Scene_In_Background());
+	}
+
+
+	IEnumerator Load_Next_Scene_In_Background()
+	{
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MapScene");
+
+		// Wait until the asynchronous scene fully loads
+		while (!asyncLoad.isDone)
+		{
+			yield return null;
+		}
 	}
 }
