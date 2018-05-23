@@ -481,40 +481,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 114351786979839036, guid: e007aa95d2316be4095ce47d846850cf,
-        type: 2}
-      propertyPath: interest_point
-      value: 
-      objectReference: {fileID: 1562101305962294, guid: 464dc6d093b9fd84d945072989d1c173,
-        type: 2}
-    - target: {fileID: 114351786979839036, guid: e007aa95d2316be4095ce47d846850cf,
-        type: 2}
-      propertyPath: line
-      value: 
-      objectReference: {fileID: 1563598724862730, guid: 49f61688536ca4d47b2af4f0bd6ee939,
-        type: 2}
-    - target: {fileID: 114351786979839036, guid: e007aa95d2316be4095ce47d846850cf,
-        type: 2}
-      propertyPath: ship
-      value: 
-      objectReference: {fileID: 1093960333509552, guid: 0ce439792db6c164da92ec59769f04be,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e007aa95d2316be4095ce47d846850cf, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1439888462 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1976218787729454, guid: e007aa95d2316be4095ce47d846850cf,
-    type: 2}
-  m_PrefabInternal: {fileID: 1365703123}
---- !u!114 &1439888463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1439888462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a855ed46ef5eaa94e9ba7ea4819767a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

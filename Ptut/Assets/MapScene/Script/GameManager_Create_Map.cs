@@ -16,6 +16,9 @@ namespace MapScene {
 		private GameObject end_point;
 		private Vector3 player_position;
 
+		public Sprite start_sprite;
+		public Sprite end_sprite;
+
 		void OnEnable(){
 			Set_Initial_References ();
 			Create_Map ();
@@ -125,8 +128,8 @@ namespace MapScene {
 
 		//Fonction qui change le logo et la couleur des points d'intérêt selon leur type
 		private void Draw_Point(){
-			start_point.transform.localScale = new Vector3(0.05f,0.05f,10f);									//Aggrandit les points de départ et d'arrivée (impossible de changer la couleur d'un sprite noir)												
-			end_point.transform.localScale  = new Vector3(0.05f,0.05f,10f);																
+			start_point.GetComponent<SpriteRenderer> ().sprite = start_sprite;									//Chanhe les sprites d'arrivés et de départ												
+			end_point.GetComponent<SpriteRenderer> ().sprite = end_sprite;										
 		}
 
 		//Fonction qui relie tous les points à leurs voisins

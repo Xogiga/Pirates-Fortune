@@ -83,6 +83,7 @@ c63db43c730fa2cbb8ca07de15898cb6 UnityEngine.UI.dll:UnityEngine.UI.Toggle
 f61c0793411f10cf5fbfa1473fef5ef2 UnityEngine.UI.dll:UnityEngine.UI.ToggleGroup
 86d36c43c53541d667100dc90b89cfba UnityEngine.UI.dll:UnityEngine.EventSystems.TouchInputModule
 1b8c02d0aa82fbf036a2b9b2d713eec3 UnityEngine.UI.dll:UnityEngine.UI.VerticalLayoutGroup
+e86577c80865792e84d79e0885d2fc4b Assembly-CSharp.dll:MapScene.GameManager_Create_Map
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 cf455f7a806648c6ed4c7d3e3f8a0e03 UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
 13bdb7c23815c33a33b37b0ba8dd39be UnityEngine.Timeline.dll:UnityEngine.Timeline.AnimationPlayableAsset
@@ -95,6 +96,7 @@ ff05dcdf90651c3d98a9cad3df5e471e UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 30afa8783a8bbee2e465ec9ce1efaee2 UnityEngine.Timeline.dll:UnityEngine.Timeline.GroupTrack
 30afa8783a8bbee2e465ec9ce1efaee2 UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 607d64d2c4bc76ac9876e6f7b9cc7edf UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:MapScene.Ship_Master
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour
 60b2bb652410a5867a5ab9a01cd38461 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkDiscovery
@@ -120,6 +122,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Hero_Deplacement
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:MapScene.GameManager_Master
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Tile_Script
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:MapScene.GameManager_Commands
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.BackgroundMap_Camera_Movement
 380f2e23e59943820c391fb7d3e68dd1 Assembly-CSharp.dll:.CombatHUD_Master
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.GameManager_Pathfinding
@@ -163,6 +166,3 @@ d8fca1dee9c7e5ef63f8f549b58735e8 Assembly-CSharp.dll:.interest_marker_script
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Hero_Attack_1
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.LogText_Script
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Hero_Show_Possible_Movements
-e86577c80865792e84d79e0885d2fc4b Assembly-CSharp.dll:MapScene.GameManager_Create_Map
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:MapScene.GameManager_Commands
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:MapScene.Ship_Master
