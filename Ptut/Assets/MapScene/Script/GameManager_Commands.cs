@@ -18,10 +18,11 @@ namespace MapScene {
 
 		// Update is called once per frame
 		void Update () {
-			if (EventSystem.current.IsPointerOverGameObject ()) {									//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
-				return;
-			}
+			
 			if (Input.GetMouseButtonDown (0)) {														//Gère les déplacements à la souris
+				if (EventSystem.current.IsPointerOverGameObject ()) {								//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
+					return;
+				}
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
 				RaycastHit hit;																		//Permet de récupérer la hitbox touchée
 				if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
@@ -31,6 +32,10 @@ namespace MapScene {
 						player_script.Can_I_Move (hit.transform.gameObject);						//Se déplace jusqu'au point sélectionée
 					}
 				}
+			}
+			if (Input.GetKey ("escape")) 															//Ferme l'application
+			{
+				Application.Quit ();
 			}
 		}
 	}
