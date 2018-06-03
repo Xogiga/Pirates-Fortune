@@ -111,6 +111,7 @@
     <Compile Include="Assets\MapScene\Script\GameManager_Create_Map.cs" />
     <Compile Include="Assets\MapScene\Script\GameManager_Commands.cs" />
     <Compile Include="Assets\MapScene\Script\Ship_Master.cs" />
+    <Compile Include="Assets\MapScene\Script\MapSave.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

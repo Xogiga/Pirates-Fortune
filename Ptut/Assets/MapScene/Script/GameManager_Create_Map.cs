@@ -15,16 +15,21 @@ namespace MapScene {
 		private GameObject start_point;
 		private GameObject end_point;
 		private Vector3 player_position;
+		public static GameManager_Create_Map creation_script;
 
 		public Sprite start_sprite;
 		public Sprite end_sprite;
 
+		void Awake(){
+			creation_script = this;
+		}
+
 		void OnEnable(){
 			Set_Initial_References ();
-			Create_Map ();
 		}
 
 		private void Set_Initial_References(){
+			creation_script = this;
 			map = GameObject.FindGameObjectWithTag ("Map");
 			global_list_point = new List<GameObject> ();
 			global_list_line = new List<GameObject> ();
@@ -33,17 +38,40 @@ namespace MapScene {
 
 		//Fonction qui crée la Map
 		public void Create_Map(){
-			Create_All_Points ();															//Crée les points
-			Choose_Start_End();																//Détermine le debut et l'arrivée
-			Draw_Point();
-			Create_All_Lines ();															//Crée les lignes
-			colors_list = Check_Map();														//Fais des colorations sur le graphe de le map
-			if (colors_list != null) {														//S'il y a plusieurs couleurs
-				Correct_Map (colors_list);													//Corrige la map
+			if (MapSave.CurrentMap.Load() == false) {											//S'il n'y a rien a charger
+				Create_All_Points ();															//Crée les points
+				Choose_Start_End ();															//Détermine le debut et l'arrivée
+				Create_All_Lines ();															//Crée les lignes
+				colors_list = Check_Map ();														//Fais des colorations sur le graphe de le map
+				if (colors_list != null) {														//S'il y a plusieurs couleurs
+					Correct_Map (colors_list);													//Corrige la map
+				}
+				Instantiate_Ship ();															//Crée le bateau
+				GameMaster.Set_Reachable_point (start_point);									//Détermine les points accessibles
+				//Sauvegarde la Map
+				MapSave.CurrentMap.global_list_line = global_list_line;
+			} else {
+				Recreate_Previous_Map ();
 			}
-			Instantiate_Ship ();															//Crée le bateau
-			Center_Camera ();																//Centre la caméra
-			GameMaster.Set_Reachable_point(start_point);									//Détermine les points accessibles
+			Center_Camera ();																	//Centre la caméra
+			MapSave.CurrentMap.global_list_point = global_list_point;							//Sauvegarde tous les points
+			Draw_Point ();																		//Change les sprites selon les points
+		}
+
+		//Fonction qui recrée la map à partir du fichier de sauvegarde
+		private void Recreate_Previous_Map(){
+			foreach (MapSave.PointData d in MapSave.CurrentMap.Get_global_data_point()) {		//Recrée tous les points de la map
+				Create_One_Point(d.posX, d.posY);
+				interest_marker_script last_script = 
+					global_list_point[global_list_point.Count -1].GetComponent<interest_marker_script>();//Récupère le script du dernier point créé
+				last_script.done = d.done;
+				last_script.event_name = d.eventName;
+
+			}
+			player_position = MapSave.CurrentMap.playerPos;										//Replace le joueur	
+			Instantiate (ship, player_position ,Quaternion.identity);
+			string s = MapSave.CurrentMap.startPoint.Substring (5);
+			start_point = global_list_point [int.Parse (s)];									//Définit le start_point à partir de l'indice situé dans son nom
 		}
 
 		//Fonction qui dispere aléatoirement les points d'intérêts sur la map
@@ -66,15 +94,20 @@ namespace MapScene {
 				if (Random.Range (0f, 1f) < chance) {															//Fait apparaître un point quand le chiffre random est inférieur à la chance d'apparition
 					float posX = Random.Range (c.x, c.x + 2);
 					float posY = Random.Range (c.y, c.y + 2);
-					GameObject nouvpoint = Instantiate (interest_point, new Vector3 (posX, posY, 1), Quaternion.identity, map.transform);
-					nouvpoint.name = "Point" + global_list_point.Count;
-					global_list_point.Add (nouvpoint);
+					Create_One_Point (posX, posY);																//Créer le gameobject
 					chance -= 0.1f;																				//Si un point apparaît les chances d'apparition du suivant sont plus faible
 				} else {
 					chance += 0.1f;																				//S'il n'apparaît pas l'inverse
 				}
 				cpt_case++;
 			}
+		}
+
+		//Fonction qui créer un GO point à une position donnée
+		private void Create_One_Point(float posX,float posY){
+			GameObject nouvpoint = Instantiate (interest_point, new Vector3 (posX, posY, 1), Quaternion.identity, map.transform);
+			nouvpoint.name = "Point" + global_list_point.Count;
+			global_list_point.Add (nouvpoint);
 		}
 
 		//Fonction qui détermine les points de départ et d'arrivé en prenant ceux les plus proches des angles de la carte
@@ -124,12 +157,16 @@ namespace MapScene {
 					radius++;
 				}
 			}
+
+			MapSave.CurrentMap.startPoint= start_point.name;													//Sauvegardes les points de départ et d'arrivée
+			MapSave.CurrentMap.endPoint = end_point.name;
+
 		}
 
 		//Fonction qui change le logo et la couleur des points d'intérêt selon leur type
 		private void Draw_Point(){
 			start_point.GetComponent<SpriteRenderer> ().sprite = start_sprite;									//Chanhe les sprites d'arrivés et de départ												
-			end_point.GetComponent<SpriteRenderer> ().sprite = end_sprite;										
+			//end_point.GetComponent<SpriteRenderer> ().sprite = end_sprite;									
 		}
 
 		//Fonction qui relie tous les points à leurs voisins

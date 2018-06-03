@@ -8,12 +8,14 @@ public class interest_marker_script : MonoBehaviour {
 	public string event_name;
 	public int color;
 	public bool reachable;
+	public bool done;
 
 	void OnEnable() {
 		Set_Initial_References ();
 	}
 
 	private void Set_Initial_References(){
+		done = false;
 		local_list_line = new List<GameObject>();
 		local_list_point = new List<GameObject>();
 		color = 0;

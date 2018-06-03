@@ -5,7 +5,6 @@ using UnityEngine;
 namespace MapScene {
 	public class Ship_Master : MonoBehaviour {
 		private bool is_moving;
-		private GameManager_Master GameMaster;
 
 		void OnEnable(){
 			Set_initial_references ();
@@ -14,7 +13,6 @@ namespace MapScene {
 		void Set_initial_references()
 		{		
 			is_moving = false;
-			GameMaster = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
 		}
 
 		//Fonction qui vérifie que le bateau n'est pas déjà en mouvement, avant de le déplacer
@@ -39,9 +37,9 @@ namespace MapScene {
 				this.transform.position = Vector3.MoveTowards (this.transform.position, end_position, step);											//Avance vers sa destination
 			}
 
-			GameMaster.Set_Reachable_point (destination);																								//Autorise le déplacement vers les points suivants
+			GameManager_Master.GameMaster.Set_Reachable_point (destination);																								//Autorise le déplacement vers les points suivants
 			is_moving = false;																															//Booléen qui autorise un nouveau déplacement
-			GameMaster.Load_Event_Scene(destination);
+			GameManager_Master.GameMaster.Load_Event_Scene(destination);
 		}
 
 

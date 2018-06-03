@@ -6,6 +6,11 @@ using UnityEngine.EventSystems;
 namespace MapScene {
 	public class GameManager_Commands : MonoBehaviour {
 		private Ship_Master player_script;
+		public static GameManager_Commands Commands;
+
+		void Awake(){
+			Commands = this;
+		}
 
 		void OnEnable(){
 			Set_initial_references ();
