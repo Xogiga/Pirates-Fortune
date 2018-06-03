@@ -47,20 +47,25 @@ namespace MapScene {
 					Correct_Map (colors_list);													//Corrige la map
 				}
 				Instantiate_Ship ();															//Crée le bateau
-				GameMaster.Set_Reachable_point (start_point);									//Détermine les points accessibles
-				//Sauvegarde la Map
-				MapSave.CurrentMap.global_list_line = global_list_line;
 			} else {
 				Recreate_Previous_Map ();
 			}
 			Center_Camera ();																	//Centre la caméra
-			MapSave.CurrentMap.global_list_point = global_list_point;							//Sauvegarde tous les points
 			Draw_Point ();																		//Change les sprites selon les points
+			SaveToData();
+		}
+
+		//Envoie toutes les informations au script qui contient la sauvegarde
+		private void SaveToData(){
+			MapSave.CurrentMap.global_list_line = global_list_line;
+			MapSave.CurrentMap.global_list_point = global_list_point;							//Sauvegarde tous les points
+			MapSave.CurrentMap.startPoint = start_point;										//Enregistre le point de départ
+			MapSave.CurrentMap.endPoint = end_point;											//Enregistre le point d'arrivée
 		}
 
 		//Fonction qui recrée la map à partir du fichier de sauvegarde
 		private void Recreate_Previous_Map(){
-			foreach (MapSave.PointData d in MapSave.CurrentMap.Get_global_data_point()) {		//Recrée tous les points de la map
+			foreach (MapSave.PointData d in MapSave.CurrentMap.global_data_point) {				//Recrée tous les points de la map
 				Create_One_Point(d.posX, d.posY);
 				interest_marker_script last_script = 
 					global_list_point[global_list_point.Count -1].GetComponent<interest_marker_script>();//Récupère le script du dernier point créé
@@ -68,10 +73,41 @@ namespace MapScene {
 				last_script.event_name = d.eventName;
 
 			}
+
+			foreach (MapSave.LineData l in MapSave.CurrentMap.global_data_line) {
+				ReCreate_Line (l.index1, l.index2);
+			}
+
+
 			player_position = MapSave.CurrentMap.playerPos;										//Replace le joueur	
-			Instantiate (ship, player_position ,Quaternion.identity);
-			string s = MapSave.CurrentMap.startPoint.Substring (5);
-			start_point = global_list_point [int.Parse (s)];									//Définit le start_point à partir de l'indice situé dans son nom
+			Instantiate (ship, player_position ,Quaternion.identity);							//Crée le bateau
+
+			//Recupère les indices des points de départ et d'arrivé puis les enregistre à nouveau
+			start_point = global_list_point [MapSave.CurrentMap.startPoint_data];				//Définit le start_point à partir de l'indice
+			end_point = global_list_point[MapSave.CurrentMap.endPoint_data];					//Définit le end-point à partir de l'indice
+
+		}
+
+		//
+		private void ReCreate_Line(int index1, int index2){
+			GameObject point1 = global_list_point [index1];
+			GameObject point2 = global_list_point [index2];
+			GameObject nouvelle_ligne = Instantiate (line, Vector3.zero, Quaternion.identity, map.transform);	//Crée une ligne qui a pour parent la carte
+			LineRenderer linerenderer = nouvelle_ligne.GetComponent<LineRenderer> ();
+			linerenderer.SetPosition (0, point1.transform.position);											//On la place de façon à relier les points
+			linerenderer.SetPosition (1, point2.transform.position);
+			linerenderer.name = "Line" + point1.name + point2.name;												//On la renomme en fonction des points qu'elle joint
+			global_list_line.Add (linerenderer.gameObject);														//On l'ajoute à la liste de toutes les lignes
+
+			interest_marker_script script1 = point1.GetComponent<interest_marker_script> ();
+			interest_marker_script script2 = point2.GetComponent<interest_marker_script> ();
+
+			script1.local_list_line.Add (nouvelle_ligne);														//On l'ajoute à la liste des lignes reliés à ces points
+			script2.local_list_line.Add (nouvelle_ligne);
+			script1.local_list_point.Add (point2);																//On ajoute chaque point à la liste des points reliés de l'autre point
+			script2.local_list_point.Add (point1);
+
+			nouvelle_ligne.SetActive (false);				
 		}
 
 		//Fonction qui dispere aléatoirement les points d'intérêts sur la map
@@ -106,7 +142,7 @@ namespace MapScene {
 		//Fonction qui créer un GO point à une position donnée
 		private void Create_One_Point(float posX,float posY){
 			GameObject nouvpoint = Instantiate (interest_point, new Vector3 (posX, posY, 1), Quaternion.identity, map.transform);
-			nouvpoint.name = "Point" + global_list_point.Count;
+			nouvpoint.name = "Point" + global_list_point.Count.ToString("00");
 			global_list_point.Add (nouvpoint);
 		}
 
@@ -158,15 +194,13 @@ namespace MapScene {
 				}
 			}
 
-			MapSave.CurrentMap.startPoint= start_point.name;													//Sauvegardes les points de départ et d'arrivée
-			MapSave.CurrentMap.endPoint = end_point.name;
-
+			start_point.GetComponent<interest_marker_script> ().done	= true;									//Détermine l'évènement de départ comme fait
 		}
 
 		//Fonction qui change le logo et la couleur des points d'intérêt selon leur type
 		private void Draw_Point(){
 			start_point.GetComponent<SpriteRenderer> ().sprite = start_sprite;									//Chanhe les sprites d'arrivés et de départ												
-			//end_point.GetComponent<SpriteRenderer> ().sprite = end_sprite;									
+			end_point.GetComponent<SpriteRenderer> ().sprite = end_sprite;									
 		}
 
 		//Fonction qui relie tous les points à leurs voisins
