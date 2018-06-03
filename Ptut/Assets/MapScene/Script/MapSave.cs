@@ -76,7 +76,6 @@ namespace MapScene {
 			return SerialLines;
 		}
 
-
 		//Fonction qui change les noms des points en index de la liste
 		private int Transform_Name_To_Int(GameObject point){
 			string stringIndex = point.name.Substring (5);											//Supprime les 5 premiers caractères d'un string
