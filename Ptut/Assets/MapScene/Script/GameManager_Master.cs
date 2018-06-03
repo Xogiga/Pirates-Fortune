@@ -23,7 +23,7 @@ namespace MapScene {
 			if (GameManager_Create_Map.creation_script != null && GameManager_Commands.Commands != null) {
 				GameManager_Create_Map.creation_script.Create_Map ();
 				GameManager_Commands.Commands.enabled = true;
-				Set_Reachable_point (MapSave.CurrentMap.startPoint);										//Détermine les points accessibles
+				Set_Reachable_point (MapSave.CurrentMap.playerPos);										//Détermine les points accessibles
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace MapScene {
 		public void Load_Event_Scene(GameObject point){
 			interest_marker_script point_script = point.GetComponent<interest_marker_script> ();			//Récupère le scrit qui contient les données du point
 			if (point_script.done == false) {																//Si le point n'a pas déjà été parcouru
-				MapSave.CurrentMap.playerPos = GameObject.FindWithTag ("Hero").transform.position;			//Enregistre la position du joueur
+				MapSave.CurrentMap.playerPos = point;														//Enregistre la position du joueur
 				point.GetComponent<interest_marker_script> ().done = true;									//Détermine l'évènement comme fait
 				MapSave.CurrentMap.Save ();																	//Sauvegarde les informations de la map dans un fichier, avant de changer de scène
 				StartCoroutine (Load_Next_Scene_In_Background (point_script.event_name));					//Charge l'évènement à partir de son nom

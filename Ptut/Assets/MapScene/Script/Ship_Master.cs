@@ -37,7 +37,7 @@ namespace MapScene {
 				this.transform.position = Vector3.MoveTowards (this.transform.position, end_position, step);											//Avance vers sa destination
 			}
 
-			GameManager_Master.GameMaster.Set_Reachable_point (destination);																								//Autorise le déplacement vers les points suivants
+			GameManager_Master.GameMaster.Set_Reachable_point (destination);																			//Autorise le déplacement vers les points suivants
 			is_moving = false;																															//Booléen qui autorise un nouveau déplacement
 			GameManager_Master.GameMaster.Load_Event_Scene(destination);
 		}

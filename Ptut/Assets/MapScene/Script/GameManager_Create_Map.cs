@@ -14,7 +14,7 @@ namespace MapScene {
 		private List<List<GameObject>> colors_list;
 		private GameObject start_point;
 		private GameObject end_point;
-		private Vector3 player_position;
+		private GameObject player_position;
 		public static GameManager_Create_Map creation_script;
 
 		public Sprite start_sprite;
@@ -61,6 +61,7 @@ namespace MapScene {
 			MapSave.CurrentMap.global_list_point = global_list_point;							//Sauvegarde tous les points
 			MapSave.CurrentMap.startPoint = start_point;										//Enregistre le point de départ
 			MapSave.CurrentMap.endPoint = end_point;											//Enregistre le point d'arrivée
+			MapSave.CurrentMap.playerPos = player_position;										//Enregistre sa position actuel
 		}
 
 		//Fonction qui recrée la map à partir du fichier de sauvegarde
@@ -79,8 +80,9 @@ namespace MapScene {
 			}
 
 
-			player_position = MapSave.CurrentMap.playerPos;										//Replace le joueur	
-			Instantiate (ship, player_position ,Quaternion.identity);							//Crée le bateau
+			player_position = 
+				global_list_point[MapSave.CurrentMap.playerPos_data];		//Replace le joueur	
+			Instantiate (ship, player_position.transform.position ,Quaternion.identity);							//Crée le bateau
 
 			//Recupère les indices des points de départ et d'arrivé puis les enregistre à nouveau
 			start_point = global_list_point [MapSave.CurrentMap.startPoint_data];				//Définit le start_point à partir de l'indice
@@ -362,15 +364,15 @@ namespace MapScene {
 
 		//Fonction qui place le bateau au point de départ
 		private void Instantiate_Ship(){
-			player_position = start_point.transform.position + new Vector3 (1, 0, 0);
-			Instantiate (ship, player_position ,Quaternion.identity);
+			player_position = start_point;
+			Instantiate (ship, player_position.transform.position + new Vector3 (1, 0, 0), Quaternion.identity);
 		}
 
 		//Fonction qui place la caméra sur le joueur au démarage
 		private void Center_Camera(){
 			GameObject camera1 = GameObject.FindWithTag ("MainCamera");
-			float camX = Mathf.Clamp (player_position.x, 0,15);												//Encadre les valeurs X,Y de la caméra dans les limites de la carte
-			float camY = Mathf.Clamp (player_position.y, 0,22);
+			float camX = Mathf.Clamp (player_position.transform.position.x, 0,15);												//Encadre les valeurs X,Y de la caméra dans les limites de la carte
+			float camY = Mathf.Clamp (player_position.transform.position.y, 0,22);
 			camera1.transform.position =  new Vector3 (camX,camY, -10);
 
 		}

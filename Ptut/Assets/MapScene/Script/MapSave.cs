@@ -16,7 +16,8 @@ namespace MapScene {
 		public List<GameObject> global_list_line;
 		public List<PointData> global_data_point;
 		public List<LineData> global_data_line;
-		public Vector3 playerPos;
+		public GameObject playerPos;
+		public int playerPos_data;
 		public GameObject startPoint;
 		public int startPoint_data;
 		public GameObject endPoint;
@@ -38,8 +39,7 @@ namespace MapScene {
 
 			data.global_list_line = Transform_Lines_To_Serial();
 			data.global_list_point = Transform_Points_To_Serial();
-			data.playerX = playerPos.x;
-			data.playerY = playerPos.y;
+			data.playerPos = Transform_Name_To_Int(playerPos);
 			data.startPoint_data = Transform_Name_To_Int(startPoint);
 			data.endPoint_data = Transform_Name_To_Int(endPoint);
 
@@ -93,9 +93,9 @@ namespace MapScene {
 
 				global_data_line = data.global_list_line;
 				global_data_point = data.global_list_point;											//Recupère la liste de point en PointData
-				playerPos = new Vector3 (data.playerX, data.playerY);								//Récupère la position du joueur en Vector3
+				playerPos_data = data.playerPos;														//Récupère la position du joueur en Vector3
 				endPoint_data = data.endPoint_data;													//Récupère l'indice du point d'arrivée
-				startPoint_data = data.startPoint_data;													//Et de départ
+				startPoint_data = data.startPoint_data;												//Et de départ
 
 				return true;
 			} else {
@@ -110,8 +110,7 @@ namespace MapScene {
 		public class MapData {
 			public List<PointData> global_list_point;
 			public List<LineData> global_list_line;
-			public float playerX;
-			public float playerY;
+			public int playerPos;
 			public int startPoint_data;
 			public int endPoint_data;
 		}
