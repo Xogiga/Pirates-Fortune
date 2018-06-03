@@ -16,6 +16,7 @@ namespace MapScene {
 		private GameObject end_point;
 		private GameObject player_position;
 		public static GameManager_Create_Map creation_script;
+		private List<GameObject> visited_points;
 
 		public Sprite start_sprite;
 		public Sprite end_sprite;
@@ -34,6 +35,7 @@ namespace MapScene {
 			global_list_point = new List<GameObject> ();
 			global_list_line = new List<GameObject> ();
 			GameMaster = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
+			visited_points = new List<GameObject> ();
 		}
 
 		//Fonction qui crée la Map
@@ -72,7 +74,9 @@ namespace MapScene {
 					global_list_point[global_list_point.Count -1].GetComponent<interest_marker_script>();//Récupère le script du dernier point créé
 				last_script.done = d.done;
 				last_script.event_name = d.eventName;
-
+				if (d.done == true) {															//Si le joueur a déjà fait l'évènement
+					visited_points.Add(global_list_point[global_list_point.Count -1]);			//Ajoute le point à ceux visités
+				}
 			}
 
 			foreach (MapSave.LineData l in MapSave.CurrentMap.global_data_line) {
@@ -201,8 +205,11 @@ namespace MapScene {
 
 		//Fonction qui change le logo et la couleur des points d'intérêt selon leur type
 		private void Draw_Point(){
-			start_point.GetComponent<SpriteRenderer> ().sprite = start_sprite;									//Chanhe les sprites d'arrivés et de départ												
-			end_point.GetComponent<SpriteRenderer> ().sprite = end_sprite;									
+			start_point.GetComponent<SpriteRenderer> ().sprite = start_sprite;									//Change les sprites d'arrivés et de départ												
+			end_point.GetComponent<SpriteRenderer> ().sprite = end_sprite;
+			foreach (GameObject p in visited_points) {															//Grise les points visités
+				p.GetComponent<SpriteRenderer> ().color = new Color(1,1,1,0.5f);
+			}
 		}
 
 		//Fonction qui relie tous les points à leurs voisins
