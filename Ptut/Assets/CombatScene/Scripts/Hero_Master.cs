@@ -7,11 +7,11 @@ using System.Runtime.CompilerServices;
 public class Hero_Master : MonoBehaviour {
 	public bool is_moving;
 	private int stats_de_deplacement;
-	[SerializeField] [Range(0,100)] private int movement_point;
+	[Range(0,100)] public int movement_point;
 	private int stats_daction;
-	[SerializeField] [Range(0,100)] private int action_point;
-	[SerializeField] [Range(0,100)] private int health_stat;
-	private int current_health;
+	[Range(0,100)] public int action_point;
+	private int health_stat;
+	[Range(0,100)] public int current_health;
 	private GameObject indicator;
 	private CombatHUD_Master combatHUD_master;
 	private GameManager_Master game_master;

@@ -114,6 +114,7 @@
     <Compile Include="Assets\MapScene\Script\MapSave.cs" />
     <Compile Include="Assets\MapScene\Script\Dialog_Manager.cs" />
     <Compile Include="Assets\MapScene\Script\Class\Dialogue.cs" />
+    <Compile Include="Assets\MapScene\Script\References.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

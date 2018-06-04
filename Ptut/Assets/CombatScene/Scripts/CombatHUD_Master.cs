@@ -250,11 +250,12 @@ public class CombatHUD_Master : MonoBehaviour {
 		} else {
 			image.sprite = defeat_sprite;
 		}
-		StartCoroutine (Slow_Show_End_Screen (image));
+		StartCoroutine (Slowly_Show_End_Screen (image, victory));
 	}
 
 	//Réalise un fondu pour l'apparition de l'écran de fin
-	IEnumerator Slow_Show_End_Screen(Image i){
+	IEnumerator Slowly_Show_End_Screen(Image i, bool victory){
+		GameObject button = end_screen.transform.GetChild (1).gameObject;
 		is_animating++;
 		end_screen.SetActive (true);
 		byte transparence = 0;
@@ -263,8 +264,10 @@ public class CombatHUD_Master : MonoBehaviour {
 			i.color = new Color32(255,255,255,transparence);
 			transparence += 3;
 		}
-		button_end_turn = GameObject.Find (this.name+"/End_screen/Button");							//A la fin de l'animation affiche le bouton pour rejouer
-		button_end_turn.SetActive(true);
+		if (victory == false) {
+			button.transform.GetChild (0).GetComponent<Text>().text = "Menu";
+		}
+		button.SetActive(true);																		//A la fin de l'animation affiche le bouton pour rejouer
 		is_animating--;
 	}
 }

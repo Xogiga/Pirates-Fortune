@@ -14,22 +14,15 @@ namespace MapScene {
 		private GameObject start_point;
 		private GameObject end_point;
 		private GameObject player_position;
-		public static GameManager_Create_Map creation_script;
 		private List<GameObject> visited_points;
-
 		public Sprite start_sprite;
 		public Sprite end_sprite;
-
-		void Awake(){
-			creation_script = this;
-		}
 
 		void OnEnable(){
 			Set_Initial_References ();
 		}
 
 		private void Set_Initial_References(){
-			creation_script = this;
 			map = GameObject.FindGameObjectWithTag ("Map");
 			global_list_point = new List<GameObject> ();
 			global_list_line = new List<GameObject> ();
@@ -38,7 +31,7 @@ namespace MapScene {
 
 		//Fonction qui crée la Map
 		public void Create_Map(){
-			if (MapSave.CurrentMap.Load() == false) {											//S'il n'y a rien a charger
+			if (References.SaveMapScript.Load() == false) {											//S'il n'y a rien a charger
 				Create_All_Points ();															//Crée les points
 				Choose_Start_End ();															//Détermine le debut et l'arrivée
 				Create_All_Lines ();															//Crée les lignes
@@ -52,8 +45,8 @@ namespace MapScene {
 				Recreate_Previous_Map ();
 			}
 
-			GameManager_Master.GameMaster.Set_current_point(player_position);					//Définit le point où se trouve le joueur
-			GameManager_Master.GameMaster.Set_Reachable_point ();								//Détermine les points accessibles
+			References.GameMaster.Set_current_point(player_position);					//Définit le point où se trouve le joueur
+			References.GameMaster.Set_Reachable_point ();								//Détermine les points accessibles
 			Center_Camera ();																	//Centre la caméra
 			Draw_Point ();																		//Change les sprites selon les points
 			SaveToData();																		//Envoie toutes les données au script de sauvegarde
@@ -61,16 +54,16 @@ namespace MapScene {
 
 		//Envoie toutes les informations au script qui contient la sauvegarde
 		private void SaveToData(){
-			MapSave.CurrentMap.global_list_line = global_list_line;
-			MapSave.CurrentMap.global_list_point = global_list_point;							//Sauvegarde tous les points
-			MapSave.CurrentMap.startPoint = start_point;										//Enregistre le point de départ
-			MapSave.CurrentMap.endPoint = end_point;											//Enregistre le point d'arrivée
-			MapSave.CurrentMap.playerPos = player_position;										//Enregistre sa position actuel
+			References.SaveMapScript.global_list_line = global_list_line;
+			References.SaveMapScript.global_list_point = global_list_point;							//Sauvegarde tous les points
+			References.SaveMapScript.startPoint = start_point;										//Enregistre le point de départ
+			References.SaveMapScript.endPoint = end_point;											//Enregistre le point d'arrivée
+			References.SaveMapScript.playerPos = player_position;										//Enregistre sa position actuel
 		}
 
 		//Fonction qui recrée la map à partir du fichier de sauvegarde
 		private void Recreate_Previous_Map(){
-			foreach (MapSave.PointData d in MapSave.CurrentMap.global_data_point) {				//Recrée tous les points de la map
+			foreach (MapSave.PointData d in References.SaveMapScript.global_data_point) {				//Recrée tous les points de la map
 				Create_One_Point(d.posX, d.posY);
 				interest_marker_script last_script = 
 					global_list_point[global_list_point.Count -1].GetComponent<interest_marker_script>();//Récupère le script du dernier point créé
@@ -81,18 +74,18 @@ namespace MapScene {
 				}
 			}
 
-			foreach (MapSave.LineData l in MapSave.CurrentMap.global_data_line) {
+			foreach (MapSave.LineData l in References.SaveMapScript.global_data_line) {
 				ReCreate_Line (l.index1, l.index2);
 			}
 
 
 			player_position = 
-				global_list_point[MapSave.CurrentMap.playerPos_data];							//Replace le joueur	
+				global_list_point[References.SaveMapScript.playerPos_data];							//Replace le joueur	
 				Instantiate_Ship();																//Crée le bateau
 
 			//Recupère les indices des points de départ et d'arrivé puis les enregistre à nouveau
-			start_point = global_list_point [MapSave.CurrentMap.startPoint_data];				//Définit le start_point à partir de l'indice
-			end_point = global_list_point[MapSave.CurrentMap.endPoint_data];					//Définit le end-point à partir de l'indice
+			start_point = global_list_point [References.SaveMapScript.startPoint_data];				//Définit le start_point à partir de l'indice
+			end_point = global_list_point[References.SaveMapScript.endPoint_data];					//Définit le end-point à partir de l'indice
 
 		}
 

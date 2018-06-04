@@ -9,9 +9,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace MapScene {
 
 	public class MapSave : MonoBehaviour {
-
-		public static MapSave CurrentMap;
-
 		public List<GameObject> global_list_point;
 		public List<GameObject> global_list_line;
 		public List<PointData> global_data_point;
@@ -22,12 +19,6 @@ namespace MapScene {
 		public int startPoint_data;
 		public GameObject endPoint;
 		public int endPoint_data;
-
-
-		//Fonction qui définit l'objet qui contient les informations de la map au chargement de la scène
-		void Awake(){
-			CurrentMap = this;
-		}
 
 		//Fonction qui sauvegarde les données dans un fichier externe
 		public void Save(){

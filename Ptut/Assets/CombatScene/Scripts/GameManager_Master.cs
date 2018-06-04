@@ -18,6 +18,7 @@ public class GameManager_Master : MonoBehaviour {
 	private int indice_playing_perso;
 	private CombatHUD_Master combatHUD_master;
 	private int turn;
+	private bool victory;
 
 	private void OnEnable(){
 		Set_initial_reference();
@@ -89,16 +90,16 @@ public class GameManager_Master : MonoBehaviour {
 
 		if(is_any_hero_alive == false || is_any_ennemy_alive == false){
 			if (is_any_ennemy_alive == false) {
-				End_Fight (true);
+				victory = true;
 			} else {
-				End_Fight (false);
+				victory = false;
 			}
-
+			End_Fight ();
 		}
 	}
 
 	//Fonction qui termine le combat
-	private void End_Fight(bool victory){
+	private void End_Fight(){
 		is_fight_over = true;																							//Déclare le combat terminé
 		combatHUD_master.Show_End_Screen(victory);																		//Affiche l'écran de fin
 	}
@@ -192,10 +193,13 @@ public class GameManager_Master : MonoBehaviour {
 	}	
 
 	//Fonction qui retourne à la scène de la carte
-	public void Load_Map(){
-		StartCoroutine(Load_Next_Scene_In_Background());
+	public void Load_Next_Scene(){
+		if (victory == true) {
+			StartCoroutine (Load_Next_Scene_In_Background ());
+		} else {
+			Application.Quit ();
+		}
 	}
-
 
 	IEnumerator Load_Next_Scene_In_Background()
 	{

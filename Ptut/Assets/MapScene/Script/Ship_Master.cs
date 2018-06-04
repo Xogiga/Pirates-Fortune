@@ -38,7 +38,7 @@ namespace MapScene {
 			}
 
 			is_moving = false;																															//Booléen qui autorise un nouveau déplacement
-			GameManager_Master.GameMaster.Interact_With_Interest_Point(destination);																	//Appel la suite des évènements
+			References.GameMaster.Interact_With_Interest_Point(destination);																	//Appel la suite des évènements
 		}
 
 
