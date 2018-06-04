@@ -38,6 +38,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d830fd9e20323f4c997ac4ed5d3b5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name_text: {fileID: 0}
+  dialog_text: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!224 &224192144578438074
 RectTransform:
   m_ObjectHideFlags: 1

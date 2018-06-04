@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace MapScene {
 	public class GameManager_Create_Map : MonoBehaviour {
-		private GameManager_Master GameMaster;
 		public GameObject interest_point;
 		public GameObject line;
 		public GameObject ship;
@@ -34,7 +33,6 @@ namespace MapScene {
 			map = GameObject.FindGameObjectWithTag ("Map");
 			global_list_point = new List<GameObject> ();
 			global_list_line = new List<GameObject> ();
-			GameMaster = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
 			visited_points = new List<GameObject> ();
 		}
 
@@ -49,12 +47,16 @@ namespace MapScene {
 					Correct_Map (colors_list);													//Corrige la map
 				}
 				Instantiate_Ship ();															//Crée le bateau
+				Add_Visited_Points(start_point);												//Grise le point de départ
 			} else {
 				Recreate_Previous_Map ();
 			}
+
+			GameManager_Master.GameMaster.Set_current_point(player_position);					//Définit le point où se trouve le joueur
+			GameManager_Master.GameMaster.Set_Reachable_point ();								//Détermine les points accessibles
 			Center_Camera ();																	//Centre la caméra
 			Draw_Point ();																		//Change les sprites selon les points
-			SaveToData();
+			SaveToData();																		//Envoie toutes les données au script de sauvegarde
 		}
 
 		//Envoie toutes les informations au script qui contient la sauvegarde
@@ -85,8 +87,8 @@ namespace MapScene {
 
 
 			player_position = 
-				global_list_point[MapSave.CurrentMap.playerPos_data];		//Replace le joueur	
-			Instantiate (ship, player_position.transform.position ,Quaternion.identity);							//Crée le bateau
+				global_list_point[MapSave.CurrentMap.playerPos_data];							//Replace le joueur	
+				Instantiate_Ship();																//Crée le bateau
 
 			//Recupère les indices des points de départ et d'arrivé puis les enregistre à nouveau
 			start_point = global_list_point [MapSave.CurrentMap.startPoint_data];				//Définit le start_point à partir de l'indice
@@ -210,6 +212,12 @@ namespace MapScene {
 			foreach (GameObject p in visited_points) {															//Grise les points visités
 				p.GetComponent<SpriteRenderer> ().color = new Color(1,1,1,0.5f);
 			}
+		}
+
+		//Fonction qui permet de griser le dernier point visité
+		public void Add_Visited_Points(GameObject point){
+			visited_points.Add(point);
+			point.GetComponent<SpriteRenderer> ().color = new Color(1,1,1,0.5f);
 		}
 
 		//Fonction qui relie tous les points à leurs voisins
@@ -371,7 +379,9 @@ namespace MapScene {
 
 		//Fonction qui place le bateau au point de départ
 		private void Instantiate_Ship(){
-			player_position = start_point;
+			if (player_position == null) {
+				player_position = start_point;
+			}
 			Instantiate (ship, player_position.transform.position + new Vector3 (1, 0, 0), Quaternion.identity);
 		}
 

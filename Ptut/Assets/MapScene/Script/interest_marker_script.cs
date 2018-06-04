@@ -5,6 +5,7 @@ using UnityEngine;
 public class interest_marker_script : MonoBehaviour {
 	public List<GameObject> local_list_line;
 	public List<GameObject> local_list_point;
+	public Dialogue dialogue;
 	public string event_name;
 	public int color;
 	public bool reachable;
@@ -22,6 +23,12 @@ public class interest_marker_script : MonoBehaviour {
 		reachable = false;
 		event_name = "CombatScene";
 	}
+
+	public Dialogue Get_dialogue(){
+		return dialogue;
+	}
+
+
 
 	void OnMouseEnter(){
 		Show_Lines ();

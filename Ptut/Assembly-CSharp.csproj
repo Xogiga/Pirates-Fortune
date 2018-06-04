@@ -113,7 +113,6 @@
     <Compile Include="Assets\MapScene\Script\Ship_Master.cs" />
     <Compile Include="Assets\MapScene\Script\MapSave.cs" />
     <Compile Include="Assets\MapScene\Script\Dialog_Manager.cs" />
-    <Compile Include="Assets\MapScene\Script\StoryElement.cs" />
     <Compile Include="Assets\MapScene\Script\Class\Dialogue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

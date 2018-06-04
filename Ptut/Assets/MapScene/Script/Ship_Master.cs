@@ -28,7 +28,7 @@ namespace MapScene {
 		{
 			float waittime = 0.04f; 																													//Temps entre chaque micro-déplacement de MoveToward
 			float step = 4*waittime; 																													//Vitesse*Temps = distance de MoveTowards
-			Vector3 end_position = destination.transform.position;
+			Vector3 end_position = destination.transform.position + new Vector3 (1, 0, 0);
 
 			Side_flip (end_position);																													//Pivote le  bateau en fonction de sa direction
 
@@ -37,9 +37,8 @@ namespace MapScene {
 				this.transform.position = Vector3.MoveTowards (this.transform.position, end_position, step);											//Avance vers sa destination
 			}
 
-			GameManager_Master.GameMaster.Set_Reachable_point (destination);																			//Autorise le déplacement vers les points suivants
 			is_moving = false;																															//Booléen qui autorise un nouveau déplacement
-			GameManager_Master.GameMaster.Load_Event_Scene(destination);
+			GameManager_Master.GameMaster.Interact_With_Interest_Point(destination);																	//Appel la suite des évènements
 		}
 
 
