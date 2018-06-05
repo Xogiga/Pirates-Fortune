@@ -65,7 +65,7 @@ namespace MapScene {
 
 			foreach (GameObject point in global_list_point) {
 				if(point != start_point && end_point){
-					int random_index = Random.Range (0,all_event.Count);
+					int random_index = Random.Range (2,4);
 					Set_One_Event (point, random_index);
 				}
 			}
@@ -76,10 +76,6 @@ namespace MapScene {
 			interest_marker_script point_script = point.GetComponent<interest_marker_script> ();
 			point_script.Event = all_event [event_index];											//Attribue l'évènement
 			point_script.index_event = event_index;
-
-			if (all_event [event_index].is_unique == true) {										//S'il n'a droit qu'à une répétition
-				all_event.RemoveAt (event_index);													//Le supprime de la liste
-			}
 		}
 
 		//Envoie toutes les informations au script qui contient la sauvegarde
