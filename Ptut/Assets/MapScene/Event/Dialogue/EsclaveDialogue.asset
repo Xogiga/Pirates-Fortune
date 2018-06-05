@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 792c86ea7bf9d494b829b68ba6ffc907, type: 3}
+  m_Name: EsclaveDialogue
+  m_EditorClassIdentifier: 
+  name: Iles Emeraudes
+  sentences:
+  - "Alors que vous vous appr\xE9tez \xE0 larguez l'ancre au port local, un navire
+    d'esclave rebelle se met sur votre route. L'\xE9quipage de fortune se rapproche
+    jusqu'\xE0 distance de voix et vous hurle : \"Etes-vous avec ou contre la cause
+    ?!\""
+  - "Vous jetez un regard d'incompr\xE9hension \xE0 votre \xE9quipage, aucun d'eux
+    ne semble pouvoir vous aider. Perdant patience, le chef des esclaves se jette
+    sur votre navire en hurlant : \"Mort aux ma\xEEtres !\"."

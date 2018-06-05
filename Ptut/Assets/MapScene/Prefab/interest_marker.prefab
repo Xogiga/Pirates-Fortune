@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4795075813182280}
   - component: {fileID: 212421759106611620}
-  - component: {fileID: 114031338816067284}
   - component: {fileID: 65448970042542528}
+  - component: {fileID: 114896602912406320}
   m_Layer: 0
   m_Name: interest_marker
   m_TagString: Point
@@ -54,7 +54,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 12, y: 12, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114031338816067284
+--- !u!114 &114896602912406320
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -67,7 +67,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   local_list_line: []
   local_list_point: []
-  dialogue: {fileID: 11400000, guid: 81051fa4c93e0974686a90231042ef29, type: 2}
+  Event: {fileID: 0}
+  dialogue: {fileID: 0}
   event_name: 
   color: 0
   reachable: 0

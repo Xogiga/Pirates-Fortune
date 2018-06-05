@@ -31,9 +31,9 @@ namespace MapScene {
 			interest_marker_script point_script = destination.GetComponent<interest_marker_script> ();
 			Set_Reachable_point();																		//Détermines les prochaines iles accessibles
 			if (point_script.done == false) {															//Si l'évènement n'a pas déjà était fait
-				References.DialogueManager.Start_Dialogue (destination);							//Démarre le dialogue
+				References.DialogueManager.Start_Dialogue (destination);								//Démarre le dialogue
 			}
-			References.SaveMapScript.playerPos = current_point;												//Enregistre la position du joueur
+			References.SaveMapScript.playerPos = current_point;											//Enregistre la position du joueur
 		}
 
 		//Fonction qui détermine les points accessibles
@@ -58,18 +58,18 @@ namespace MapScene {
 			interest_marker_script point_script = current_point.GetComponent<interest_marker_script> ();	//Récupère le script qui contient les données du point
 			if (point_script.done == false) {																//Si le point n'a pas déjà été parcouru
 				point_script.done = true;																	//Détermine l'évènement comme fait
-				References.CreationScript.Add_Visited_Points(current_point);					//Grise le dernier point visité
-				References.SaveMapScript.Save ();																	//Sauvegarde les informations de la map dans un fichier, avant de changer de scène
-				if(point_script.event_name != null){														//Si le point contient une scène à charger
-					StartCoroutine (Load_Next_Scene_In_Background (point_script.event_name));				//Charge l'évènement à partir de son nom
+				References.CreationScript.Add_Visited_Points(current_point);								//Grise le dernier point visité
+				References.SaveMapScript.Save ();															//Sauvegarde les informations de la map dans un fichier, avant de changer de scène
+				if(point_script.Event.Involve_Fight){														//Si le point contient une scène à charger
+					StartCoroutine (Load_Next_Fight_In_Background ());										//Charge l'évènement à partir de son nom
 				}
 			}
 		}
 
 
-		IEnumerator Load_Next_Scene_In_Background(string name)
+		IEnumerator Load_Next_Fight_In_Background()
 		{
-			AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(name);
+			AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("CombatScene");
 
 			// Wait until the asynchronous scene fully loads
 			while (!asyncLoad.isDone)

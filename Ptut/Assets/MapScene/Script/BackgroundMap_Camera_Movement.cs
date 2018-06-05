@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace MapScene {
-
-
 	public class BackgroundMap_Camera_Movement : MonoBehaviour {
 		private GameObject camera1;
 

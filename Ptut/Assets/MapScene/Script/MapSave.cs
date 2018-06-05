@@ -47,7 +47,7 @@ namespace MapScene {
 				interest_marker_script object_script = g.GetComponent<interest_marker_script> (); 
 
 				SerialPoints.Add(new PointData(g.transform.position.x,
-					g.transform.position.y, object_script.done, object_script.event_name));
+					g.transform.position.y, object_script.done, object_script.index_event));
 			}
 
 			return SerialPoints;
@@ -83,7 +83,7 @@ namespace MapScene {
 
 				global_data_line = data.global_list_line;
 				global_data_point = data.global_list_point;											//Recupère la liste de point en PointData
-				playerPos_data = data.playerPos;														//Récupère la position du joueur en Vector3
+				playerPos_data = data.playerPos;													//Récupère la position du joueur en Vector3
 				endPoint_data = data.endPoint_data;													//Récupère l'indice du point d'arrivée
 				startPoint_data = data.startPoint_data;												//Et de départ
 
@@ -111,13 +111,13 @@ namespace MapScene {
 			public float posX;
 			public float posY;
 			public bool done;
-			public string eventName;
+			public int event_index;
 
-			public PointData(float x, float y, bool d, string e){					//Constructeur
+			public PointData(float x, float y, bool d, int e){					//Constructeur
 				posX = x;
 				posY = y;
 				done = d;
-				eventName =e ;
+				event_index = e ;
 			}
 		}
 

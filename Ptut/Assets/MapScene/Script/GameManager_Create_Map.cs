@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace MapScene {
 	public class GameManager_Create_Map : MonoBehaviour {
@@ -11,6 +12,7 @@ namespace MapScene {
 		private List<GameObject> global_list_point;
 		private List<GameObject> global_list_line;
 		private List<List<GameObject>> colors_list;
+		private List<GameEvent> all_event;
 		private GameObject start_point;
 		private GameObject end_point;
 		private GameObject player_position;
@@ -23,6 +25,10 @@ namespace MapScene {
 		}
 
 		private void Set_Initial_References(){
+			EventList EventData = (EventList)AssetDatabase
+				.LoadAssetAtPath("Assets/MapScene/Event/AllEventList.asset", typeof(EventList));//Charge l'object qui contient la list des évènement
+			all_event = new List<GameEvent>(EventData.eventList);								//Copie la liste de tous les évènements possibles
+
 			map = GameObject.FindGameObjectWithTag ("Map");
 			global_list_point = new List<GameObject> ();
 			global_list_line = new List<GameObject> ();
@@ -31,7 +37,7 @@ namespace MapScene {
 
 		//Fonction qui crée la Map
 		public void Create_Map(){
-			if (References.SaveMapScript.Load() == false) {											//S'il n'y a rien a charger
+			if (References.SaveMapScript.Load() == false) {										//S'il n'y a rien a charger
 				Create_All_Points ();															//Crée les points
 				Choose_Start_End ();															//Détermine le debut et l'arrivée
 				Create_All_Lines ();															//Crée les lignes
@@ -41,15 +47,39 @@ namespace MapScene {
 				}
 				Instantiate_Ship ();															//Crée le bateau
 				Add_Visited_Points(start_point);												//Grise le point de départ
+				Attribute_All_Events();															//Détermine tous les events
 			} else {
 				Recreate_Previous_Map ();
 			}
 
-			References.GameMaster.Set_current_point(player_position);					//Définit le point où se trouve le joueur
-			References.GameMaster.Set_Reachable_point ();								//Détermine les points accessibles
 			Center_Camera ();																	//Centre la caméra
 			Draw_Point ();																		//Change les sprites selon les points
 			SaveToData();																		//Envoie toutes les données au script de sauvegarde
+			References.GameMaster.Interact_With_Interest_Point(player_position);				//Lance l'évent
+		}
+
+		//Fonctions qui attribue un évènement à chaque point
+		private void Attribute_All_Events(){
+			Set_One_Event (start_point, 0);
+			Set_One_Event (end_point, 1);
+
+			foreach (GameObject point in global_list_point) {
+				if(point != start_point && end_point){
+					int random_index = Random.Range (0,all_event.Count);
+					Set_One_Event (point, random_index);
+				}
+			}
+		}
+
+		//Fonctions qui attribue un évènement à chaque point
+		private void Set_One_Event(GameObject point, int event_index){
+			interest_marker_script point_script = point.GetComponent<interest_marker_script> ();
+			point_script.Event = all_event [event_index];											//Attribue l'évènement
+			point_script.index_event = event_index;
+
+			if (all_event [event_index].is_unique == true) {										//S'il n'a droit qu'à une répétition
+				all_event.RemoveAt (event_index);													//Le supprime de la liste
+			}
 		}
 
 		//Envoie toutes les informations au script qui contient la sauvegarde
@@ -58,20 +88,22 @@ namespace MapScene {
 			References.SaveMapScript.global_list_point = global_list_point;							//Sauvegarde tous les points
 			References.SaveMapScript.startPoint = start_point;										//Enregistre le point de départ
 			References.SaveMapScript.endPoint = end_point;											//Enregistre le point d'arrivée
-			References.SaveMapScript.playerPos = player_position;										//Enregistre sa position actuel
+			References.SaveMapScript.playerPos = player_position;									//Enregistre sa position actuel
 		}
 
 		//Fonction qui recrée la map à partir du fichier de sauvegarde
 		private void Recreate_Previous_Map(){
-			foreach (MapSave.PointData d in References.SaveMapScript.global_data_point) {				//Recrée tous les points de la map
+			foreach (MapSave.PointData d in References.SaveMapScript.global_data_point) {			//Recrée tous les points de la map
 				Create_One_Point(d.posX, d.posY);
-				interest_marker_script last_script = 
-					global_list_point[global_list_point.Count -1].GetComponent<interest_marker_script>();//Récupère le script du dernier point créé
+				GameObject last_point = global_list_point [global_list_point.Count - 1];
+				interest_marker_script last_script = last_point.GetComponent<interest_marker_script>();//Récupère le script du dernier point créé
+				last_script.index_event = d.event_index;
 				last_script.done = d.done;
-				last_script.event_name = d.eventName;
-				if (d.done == true) {															//Si le joueur a déjà fait l'évènement
-					visited_points.Add(global_list_point[global_list_point.Count -1]);			//Ajoute le point à ceux visités
+				last_script.index_event = d.event_index;
+				if (d.done == true) {																//Si le joueur a déjà fait l'évènement
+					visited_points.Add(global_list_point[global_list_point.Count -1]);				//Ajoute le point à ceux visités
 				}
+				Set_One_Event (last_point, last_script.index_event);								//Réattribue les évènements
 			}
 
 			foreach (MapSave.LineData l in References.SaveMapScript.global_data_line) {
@@ -81,15 +113,15 @@ namespace MapScene {
 
 			player_position = 
 				global_list_point[References.SaveMapScript.playerPos_data];							//Replace le joueur	
-				Instantiate_Ship();																//Crée le bateau
+				Instantiate_Ship();																	//Crée le bateau
 
 			//Recupère les indices des points de départ et d'arrivé puis les enregistre à nouveau
 			start_point = global_list_point [References.SaveMapScript.startPoint_data];				//Définit le start_point à partir de l'indice
 			end_point = global_list_point[References.SaveMapScript.endPoint_data];					//Définit le end-point à partir de l'indice
-
 		}
+			
 
-		//
+		//Recrée toutes les lignes à partir des données enregistrées
 		private void ReCreate_Line(int index1, int index2){
 			GameObject point1 = global_list_point [index1];
 			GameObject point2 = global_list_point [index2];
@@ -115,7 +147,7 @@ namespace MapScene {
 		private void Create_All_Points(){
 			List<Tuple> cases = new List<Tuple> ();
 
-			for (float i = -6; i < 21; i+=3) {												//Crée une liste de case
+			for (float i = -6; i < 21; i+=3) {																	//Crée une liste de case
 				for (float j = -2; j < 25; j+=3) {
 					cases.Add (new Tuple (i, j));
 				}
@@ -194,8 +226,6 @@ namespace MapScene {
 					radius++;
 				}
 			}
-
-			start_point.GetComponent<interest_marker_script> ().done	= true;									//Détermine l'évènement de départ comme fait
 		}
 
 		//Fonction qui change le logo et la couleur des points d'intérêt selon leur type

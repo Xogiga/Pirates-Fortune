@@ -66,7 +66,6 @@
     <Compile Include="Assets\CombatScene\Scripts\LogText_Script.cs" />
     <Compile Include="Assets\CombatScene\Scripts\Tile_Script.cs" />
     <Compile Include="Assets\MapScene\Script\BackgroundMap_Camera_Movement.cs" />
-    <Compile Include="Assets\MapScene\Script\Class\Tuple.cs" />
     <Compile Include="Assets\MapScene\Script\GameManager_Master.cs" />
     <Compile Include="Assets\MapScene\Script\interest_marker_script.cs" />
     <Reference Include="UnityEngine.UI">
@@ -113,8 +112,11 @@
     <Compile Include="Assets\MapScene\Script\Ship_Master.cs" />
     <Compile Include="Assets\MapScene\Script\MapSave.cs" />
     <Compile Include="Assets\MapScene\Script\Dialog_Manager.cs" />
-    <Compile Include="Assets\MapScene\Script\Class\Dialogue.cs" />
     <Compile Include="Assets\MapScene\Script\References.cs" />
+    <Compile Include="Assets\MapScene\Class\Dialogue.cs" />
+    <Compile Include="Assets\MapScene\Class\EventList.cs" />
+    <Compile Include="Assets\MapScene\Class\GameEvent.cs" />
+    <Compile Include="Assets\MapScene\Class\Tuple.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -124,4 +126,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Assets\MapScene\Script\Class\" />
+    <Folder Include="Assets\MapScene\Class\" />
+  </ItemGroup>
 </Project>
