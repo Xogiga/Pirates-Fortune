@@ -27,7 +27,7 @@ namespace MapScene {
 		private void Set_Initial_References(){
 			EventList EventData = (EventList)AssetDatabase
 				.LoadAssetAtPath("Assets/MapScene/Event/AllEventList.asset", typeof(EventList));//Charge l'object qui contient la list des évènement
-			all_event = new List<GameEvent>(EventData.eventList);								//Copie la liste de tous les évènements possibles
+			all_event = EventData.eventList;													//Copie la liste de tous les évènements possibles
 
 			map = GameObject.FindGameObjectWithTag ("Map");
 			global_list_point = new List<GameObject> ();
@@ -64,7 +64,7 @@ namespace MapScene {
 			Set_One_Event (end_point, 1);
 
 			foreach (GameObject point in global_list_point) {
-				if(point != start_point && end_point){
+				if(point != start_point && point != end_point){
 					int random_index = Random.Range (2,4);
 					Set_One_Event (point, random_index);
 				}

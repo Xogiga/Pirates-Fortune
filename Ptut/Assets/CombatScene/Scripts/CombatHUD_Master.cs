@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CombatHUD_Master : MonoBehaviour {
 	private GameObject announce;
-	[SerializeField] private GameObject combat_log;
+	public GameObject combat_log;
 
 	private GameObject button_end_turn;
 

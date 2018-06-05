@@ -37,7 +37,7 @@ namespace MapScene {
 
 		void Update(){
 			//zoom et dézoom de la caméra
-			if (References.DialogueManager.popup_open==false) {													//Si une fenetre de dialogue est ouverte, sort de la fonction.
+			if (References.DialogueManager.popup_open==false) {												//Si une fenetre de dialogue est ouverte, sort de la fonction.
 				if (Input.GetAxis("Mouse ScrollWheel")!=0) {
 					
 
