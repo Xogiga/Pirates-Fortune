@@ -32,7 +32,7 @@ namespace MapScene {
 			Set_Reachable_point();																		//Détermines les prochaines iles accessibles
 			if (point_script.done == false) {															//Si l'évènement n'a pas déjà était fait
 				References.DialogueManager.Start_Dialogue (destination);							//Démarre le dialogue
-			}			
+			}
 			References.SaveMapScript.playerPos = current_point;												//Enregistre la position du joueur
 		}
 
@@ -79,4 +79,3 @@ namespace MapScene {
 		}
 	}
 }
-	

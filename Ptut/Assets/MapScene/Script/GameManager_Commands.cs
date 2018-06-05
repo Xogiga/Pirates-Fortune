@@ -12,15 +12,16 @@ namespace MapScene {
 		}
 
 		//Reférences fixes
-		private void Set_initial_references () {																		
+		private void Set_initial_references () {
 			player_script = GameObject.FindWithTag ("Hero").GetComponent<Ship_Master> ();
 		}
 
 		// Update is called once per frame
 		void Update () {
-			
+
 			if (Input.GetMouseButtonDown (0)) {														//Gère les déplacements à la souris
-				if (EventSystem.current.IsPointerOverGameObject ()) {								//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
+				if (EventSystem.current.IsPointerOverGameObject () || 
+				References.DialogueManager.popup_open==true) {								//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
 					return;
 				}
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
@@ -28,7 +29,7 @@ namespace MapScene {
 				if (Physics.Raycast (ray, out hit)) {												//Return True si le Rayon touche une hitbox à la position de la souris
 					if (hit.transform.tag == "Point" 												//Vérifie que l'objet touché fait partie de la map
 						&& hit.transform.GetComponent<interest_marker_script>().reachable == true) 	//Et que c'est un point atteignable
-					{												
+					{
 						player_script.Can_I_Move (hit.transform.gameObject);						//Se déplace jusqu'au point sélectionée
 					}
 				}

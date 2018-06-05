@@ -8,10 +8,13 @@ namespace MapScene {
 		public Text name_text;
 		public Text dialog_text;
 		public Animator animator;
+		public bool popup_open;
 		private Queue<string> sentences = new Queue<string> ();
+
 
 		//Fonction qui démarre le dialogue
 		public void Start_Dialogue(GameObject point){
+			popup_open = true;
 			interest_marker_script point_script = point.GetComponent<interest_marker_script> ();
 			Dialogue dialogue = point_script.Get_dialogue ();											//Récupère le dialogue de l'évènement
 			animator.SetBool ("isOpen", true);
@@ -49,6 +52,7 @@ namespace MapScene {
 		void EndDialogue(){
 			animator.SetBool ("isOpen", false);
 			References.GameMaster.Execute_Event ();
+			popup_open =false;
 		}
 	}
 }
