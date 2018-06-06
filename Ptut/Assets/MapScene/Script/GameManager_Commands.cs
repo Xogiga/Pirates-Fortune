@@ -21,7 +21,7 @@ namespace MapScene {
 
 			if (Input.GetMouseButtonDown (0)) {														//Gère les déplacements à la souris
 				if (EventSystem.current.IsPointerOverGameObject () || 
-				References.DialogueManager.popup_open==true) {								//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
+				References.DialogueManager.popup_open==true) {										//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
 					return;
 				}
 				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);						//Crée un rayon
@@ -34,7 +34,11 @@ namespace MapScene {
 					}
 				}
 			}
-			if (Input.GetKey ("escape")) 															//Ferme l'application
+			if (Input.GetKey (KeyCode.Space)) 														//Centre la caméra
+			{
+				References.CreationScript.Center_Camera ();
+			}
+			if (Input.GetKey (KeyCode.Escape)) 														//Ferme l'application
 			{
 				Application.Quit ();
 			}

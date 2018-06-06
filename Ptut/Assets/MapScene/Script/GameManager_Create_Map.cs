@@ -405,7 +405,7 @@ namespace MapScene {
 		}
 
 		//Fonction qui place la caméra sur le joueur au démarage
-		private void Center_Camera(){
+		public void Center_Camera(){
 			GameObject camera1 = GameObject.FindWithTag ("MainCamera");
 			float camX = Mathf.Clamp (player_position.transform.position.x, 0,15);												//Encadre les valeurs X,Y de la caméra dans les limites de la carte
 			float camY = Mathf.Clamp (player_position.transform.position.y, 0,22);
