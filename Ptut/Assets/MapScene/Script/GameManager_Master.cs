@@ -42,7 +42,7 @@ namespace MapScene {
 
 			if (reachable_points != null) {																//Si la liste existe déjà
 				foreach (GameObject N in reachable_points) {											//Rend tous ces points inaccessible
-					point_script.reachable = false;
+					N.GetComponent<interest_marker_script>().reachable = false;
 				}
 			}
 
