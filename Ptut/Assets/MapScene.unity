@@ -521,7 +521,7 @@ Transform:
   m_Children:
   - {fileID: 354985692}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1092970986
 MonoBehaviour:
@@ -602,7 +602,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4966993367697872, guid: e007aa95d2316be4095ce47d846850cf, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114538924097571676, guid: e007aa95d2316be4095ce47d846850cf,
         type: 2}
@@ -619,6 +619,12 @@ Prefab:
       propertyPath: animator
       value: 
       objectReference: {fileID: 320766203}
+    - target: {fileID: 114351786979839036, guid: e007aa95d2316be4095ce47d846850cf,
+        type: 2}
+      propertyPath: marine_sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e41967ac4f9086141a33b69f0e7aa66d,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e007aa95d2316be4095ce47d846850cf, type: 2}
   m_IsPrefabParent: 0

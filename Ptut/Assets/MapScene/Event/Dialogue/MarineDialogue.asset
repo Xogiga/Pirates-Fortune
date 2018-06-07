@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 792c86ea7bf9d494b829b68ba6ffc907, type: 3}
+  m_Name: MarineDialogue
+  m_EditorClassIdentifier: 
+  name: Marine
+  sentences:
+  - "La Marine vous a rattrap\xE9 ! La flotte fond sur vous en un \xE9clair. C'est
+    la panique !"

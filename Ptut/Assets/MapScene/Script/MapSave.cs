@@ -19,6 +19,7 @@ namespace MapScene {
 		public int startPoint_data;
 		public GameObject endPoint;
 		public int endPoint_data;
+		public int turn;
 
 		//Fonction qui sauvegarde les données dans un fichier externe
 		public void Save(){
@@ -33,7 +34,7 @@ namespace MapScene {
 			data.playerPos = Transform_Name_To_Int(playerPos);
 			data.startPoint_data = Transform_Name_To_Int(startPoint);
 			data.endPoint_data = Transform_Name_To_Int(endPoint);
-
+			data.turn = turn;
 
 			bf.Serialize (file, data);																//Enregistre
 			file.Close ();																			//Ferme le fichier
@@ -86,13 +87,13 @@ namespace MapScene {
 				playerPos_data = data.playerPos;													//Récupère la position du joueur en Vector3
 				endPoint_data = data.endPoint_data;													//Récupère l'indice du point d'arrivée
 				startPoint_data = data.startPoint_data;												//Et de départ
+				turn = data.turn;																	//Récupère le tour
 
 				return true;
 			} else {
 				return false;
 			}
 		}
-
 
 
 		//Classe qui représente les données à sauvergarder
@@ -103,6 +104,7 @@ namespace MapScene {
 			public int playerPos;
 			public int startPoint_data;
 			public int endPoint_data;
+			public int turn;
 		}
 
 		//Classe qui représente les données à sauvergarder
@@ -112,6 +114,7 @@ namespace MapScene {
 			public float posY;
 			public bool done;
 			public int event_index;
+
 
 			public PointData(float x, float y, bool d, int e){					//Constructeur
 				posX = x;

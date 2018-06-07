@@ -5,9 +5,16 @@ using UnityEditor;
 
 namespace MapScene {
 	public class GameManager_Create_Map : MonoBehaviour {
+		[Header("Prefabs :")]
 		public GameObject interest_point;
 		public GameObject line;
 		public GameObject ship;
+
+		[Header("Map Sprites :")]
+		public Sprite start_sprite;
+		public Sprite end_sprite;
+		public Sprite marine_sprite;
+
 		private GameObject map;
 		private List<GameObject> global_list_point;
 		private List<GameObject> global_list_line;
@@ -17,8 +24,10 @@ namespace MapScene {
 		private GameObject end_point;
 		private GameObject player_position;
 		private List<GameObject> visited_points;
-		public Sprite start_sprite;
-		public Sprite end_sprite;
+		private List<GameObject> marine_territory;
+
+		[SerializeField]
+		private int turn;
 
 		void OnEnable(){
 			Set_Initial_References ();
@@ -33,6 +42,8 @@ namespace MapScene {
 			global_list_point = new List<GameObject> ();
 			global_list_line = new List<GameObject> ();
 			visited_points = new List<GameObject> ();
+			marine_territory = new List<GameObject> ();
+			turn = 0;
 		}
 
 		//Fonction qui crée la Map
@@ -46,16 +57,18 @@ namespace MapScene {
 					Correct_Map (colors_list);													//Corrige la map
 				}
 				Instantiate_Ship ();															//Crée le bateau
+				start_point.GetComponent<interest_marker_script>().done = true;
 				Add_Visited_Points(start_point);												//Grise le point de départ
 				Attribute_All_Events();															//Détermine tous les events
 			} else {
+				turn = References.SaveMapScript.turn ;											
 				Recreate_Previous_Map ();
 			}
 
 			Center_Camera ();																	//Centre la caméra
 			Draw_Point ();																		//Change les sprites selon les points
 			SaveToData();																		//Envoie toutes les données au script de sauvegarde
-			References.GameMaster.Interact_With_Interest_Point(player_position);				//Lance l'évent
+			References.GameMaster.Interact_With_Interest_Point(player_position, true);			//Donne le point actuel au gameMaster
 		}
 
 		//Fonctions qui attribue un évènement à chaque point
@@ -65,7 +78,7 @@ namespace MapScene {
 
 			foreach (GameObject point in global_list_point) {
 				if(point != start_point && point != end_point){
-					int random_index = Random.Range (2,4);
+					int random_index = Random.Range (3,all_event.Count);
 					Set_One_Event (point, random_index);
 				}
 			}
@@ -74,8 +87,7 @@ namespace MapScene {
 		//Fonctions qui attribue un évènement à chaque point
 		private void Set_One_Event(GameObject point, int event_index){
 			interest_marker_script point_script = point.GetComponent<interest_marker_script> ();
-			point_script.Event = all_event [event_index];											//Attribue l'évènement
-			point_script.index_event = event_index;
+			point_script.Set_Event (all_event [event_index], event_index);
 		}
 
 		//Envoie toutes les informations au script qui contient la sauvegarde
@@ -100,6 +112,11 @@ namespace MapScene {
 					visited_points.Add(global_list_point[global_list_point.Count -1]);				//Ajoute le point à ceux visités
 				}
 				Set_One_Event (last_point, last_script.index_event);								//Réattribue les évènements
+				if (last_script.Event.EventName == "Marine") {										//Si l'évènement est celui de la marine, l'ajoute à la liste
+					last_script.marine = true;
+					last_script.done = false;
+					marine_territory.Add (last_point);
+				}
 			}
 
 			foreach (MapSave.LineData l in References.SaveMapScript.global_data_line) {
@@ -231,6 +248,17 @@ namespace MapScene {
 			foreach (GameObject p in visited_points) {															//Grise les points visités
 				p.GetComponent<SpriteRenderer> ().color = new Color(1,1,1,0.5f);
 			}
+			Draw_Marine_Waves ();
+		}
+
+		//Fonction qui change le logo et la couleur des points d'intérêt selon leur type
+		private void Draw_Marine_Waves(){
+			foreach (GameObject p in marine_territory) {														//Pour chaque point sous contrôle de la marine
+				SpriteRenderer SP = p.GetComponent<SpriteRenderer> ();
+				SP.sprite = marine_sprite;																		//Donne le logo de la marine
+				SP.color = new Color(1,1,1,1);																	//"Dégrise" le point
+			}
+
 		}
 
 		//Fonction qui permet de griser le dernier point visité
@@ -407,7 +435,7 @@ namespace MapScene {
 		//Fonction qui place la caméra sur le joueur au démarage
 		public void Center_Camera(){
 			GameObject camera1 = GameObject.FindWithTag ("MainCamera");
-			float camX = Mathf.Clamp (player_position.transform.position.x, 0,15);												//Encadre les valeurs X,Y de la caméra dans les limites de la carte
+			float camX = Mathf.Clamp (player_position.transform.position.x, 0,15);									//Encadre les valeurs X,Y de la caméra dans les limites de la carte
 			float camY = Mathf.Clamp (player_position.transform.position.y, 0,22);
 			camera1.transform.position =  new Vector3 (camX,camY, -10);
 
@@ -418,6 +446,38 @@ namespace MapScene {
 			foreach (GameObject g in list) {
 				g.GetComponent<interest_marker_script> ().color = new_color;
 			}
+		}
+
+		//Fonction qui ajoute un tour à chaque déplacement
+		public void Add_Turn(){
+			turn = turn + 1;
+			if (turn%2 == 0 && turn > 5 || turn == 3) {																//Si le tour est le tour 3 ou s'il est un multiple de deux (modulo = 0)
+				New_Waves(turn);																					//Ajoute une vague de marine
+			}
+			References.SaveMapScript.turn = turn;																	//Enregistre le tour
+		}
+
+		//Fonction qui avance la vague de la Marine
+		public void New_Waves(int t){
+			if (t == 3) {																							//Au troisième tour
+				Set_One_Event (start_point, 2);																		//Arrivé de la marine sur le point de départ
+				marine_territory.Add (start_point);
+			}
+			else if (t > 5) {																						//Après le tour 5, tous les tour pair
+				List<GameObject> temporary_list = new List<GameObject> ();
+				foreach (GameObject p in marine_territory) {														//Pour toutes les îles de la marines
+					interest_marker_script script_point = p.GetComponent<interest_marker_script> ();
+					foreach(GameObject neighbourg in script_point.local_list_point){								//Colonise toutes les îles voisines
+						interest_marker_script script_neighbourg = neighbourg.GetComponent<interest_marker_script> ();
+						if (script_neighbourg.marine == false) {													//Qui ne sont pas déjà de la marine
+							Set_One_Event (neighbourg, 2);
+							temporary_list.Add (neighbourg);
+						}
+					}
+				}
+				marine_territory.AddRange(temporary_list);															//Ajoute les dernières îles à la liste totale
+			}
+			Draw_Marine_Waves ();																					//Change les sprites des marqueurs
 		}
 	}
 }
