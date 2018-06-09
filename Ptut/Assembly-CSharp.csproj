@@ -117,6 +117,8 @@
     <Compile Include="Assets\MapScene\Class\EventList.cs" />
     <Compile Include="Assets\MapScene\Class\GameEvent.cs" />
     <Compile Include="Assets\MapScene\Class\Tuple.cs" />
+    <Compile Include="Assets\MapScene\Class\FightParameters.cs" />
+    <Compile Include="Assets\MapScene\Script\DataTransporter_Script.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

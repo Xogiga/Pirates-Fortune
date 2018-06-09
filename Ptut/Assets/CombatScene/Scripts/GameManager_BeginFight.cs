@@ -22,6 +22,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 	private List<Tile> case_spawn_equipe_ennemy;																				//Liste des cases d'apparition possible des personnages ennemis
 
 	private GameObject[] liste_perso = new GameObject[16];
+	private FightParameters fp;
 
 	void OnEnable(){
 		Set_initial_references ();
@@ -30,14 +31,6 @@ public class GameManager_BeginFight : MonoBehaviour {
 
 	void OnDisable(){
 		game_manager_master.event_begin_fight -= Begin_fight;
-	}
-
-	void Begin_fight(){
-		create_matrice ();
-		instantiate_matrice ();
-		Pop_allié (nb_allies);
-		Pop_ennemi (nb_ennemies);
-		rempli_liste_perso();
 	}
 
 	void Set_initial_references()
@@ -49,6 +42,25 @@ public class GameManager_BeginFight : MonoBehaviour {
 		create_list_spawn_ennemy ();
 	}
 
+	void Begin_fight(){
+		if (DataTransporter_Script.data != null) {																	//Si un objet transporte des paramètres de combat
+			Use_Fight_Parameters();																					//Récupère ces paramètres
+		}
+		create_matrice ();
+		instantiate_matrice ();
+		Pop_allié (nb_allies);
+		Pop_ennemi (nb_ennemies);
+		rempli_liste_perso();
+	}
+
+	void Use_Fight_Parameters(){
+		FightParameters fp = DataTransporter_Script.data.Get_Fight_Parameters ();									//Récupère les données de l'objet
+		nb_elem_rand = fp.random_obstacles;																			//Attribue ces donnèes aux variables correspondantes
+		nb_allies = fp.allies_number;
+		nb_ennemies = fp.ennemies_number;
+		Destroy (DataTransporter_Script.data.gameObject);															//Détruit l'objet
+	}
+
 	private void create_list_spawn_alies(){																			//Remplie la liste des cases de spawn alliés
 		case_spawn_equipe_alies = new List<Tile>();
 		for (int x = 3; x <= 4; x++) {
@@ -58,7 +70,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 		}
 	}
 
-	private void create_list_spawn_ennemy(){																			//Remplie la liste des cases de spawn ennemis
+	private void create_list_spawn_ennemy(){																		//Remplie la liste des cases de spawn ennemis
 		case_spawn_equipe_ennemy = new List<Tile>();
 		for (int x = 13; x <= 14; x++) {
 			for (int y = 3; y <= 6; y++) {
@@ -87,7 +99,7 @@ public class GameManager_BeginFight : MonoBehaviour {
 		Instantiate_random_obstacle ();
 	}
 
-	private bool is_it_in_list(int random_x,int random_y){																//Fonction qui chercher à savoir si un couple x,y fait partie des cases de spawn
+	private bool is_it_in_list(int random_x,int random_y){																//Fonction détermine si un couple x,y fait partie des cases de spawn
 		bool Inlist = false;
 		foreach (Tile t in case_spawn_equipe_alies) {
 			if (t.x == random_x && t.y == random_y) {

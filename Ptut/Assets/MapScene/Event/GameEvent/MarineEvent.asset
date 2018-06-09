@@ -15,3 +15,4 @@ MonoBehaviour:
   dialogue: {fileID: 11400000, guid: 3236a2979ca87954f9a6471bf3424315, type: 2}
   is_unique: 0
   Involve_Fight: 1
+  fp: {fileID: 11400000, guid: 670a50014a64a9240820e85cd744e9f0, type: 2}

@@ -8,6 +8,7 @@ namespace MapScene {
 	public class GameManager_Master : MonoBehaviour {
 		private List<GameObject> reachable_points;
 		private GameObject current_point;
+		public GameObject data_transporter;
 
 
 		void OnEnable(){
@@ -71,6 +72,10 @@ namespace MapScene {
 			}
 			Send_To_Save_File();																		//Sauvegarde les informations de la map dans un fichier, avant de changer de scène
 			if(point_script.Event.Involve_Fight){														//Si le point contient une scène à charger
+				if (point_script.Event.fp != null) {													//S'il a des paramètres de combat différents de ceux par défaut
+					GameObject dt = Instantiate(data_transporter);										//Crée un objet qui transporte les paramètres du fight
+					dt.GetComponent<DataTransporter_Script>().Set_Fight_Parameters(point_script.Event.fp);//Transmet les paramètres de fight de l'event au transporteur
+				}
 				StartCoroutine (Load_Next_Fight_In_Background ());										//Charge l'évènement à partir de son nom
 			}
 		}
