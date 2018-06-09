@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212139476613905494}
   - component: {fileID: 61483489079196618}
   - component: {fileID: 114361154853817280}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Background_map
   m_TagString: Map
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4194560343504122}
   - component: {fileID: 212843316966986398}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: back_background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1311675127
   m_SortingLayer: -2
-  m_SortingOrder: 0
+  m_SortingOrder: -5
   m_Sprite: {fileID: 21300000, guid: c09d209d213c5d34c95a275a86cc0291, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -187,7 +187,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1311675127
   m_SortingLayer: -2
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_Sprite: {fileID: 21300000, guid: 8883180c9a11c114393e28873d8f0a6a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -34,8 +34,8 @@ namespace MapScene {
 		}
 
 		private void Set_Initial_References(){
-			EventList EventData = (EventList)AssetDatabase
-				.LoadAssetAtPath("Assets/MapScene/Event/AllEventList.asset", typeof(EventList));//Charge l'object qui contient la list des évènement
+			//Charge l'object qui contient la list des évènement
+			EventList EventData = Resources.Load("Event/AllEventList") as EventList;			//Récupère la liste des events dans les fichiers du jeu
 			all_event = EventData.eventList;													//Copie la liste de tous les évènements possibles
 
 			map = GameObject.FindGameObjectWithTag ("Map");

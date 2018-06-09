@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212421759106611620}
   - component: {fileID: 65448970042542528}
   - component: {fileID: 114896602912406320}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: interest_marker
   m_TagString: Point
   m_Icon: {fileID: 0}
@@ -68,11 +68,11 @@ MonoBehaviour:
   local_list_line: []
   local_list_point: []
   Event: {fileID: 0}
-  dialogue: {fileID: 0}
-  event_name: 
+  index_event: 0
   color: 0
   reachable: 0
   done: 0
+  marine: 0
 --- !u!212 &212421759106611620
 SpriteRenderer:
   m_ObjectHideFlags: 1
