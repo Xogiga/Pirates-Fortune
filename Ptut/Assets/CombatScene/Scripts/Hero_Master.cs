@@ -14,10 +14,7 @@ public class Hero_Master : MonoBehaviour {
 	private int health_stat;
 	[Range(0,100)] public int current_health;
 	private GameObject indicator;
-	private CombatHUD_Master combatHUD_master;
-	private GameManager_Master game_master;
 	public GameObject damage_text;
-	private CombatLog_Manager combatlog_master;
 
 	void OnEnable()
 	{
@@ -33,11 +30,7 @@ public class Hero_Master : MonoBehaviour {
 		stats_daction = 5;
 		action_point = stats_daction;
 		movement_point = stats_de_deplacement;
-		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
 		indicator = this.transform.GetChild (0).gameObject;										//Recupère un gameObject fils
-		GameObject combatHUD = GameObject.Find ("CombatHUD");
-		combatHUD_master = combatHUD.GetComponent<CombatHUD_Master>();
-		combatlog_master = combatHUD.transform.GetChild(6).GetComponent<CombatLog_Manager>();
 	}
 
 	//Fonction qui active/désactive la flèche au dessus du personnage
@@ -55,13 +48,13 @@ public class Hero_Master : MonoBehaviour {
 	//Fonction qui augmente la vie
 	public void IncreaseHealth(int health_change, string Caller_Name)
 	{
-		combatHUD_master.Set_Hero_Health(this.gameObject);
+		References.CombatHud.Set_Hero_Health(this.gameObject);
 		int previous_health = current_health;
 		current_health += health_change;
 		if (current_health > health_stat) {
 			current_health = health_stat;
 		}
-		combatHUD_master.Change_Hero_Health(previous_health, current_health, health_stat);
+		References.CombatHud.Change_Hero_Health(previous_health, current_health, health_stat);
 		Show_Floating_Text (health_change);
 		Send_Log_Message (health_change, Caller_Name);
 	}
@@ -74,7 +67,7 @@ public class Hero_Master : MonoBehaviour {
 			current_health = 0;
 			StartCoroutine(Death ());
 		} 
-		combatHUD_master.Change_Hero_Health (previous_health, current_health, health_stat);
+		References.CombatHud.Change_Hero_Health (previous_health, current_health, health_stat);
 
 		Show_Floating_Text (-health_change);
 		Send_Log_Message (-health_change, Caller_Name);
@@ -92,7 +85,7 @@ public class Hero_Master : MonoBehaviour {
 		} else  {
 			message = this.name + " recieve a heal of " + health_change + " HP from "+ Caller_name+" ("+current_health+" HP left).";
 		}
-		combatlog_master.Add_Text (message, 1);
+		References.CombatLog.Add_Text (message, 1);
 	}
 
 	//Fonction qui fait apparaître un text flotant au dessus du personnage
@@ -111,11 +104,11 @@ public class Hero_Master : MonoBehaviour {
 
 	//Fonction qui gère la mort du personnage
 	IEnumerator Death(){
-		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
-		while (combatHUD_master.Is_Animating()) {																//Attend la fin de l'annimation de la barre de vie
+		References.GameMaster.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
+		while (References.CombatHud.Is_Animating()) {																//Attend la fin de l'annimation de la barre de vie
 			yield return new WaitForSeconds (0.5f);
 		}
-		game_master.Remove_From_List (this.gameObject.name);													//Supprime le personnage de la liste
+		References.GameMaster.Remove_From_List (this.gameObject.name);													//Supprime le personnage de la liste
 		Destroy (this.gameObject);																			
 	}
 
@@ -125,7 +118,7 @@ public class Hero_Master : MonoBehaviour {
 
 	public void Set_Movement_Point(int new_movement_point){
 		movement_point = new_movement_point;
-		combatHUD_master.Set_Hero_Movement_Point (this.gameObject);										//Affiche la réduction de point de mouvement
+		References.CombatHud.Set_Hero_Movement_Point (this.gameObject);										//Affiche la réduction de point de mouvement
 	}
 
 	public int Get_Action_Point(){
@@ -142,7 +135,7 @@ public class Hero_Master : MonoBehaviour {
 
 	public void Set_Action_Point(int val){
 		action_point = val;
-		combatHUD_master.Set_Hero_Action_Point (this.gameObject);						//Affiche la réduction de point d'action
+		References.CombatHud.Set_Hero_Action_Point (this.gameObject);						//Affiche la réduction de point d'action
 	}
 }
 }

@@ -38,10 +38,6 @@ namespace MapScene {
 			{
 				References.CreationScript.Center_Camera ();
 			}
-			if (Input.GetKey (KeyCode.Escape))														//Retourne au menu
-			{
-				StartCoroutine(References.GameMaster.Load_Next_Fight_In_Background ("MenuScene"));
-			}
 		}
 	}
 }

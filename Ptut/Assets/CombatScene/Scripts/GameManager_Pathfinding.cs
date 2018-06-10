@@ -7,7 +7,6 @@ public class GameManager_Pathfinding : MonoBehaviour {
 	private int width;
 	private int height;
 	private Tile[,] matrice_case;
-	private GameManager_BeginFight script_creation_map;
 	private List<Tile> path;
 	private bool is_path_find;
 
@@ -16,10 +15,9 @@ public class GameManager_Pathfinding : MonoBehaviour {
 	}
 
 	private void Set_initial_reference(){
-		script_creation_map = this.GetComponent<GameManager_BeginFight>();
-		matrice_case = script_creation_map.get_matrice_case ();
-		width = script_creation_map.Get_Width ();
-		height = script_creation_map.Get_Height ();
+		matrice_case = References.CreationScript.get_matrice_case ();
+		width = References.CreationScript.Get_Width ();
+		height = References.CreationScript.Get_Height ();
 	}
 
 	//Fonction qui trouve la case dans la matrice à partir de sa position

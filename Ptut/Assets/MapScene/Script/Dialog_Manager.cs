@@ -45,7 +45,7 @@ namespace MapScene {
 			dialog_text.text = "";
 			foreach (char letter in sentence.ToCharArray()) {
 				dialog_text.text += letter;
-				yield return 10;
+				yield return new WaitForSeconds (0.005f);;
 			}
 		}
 

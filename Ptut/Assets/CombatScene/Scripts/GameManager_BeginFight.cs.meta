@@ -1,8 +1,7 @@
 fileFormatVersion: 2
 guid: af10eb0274aaae0478a67b2dd8090eb4
-timeCreated: 1520781667
-licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences:
   - empty_tile: {fileID: 1472448750779328, guid: 4080d4f6a61ce1244840bf16be933dfa,
@@ -12,7 +11,7 @@ MonoImporter:
   - ennemi: {fileID: 1896411845429136, guid: 6c3c528efde539f4b90a08e981f98d40, type: 2}
   - combat_HUD: {fileID: 223450008508247720, guid: d0856032a5a91a8408839e87dc476502,
       type: 2}
-  executionOrder: 100
+  executionOrder: -90
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

@@ -6,16 +6,7 @@ using UnityEngine.UI;
 namespace CombatScene{
 public class Competence_Master : MonoBehaviour {
 	private GameObject infobulle;
-	private GameManager_Master game_master;
 	private List<SpriteRenderer> sprite_list;
-
-	void OnEnable(){
-		Set_initial_reference ();
-	}
-
-	void Set_initial_reference(){
-		game_master = GameObject.FindWithTag("GameManager").GetComponent<GameManager_Master>();
-	}
 
 	private void Find_Infobulle(int Numero_competence){
 		infobulle = GameObject.Find("CombatHUD/Hero Stats Canvas/Barre des competences/Competence_"+Numero_competence+"/Infobulle_"+Numero_competence);
@@ -50,7 +41,7 @@ public class Competence_Master : MonoBehaviour {
 
 	//Fonction qui affiche les cases que le joueur peut attaqué avec la compétence qu'il survole
 	private void Show_Attack_Range(int Numero_competence){
-		GameObject hero = game_master.get_playing_perso ();
+			GameObject hero = References.GameMaster.get_playing_perso ();
 		Hero_Master hero_master = hero.GetComponent<Hero_Master> ();
 		Hero_Attack_1 hero_attack = hero.GetComponent<Hero_Attack_1> ();
 
@@ -78,7 +69,7 @@ public class Competence_Master : MonoBehaviour {
 	//Fonction qui récupère la liste de case libre autour du joueur
 	private void Get_Tile_List(int range_min, int range_max, GameObject hero){
 		sprite_list = new List<SpriteRenderer>();
-		Tile[,] grid = game_master.get_matrice ();
+		Tile[,] grid = References.GameMaster.get_matrice ();
 
 		int HeroX = Mathf.RoundToInt (hero.transform.position.x);
 		int HeroY =  Mathf.RoundToInt(hero.transform.position.y);

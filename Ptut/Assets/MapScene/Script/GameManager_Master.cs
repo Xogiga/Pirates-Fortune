@@ -97,7 +97,7 @@ namespace MapScene {
 		}
 
 
-		public IEnumerator Load_Next_Fight_In_Background(string scene_name)
+		IEnumerator Load_Next_Fight_In_Background(string scene_name)
 		{
 			AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene_name);
 

@@ -5,7 +5,6 @@ using UnityEngine;
 namespace CombatScene{
 public class Ennemy_Master : MonoBehaviour {
 
-	private GameManager_Master game_master;
 	private int movement_stats;
 	[SerializeField] [Range(0,100)] private int movement_point;
 	private int max_range;
@@ -14,9 +13,6 @@ public class Ennemy_Master : MonoBehaviour {
 	private int action_stat;
 	[SerializeField] [Range(0,100)] private int action_point;
 	private GameObject indicator;
-	private CombatHUD_Master combatHUD_master;
-	private CombatLog_Manager combatlog_master;
-	private GameManager_Pathfinding game_pathfinding;
 	public GameObject damage_text;
 
 	void OnEnable()
@@ -32,28 +28,23 @@ public class Ennemy_Master : MonoBehaviour {
 		max_range = 5;
 		action_stat = 5;
 		action_point = action_stat;
-		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master> ();
-		GameObject combatHUD = GameObject.Find ("CombatHUD");
-		combatHUD_master = combatHUD.GetComponent<CombatHUD_Master>();
-		combatlog_master = combatHUD.transform.GetChild(6).GetComponent<CombatLog_Manager>();
-		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
 		indicator = this.transform.GetChild (0).gameObject;															//Recupère un gameObject fils
 	}
 
 	//Active les stats de l'ennemi
 	void OnMouseEnter()
 	{
-		if (!combatHUD_master.Is_Animating()) {																		//Ne fait rien si une animation du HUD est déjà en cours
-			combatHUD_master.Set_Ennemy_Health (this.gameObject);													//Si la barre de vie d'un ennemi baisse déjà
-			combatHUD_master.enable_ennemy_stats ();
+		if (!References.CombatHud.Is_Animating()) {																		//Ne fait rien si une animation du HUD est déjà en cours
+			References.CombatHud.Set_Ennemy_Health (this.gameObject);													//Si la barre de vie d'un ennemi baisse déjà
+			References.CombatHud.enable_ennemy_stats ();
 		}
 	}
 
 	//Désactive les stats de l'ennemi
 	void OnMouseExit()
 	{
-		if (!combatHUD_master.Is_Animating()) {
-			combatHUD_master.disable_ennemy_stats ();
+		if (!References.CombatHud.Is_Animating()) {
+			References.CombatHud.disable_ennemy_stats ();
 		}
 	}
 
@@ -72,7 +63,7 @@ public class Ennemy_Master : MonoBehaviour {
 		if (current_health > health_stat) {
 			current_health = health_stat;
 		}
-		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);
+		References.CombatHud.Change_Ennemy_Health (previous_health, current_health, health_stat);
 		Show_Floating_Text (health_change);
 		Send_Log_Message (health_change, caller_name);
 	}
@@ -84,7 +75,7 @@ public class Ennemy_Master : MonoBehaviour {
 			current_health = 0;
 			StartCoroutine(Death ());
 		}
-		combatHUD_master.Change_Ennemy_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
+		References.CombatHud.Change_Ennemy_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
 		Show_Floating_Text (-health_change);
 		Send_Log_Message (-health_change, caller_name);
 	}
@@ -92,12 +83,12 @@ public class Ennemy_Master : MonoBehaviour {
 	//Fonction qui gère la mort du personnage
 	IEnumerator Death(){
 		GetComponent<Collider> ().enabled = false;											//Désactive sa hitbox, pour qu'on ne puisse plus le blesser à nouveau
-		while (combatHUD_master.Is_Animating()) {											//Attend la fin de l'annimation de la barre de vie
+		while (References.CombatHud.Is_Animating()) {											//Attend la fin de l'annimation de la barre de vie
 			yield return new WaitForSeconds (0.5f);
 		}
-		game_master.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
-		combatHUD_master.disable_ennemy_stats();										//Cache ses stats
-		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
+		References.GameMaster.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
+		References.CombatHud.disable_ennemy_stats();										//Cache ses stats
+		References.GameMaster.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
 		Destroy (this.gameObject);															//Détruit le gameObject
 	}
 
@@ -127,7 +118,7 @@ public class Ennemy_Master : MonoBehaviour {
 		} else  {
 			message = this.name + " recieve a heal of " + health_change + " HP from "+ Caller_name+" ("+current_health+" HP left).";
 		}
-		combatlog_master.Add_Text (message, 1);
+		References.CombatLog.Add_Text (message, 1);
 	}
 
 	//Fonction qui remet les points au max (fin de tour)
@@ -178,19 +169,19 @@ public class Ennemy_Master : MonoBehaviour {
 		int distance;
 		GameObject target;
 		if (Can_I_Attack (out distance, out target)) {														//Vérifie qu'il y a un ennemi a porté
-			combatHUD_master.Set_Hero_Health(target.gameObject);											//Affiche la barre de vie de la cible
+			References.CombatHud.Set_Hero_Health(target.gameObject);											//Affiche la barre de vie de la cible
 			StartCoroutine(Attack (distance, target));														//Attaque la cible
 		} else {																							//Sinon, passe le tour
-			game_master.passer_le_tour (); 
+			References.GameMaster.passer_le_tour (); 
 		}
 	}
 
 	//Fonction qui fait déplacer l'ennemi
 	public void try_to_move (Vector3 endposition)
 	{
-		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);			//Change la case de départ en 0 dans la matrice
-		game_pathfinding.Find_Path (this.transform.position, endposition);																		//Détermine le chemin avec le script de PathFinding
-		List<Tile> path = game_pathfinding.Get_Path ();																							//Récupère le chemin
+		References.GameMaster.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);			//Change la case de départ en 0 dans la matrice
+		References.Pathfinding.Find_Path (this.transform.position, endposition);																		//Détermine le chemin avec le script de PathFinding
+		List<Tile> path = References.Pathfinding.Get_Path ();																							//Récupère le chemin
 		StartCoroutine (Move2 (path));																											//Déplace le héros
 	}
 
@@ -223,7 +214,7 @@ public class Ennemy_Master : MonoBehaviour {
 
 	//Fonction qui gère la  fin de déplacement
 	private void End_Deplacement(){
-		game_master.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 1);			//Change la case de d'arrivé en 1 dans la matrice
+		References.GameMaster.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 1);			//Change la case de d'arrivé en 1 dans la matrice
 		Comportement_Suite();
 	}
 
@@ -252,10 +243,10 @@ public class Ennemy_Master : MonoBehaviour {
 
 	//Fonction qui détermine le chemin à prendre pour se rendre sur la case de l'ennemi
 	private List<Tile> Get_Path_From_Target(Vector3 target_position){
-		game_master.set_matrice_case (Mathf.RoundToInt (target_position.x), Mathf.RoundToInt (target_position.y), 0);		//Change TEMPORAIREMENT la case de l'ennemi en 0
-		game_pathfinding.Find_Path (this.transform.position, target_position);												//Détermine le chemin avec le script de PathFinding
-		List<Tile> path = game_pathfinding.Get_Path ();																		//Récupère le chemin
-		game_master.set_matrice_case (Mathf.RoundToInt (target_position.x), Mathf.RoundToInt (target_position.y), 1);		//Remet la case de l'ennemi en 1
+		References.GameMaster.set_matrice_case (Mathf.RoundToInt (target_position.x), Mathf.RoundToInt (target_position.y), 0);		//Change TEMPORAIREMENT la case de l'ennemi en 0
+		References.Pathfinding.Find_Path (this.transform.position, target_position);												//Détermine le chemin avec le script de PathFinding
+		List<Tile> path = References.Pathfinding.Get_Path ();																		//Récupère le chemin
+		References.GameMaster.set_matrice_case (Mathf.RoundToInt (target_position.x), Mathf.RoundToInt (target_position.y), 1);		//Remet la case de l'ennemi en 1
 		return path;
 	}
 
@@ -283,7 +274,7 @@ public class Ennemy_Master : MonoBehaviour {
 	//Fonction qui attaque l'ennemi a porté
 	IEnumerator Attack(int int_distance,GameObject target){
 		bool attack_possibility = true;
-		combatHUD_master.enable_disable_stats_for_ennemy ();												//Affiche les informations de la cible
+		References.CombatHud.enable_disable_stats_for_ennemy ();												//Affiche les informations de la cible
 		while (target != null && action_point >= 1 && attack_possibility == true) {							//Tant que la cible est en vie, que l'ennemi a des points d'action et qu'il est a portée, il attaque																		
 			if (int_distance == 1 && action_point >= 3) {													//Choisi l'attaque en fonction de la distance et de ses points d'action
 				action_point -= 3;																			//Réduit ses points d'action
@@ -294,12 +285,12 @@ public class Ennemy_Master : MonoBehaviour {
 			} else {																						//S'il n'a la range pour aucune attaque
 				attack_possibility = false;
 			}
-			while(combatHUD_master.Is_Animating() == true){
+			while(References.CombatHud.Is_Animating() == true){
 				yield return new WaitForSeconds (0.5f);														//Attend la fin des animations
 			}
 		}
-		combatHUD_master.enable_disable_stats_for_ennemy ();												//Cache les informations de la cible
-		game_master.passer_le_tour (); 
+		References.CombatHud.enable_disable_stats_for_ennemy ();												//Cache les informations de la cible
+		References.GameMaster.passer_le_tour (); 
 	}
 
 
@@ -317,7 +308,7 @@ public class Ennemy_Master : MonoBehaviour {
 
 	//Vérifie si le combat est terminé
 	public void Update(){
-		if (game_master.is_fight_over == true) {
+		if (References.GameMaster.is_fight_over == true) {
 			StopAllCoroutines();
 		}
 	}

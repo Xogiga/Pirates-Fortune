@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 namespace CombatScene{
 public class GameManager_BeginFight : MonoBehaviour {
-
-	private GameManager_Master game_manager_master;
-
 	public GameObject empty_tile;
 	public GameObject obstacle;
 	public GameObject player;
@@ -27,11 +24,11 @@ public class GameManager_BeginFight : MonoBehaviour {
 
 	void OnEnable(){
 		Set_initial_references ();
-		game_manager_master.event_begin_fight += Begin_fight;																	//Ajoute des scripts à l'évènement Begin_Fight
+		References.GameMaster.event_begin_fight += Begin_fight;																	//Ajoute des scripts à l'évènement Begin_Fight
 	}
 
 	void OnDisable(){
-		game_manager_master.event_begin_fight -= Begin_fight;
+		References.GameMaster.event_begin_fight -= Begin_fight;
 	}
 
 	void Set_initial_references()
@@ -41,7 +38,6 @@ public class GameManager_BeginFight : MonoBehaviour {
 		nb_elem_rand = 15;
 		width = 18;
 		height = 10;
-		game_manager_master = GetComponent<GameManager_Master> ();
 		create_list_spawn_alies ();
 		create_list_spawn_ennemy ();
 	}

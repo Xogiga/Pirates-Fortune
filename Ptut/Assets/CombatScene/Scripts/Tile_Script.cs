@@ -5,25 +5,15 @@ using UnityEngine.EventSystems;
 
 namespace CombatScene{
 public class Tile_Script : MonoBehaviour {
-	private GameManager_Master game_master;
 	private GameObject player;									
 	private Hero_Master hero_master;
-	private GameManager_Pathfinding game_pathfinding;
 	private List<Tile> path;
 	private int actual_turn;
 
-	void OnEnable(){
-		Set_initial_references();
-	}
-
-	void Set_initial_references(){
-		game_master = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Master>();
-		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();
-	}
 
 	public void Set_new_references(){																											//On reprend les références des cases et des personnages à chaque tour allié
 		path = null;
-		player = game_master.get_playing_perso ();
+		player = References.GameMaster.get_playing_perso ();
 		hero_master = player.GetComponent<Hero_Master> ();
 	}		
 
@@ -33,23 +23,23 @@ public class Tile_Script : MonoBehaviour {
 		if (EventSystem.current.IsPointerOverGameObject ())																						//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
 			return;
 		Set_new_references ();
-		if (game_master.is_it_your_turn == true 																								//Si c'est au tour du joueur de jouer
+		if (References.GameMaster.is_it_your_turn == true 																						//Si c'est au tour du joueur de jouer
 			&& hero_master.is_moving == false 																									//Si le héros n'est pas déjà entrain de bouger
-			&& game_master.get_matrice_case(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y)) == 0){	//Si la case de la matrice est égale à 0
-				game_pathfinding.Find_Path (player.transform.position, this.transform.position);												//Détermine le chemin entre le héros et la case
-				path = game_pathfinding.Get_Path ();																							//Récupère le chemin
+			&& References.GameMaster.get_matrice_case(Mathf.RoundToInt(this.transform.position.x), Mathf.RoundToInt(this.transform.position.y)) == 0){	//Si la case de la matrice est égale à 0
+			References.Pathfinding.Find_Path (player.transform.position, this.transform.position);												//Détermine le chemin entre le héros et la case
+			path = References.Pathfinding.Get_Path ();																							//Récupère le chemin
 				if (path != null && path.Count <=  hero_master.Get_Movement_Point()) {															//Si le chemin existe et est accessible avec les points de mouvements disponibles
 					foreach (Tile t in path) {																									//Change les sprite
 					t.obj.GetComponent<SpriteRenderer> ().color = new Color32(35,236,64,255);
 						}
 				}
 		}
-		actual_turn = game_master.get_turn ();																									//Récupère le numéro du tour
+		actual_turn = References.GameMaster.get_turn ();																						//Récupère le numéro du tour
 	}
 
 	//Fonction qui permet de réinitialiser les sprites si l'utilisateur enlève sa souris de la case
 	public void OnMouseExit(){
-		if (game_master.is_it_your_turn == true && path != null) {
+		if (References.GameMaster.is_it_your_turn == true && path != null) {
 			foreach (Tile t in path) {																											//Change tous les sprites du chemin
 				t.obj.GetComponent<SpriteRenderer> ().color = new Color32(255,255,255,255);
 			}
@@ -59,7 +49,7 @@ public class Tile_Script : MonoBehaviour {
 
 	//Fonction qui permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
 	void Update(){																														
-		if (game_master.get_turn () != actual_turn && path != null) {
+		if (References.GameMaster.get_turn () != actual_turn && path != null) {
 			foreach (Tile t in path) {																											//Change tous les sprites du chemin
 				t.obj.GetComponent<SpriteRenderer> ().color = new Color32(255,255,255,255);
 			}

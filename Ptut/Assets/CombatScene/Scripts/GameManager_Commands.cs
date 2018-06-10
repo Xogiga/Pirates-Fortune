@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 namespace CombatScene{
 public class GameManager_Commands : MonoBehaviour {
-	private GameManager_Master game_master;
 	private GameObject hero;
 	private Hero_Master hero_master;
 	private Hero_Attack_1 script_attack;
@@ -13,7 +12,6 @@ public class GameManager_Commands : MonoBehaviour {
 	private bool programmed_attack;
 	private int next_attack_code;
 	public Texture2D sprite_curseur;
-	private CombatHUD_Master combatHUD_master;
 
 	void OnEnable(){
 		Set_initial_references ();
@@ -21,22 +19,20 @@ public class GameManager_Commands : MonoBehaviour {
 
 	//Reférences fixes
 	private void Set_initial_references () {																		
-		game_master = this.GetComponent<GameManager_Master>();
-		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master> ();
 		programmed_attack = false;
 		next_attack_code = -1;
 	}
 
 	//Référence amené à changer en fonction du tour (du personnage)
 	public void Set_new_references(){																
-		hero = game_master.get_playing_perso ();
+		hero = References.GameMaster.get_playing_perso ();
 		hero_master = hero.GetComponent<Hero_Master>();
 		script_attack = hero_master.GetComponent<Hero_Attack_1> ();
 		script_deplacement = hero_master.GetComponent<Hero_Deplacement> ();
 	}
 
 	void Update () {
-		if (game_master.is_it_your_turn == true) {														//Vérifie que c'est le tour du joueur
+			if (References.GameMaster.is_it_your_turn == true) {														//Vérifie que c'est le tour du joueur
 			if (hero_master.is_moving == false) {														//Vérifie que le héros ne se déplace pas déjà
 				if (EventSystem.current.IsPointerOverGameObject ()) {									//Si le pointeur est au dessus d'un élément de l'ATH, sort de la fonction.
 					return;
@@ -70,7 +66,7 @@ public class GameManager_Commands : MonoBehaviour {
 									break;
 								}
 							} else {
-								combatHUD_master.Announce ("You can't attack this.");
+									References.CombatHud.Announce ("You can't attack this.");
 							}
 						} else if (hit.transform.tag == "Map") {										//Vérifie que l'objet touché fait partie de la map
 							script_deplacement.try_to_move (hit.transform.position);					//Se déplace jusqu'à la case sélectionée
@@ -80,13 +76,9 @@ public class GameManager_Commands : MonoBehaviour {
 				}
 
 				if (Input.GetKeyDown (KeyCode.Space)) {													//Appel la fin de tour
-						game_master.passer_le_tour ();
+						References.GameMaster.passer_le_tour ();
 				}
 			}
-		}
-		if (Input.GetKey ("escape")) 																	//Retourne au Menu
-		{
-				StartCoroutine(game_master.Load_Next_Scene_In_Background("MenuScene"));
 		}
 	}
 

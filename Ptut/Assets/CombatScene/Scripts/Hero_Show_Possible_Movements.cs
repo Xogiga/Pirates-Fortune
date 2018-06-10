@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace CombatScene{
 public class Hero_Show_Possible_Movements : MonoBehaviour {
-	private GameObject game_manager;
-	private GameManager_Master game_master;
 	private Hero_Master hero_master;
 	private List<SpriteRenderer> sprite_list;
-	private GameManager_Pathfinding game_pathfinding;
 	private int actual_turn;
 
 
@@ -18,20 +15,17 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 
 	void Set_initial_reference(){
 		sprite_list = null;
-		game_manager = GameObject.FindWithTag("GameManager");
-		game_master = game_manager.GetComponent<GameManager_Master>();
 		hero_master = this.GetComponent<Hero_Master> ();
-		game_pathfinding = GameObject.FindWithTag ("GameManager").GetComponent<GameManager_Pathfinding> ();;
 	}
 
 	//Fonction qui affiche les cases atteignable par le héros
 	public void OnMouseEnter(){
-		if (game_master.get_playing_perso().name == this.name && hero_master.is_moving == false) {											//Si le héros survolé ne se déplace pas et que c'est son tour
+		if (References.GameMaster.get_playing_perso().name == this.name && hero_master.is_moving == false) {											//Si le héros survolé ne se déplace pas et que c'est son tour
 			Get_Tile_List();																												//Actualise la liste de case
 			foreach (SpriteRenderer s in sprite_list) {																						//Pour chaque case
 				s.color =  new Color32(35,236,64,255);																						//Change la couleur
 			}
-			actual_turn = game_master.get_turn ();																			//Récupère le numéro du tour
+			actual_turn = References.GameMaster.get_turn ();																			//Récupère le numéro du tour
 		}
 	}
 
@@ -39,7 +33,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 	private void Get_Tile_List(){
 		sprite_list = new List<SpriteRenderer>();
 		int movement_points = hero_master.Get_Movement_Point();
-		Tile[,] grid = game_master.get_matrice ();
+		Tile[,] grid = References.GameMaster.get_matrice ();
 
 		int HeroX = Mathf.RoundToInt (this.transform.position.x);
 		int HeroY =  Mathf.RoundToInt(this.transform.position.y);
@@ -49,8 +43,8 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 					int distance = Mathf.Abs(i - HeroX) + Mathf.Abs(j - HeroY) ;
 					if (distance <= movement_points) {																						//On vérifie que la distance à la case est bien inférieure à ses points de mouvement
 						if (grid [i, j].state == 0) {																						//On vérifie que la case est innocupé
-							game_pathfinding.Find_Path (this.transform.position, grid [i, j].obj.transform.position);						//Détermine le chemin avec le script de PathFinding
-							List<Tile> path = game_pathfinding.Get_Path ();																	//Récumère le chemin
+							References.Pathfinding.Find_Path (this.transform.position, grid [i, j].obj.transform.position);						//Détermine le chemin avec le script de PathFinding
+							List<Tile> path = References.Pathfinding.Get_Path ();																	//Récumère le chemin
 							if(path != null && path.Count <= movement_points){																//Vérifie que la longueur du chemin est inférieure au nombre de point de déplacement
 								sprite_list.Add (grid [i, j].obj.GetComponent<SpriteRenderer> ());											//Ajoute le sprite de la case à la liste
 							}
@@ -73,7 +67,7 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 
 	//Permet de réinitialiser les sprites si l'utilisateur fait "Fin de tour" sans bouger sa souris
 	void Update(){																															
-		if (game_master.get_turn () != actual_turn && sprite_list != null) {
+		if (References.GameMaster.get_turn () != actual_turn && sprite_list != null) {
 			foreach (SpriteRenderer s in sprite_list) {
 					s.color = new Color32(255,255,255,255);
 				}

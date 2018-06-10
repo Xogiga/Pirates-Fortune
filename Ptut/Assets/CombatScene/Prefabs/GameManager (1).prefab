@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 114045389138914586}
   - component: {fileID: 114040686877454856}
   - component: {fileID: 114452889857451790}
+  - component: {fileID: 114611491040218294}
+  - component: {fileID: 114416925461062260}
   m_Layer: 0
   m_Name: GameManager (1)
   m_TagString: GameManager
@@ -57,11 +59,6 @@ MonoBehaviour:
   obstacle: {fileID: 1498541545845272, guid: 61990ba17a855904d894fbc71d6e0d60, type: 2}
   player: {fileID: 1681042431284302, guid: 64d21dbfe94d8504a8308967400d9eef, type: 2}
   ennemi: {fileID: 1350641033659568, guid: 3d13ad15cd24d9741a20a3250408e50b, type: 2}
-  width: 18
-  height: 10
-  nb_elem_rand: 20
-  nb_ennemies: 3
-  nb_allies: 3
 --- !u!114 &114045389138914586
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -76,6 +73,19 @@ MonoBehaviour:
   is_fight_begin: 0
   is_it_your_turn: 0
   is_fight_over: 0
+  data_transporter: {fileID: 1269622009971772, guid: 52dfbf9bcd7fbc74cad9bf65d28fa3a4,
+    type: 2}
+--- !u!114 &114416925461062260
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1741072507528192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5146d2f205a729943b5b435f8ed7a35a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114452889857451790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -88,3 +98,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite_curseur: {fileID: 2800000, guid: 991c73394470e3b4b9f228894fafa862, type: 3}
+--- !u!114 &114611491040218294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1741072507528192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36af1a784b6935c4180babce1befe24a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

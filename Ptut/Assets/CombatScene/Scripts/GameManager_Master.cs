@@ -11,13 +11,10 @@ public class GameManager_Master : MonoBehaviour {
 	public bool is_fight_begin;
 	public bool is_it_your_turn;
 	public bool is_fight_over;
-	private GameManager_BeginFight script_creation_map;
-	private GameManager_Commands script_commande;
 	private Tile[,] matrice_case;
 	private GameObject[] liste_perso;
 	private GameObject[] list_case;
 	private int indice_playing_perso;
-	private CombatHUD_Master combatHUD_master;
 	private int turn;
 	private bool victory;
 	public GameObject data_transporter;
@@ -27,16 +24,12 @@ public class GameManager_Master : MonoBehaviour {
 		Call_event_begin_fight();
 	}
 
-
 	private void Set_initial_reference(){
 		is_fight_begin = false;
 		is_it_your_turn = false;
 		is_fight_over=false;
-		script_creation_map = this.GetComponent<GameManager_BeginFight>();
-		script_commande = this.GetComponent<GameManager_Commands> ();
 		indice_playing_perso = 0;
 		turn = 0;
-		combatHUD_master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();	
 	}
 
 
@@ -49,9 +42,9 @@ public class GameManager_Master : MonoBehaviour {
 		{
 			is_fight_begin = true;																						//Déclare le combat commencé
 			event_begin_fight ();																						//Lance les fonctions de l'event begin_fight :
-			matrice_case = script_creation_map.get_matrice_case ();														//Récupère la matrice
-			liste_perso = script_creation_map.get_liste_perso ();														//Récupère la liste des personnages dans l'ordre des tours
-			this.GetComponent<GameManager_Commands>().enabled = true;													//Active le script des commandes
+			matrice_case = References.CreationScript.get_matrice_case ();												//Récupère la matrice
+			liste_perso = References.CreationScript.get_liste_perso ();													//Récupère la liste des personnages dans l'ordre des tours
+			References.Commands.enabled = true;																			//Active le script des commandes
 			StartCoroutine(begin_hero_turn());
 		}
 	}		
@@ -105,7 +98,7 @@ public class GameManager_Master : MonoBehaviour {
 		is_fight_over = true;																							//Déclare le combat terminé
 		GameObject dt = Instantiate(data_transporter);																	//Crée un objet qui transporte le résultat du combat
 		dt.GetComponent<DataTransporter_Script>().Set_Victory(victory);													//Transmet l'information au transporteur
-		combatHUD_master.Show_End_Screen(victory);																		//Affiche l'écran de fin
+		References.CombatHud.Show_End_Screen(victory);																	//Affiche l'écran de fin
 	}
 		
 	public void passer_le_tour(){
@@ -136,40 +129,40 @@ public class GameManager_Master : MonoBehaviour {
 	//Gère la fin de tour allié
 	private void end_hero_turn(){
 		is_it_your_turn = false;																						//On ne donne plus la main au joueur
-		script_commande.Reset_cursor();																					//On change le curseur si besoin
+		References.Commands.Reset_cursor();																				//On change le curseur si besoin
 		get_playing_perso ().GetComponent<Hero_Master> ().Point_Character();											//Désactive la flèche au dessus du personnage
-		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
+		References.CombatHud.enable_disable_button_and_stats ();														//On désactive les infos du héros et le bouton fin de tour
 		get_playing_perso ().GetComponent<Hero_Master>().Reset_Point();													//On lui redonne ses points
 	}
 
 	//Gère la fin de tour ennemi
 	private void end_ennemy_turn(){
-		combatHUD_master.disable_ennemy_stats();																		//Cache les stats du personnage
+		References.CombatHud.disable_ennemy_stats();																	//Cache les stats du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Désactive la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master>().Reset_Point();
 	}
 
 	//Gère le début de tour allié
 	IEnumerator begin_hero_turn(){
-		while(combatHUD_master.Is_Animating()){
+			while(References.CombatHud.Is_Animating()){
 			yield return new WaitForSeconds (0.5f);
 		}
 		is_it_your_turn = true;																							//On donne la main au joueur
-		combatHUD_master.Announce ("Your Turn !");																		//Annonce le tour allié
-		combatHUD_master.Set_Hero_Points (get_playing_perso());															//On affiche ses stats
-		combatHUD_master.enable_disable_button_and_stats ();															//On désactive les infos du héros et le bouton fin de tour
-		script_commande.Set_new_references();																			//On donne les références du nouveaux personnage aux commandes
+		References.CombatHud.Announce ("Your Turn !");																	//Annonce le tour allié
+		References.CombatHud.Set_Hero_Points (get_playing_perso());														//On affiche ses stats
+		References.CombatHud.enable_disable_button_and_stats ();														//On désactive les infos du héros et le bouton fin de tour
+		References.Commands.Set_new_references();																		//On donne les références du nouveaux personnage aux commandes
 		get_playing_perso ().GetComponent<Hero_Master> ().Point_Character();											//Affiche la flèche au dessus du personnage
 	}
 
 	//Gère le début de tour ennemi
 	IEnumerator begin_ennemy_turn(){
-		while(combatHUD_master.Is_Animating()){
+		while(References.CombatHud.Is_Animating()){
 			yield return new WaitForSeconds (0.5f);
 		}
-		combatHUD_master.Announce ("Ennemy Turn !");																	//Annonce le tour ennemi
-		combatHUD_master.Set_Ennemy_Health(get_playing_perso());														//Fais correspondre les stats du personnage
-		combatHUD_master.enable_ennemy_stats();																			//Affiche les stats du personnage
+		References.CombatHud.Announce ("Ennemy Turn !");																//Annonce le tour ennemi
+		References.CombatHud.Set_Ennemy_Health(get_playing_perso());													//Fais correspondre les stats du personnage
+		References.CombatHud.enable_ennemy_stats();																		//Affiche les stats du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Point_Character();											//Affiche la flèche au dessus du personnage
 		get_playing_perso ().GetComponent<Ennemy_Master> ().Comportement ();											//Appel son comportement
 	}
@@ -205,7 +198,7 @@ public class GameManager_Master : MonoBehaviour {
 		}
 	}
 
-		public IEnumerator Load_Next_Scene_In_Background(string scene_name)
+	IEnumerator Load_Next_Scene_In_Background(string scene_name)
 	{
 		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene_name);
 

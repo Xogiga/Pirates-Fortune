@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace CombatScene{
 public class Hero_Attack_1 : MonoBehaviour {
-	private CombatHUD_Master combatHUD_Master;
 	private Hero_Master hero_master;
 
 	// Use this for initialization
@@ -13,7 +12,6 @@ public class Hero_Attack_1 : MonoBehaviour {
 	}
 
 	void Set_references(){
-		combatHUD_Master = GameObject.Find ("CombatHUD").GetComponent<CombatHUD_Master>();
 		hero_master = this.GetComponent<Hero_Master> ();
 	}		
 
@@ -30,7 +28,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 			return true;
 		}
 		else {
-			combatHUD_Master.Announce ("Not enough Action Point !");	
+			References.CombatHud.Announce ("Not enough Action Point !");	
 			return false;
 			}
 	}
@@ -44,7 +42,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 				ennemy_master.DeductHealth (30, name);
 			}
 		} else {
-			combatHUD_Master.Announce ("You're too far !");																								//Ajouter  un son
+			References.CombatHud.Announce ("You're too far !");																								//Ajouter  un son
 		}
 	}
 
@@ -58,7 +56,7 @@ public class Hero_Attack_1 : MonoBehaviour {
 				ennemy_master.DeductHealth (6, name);
 			}
 		} else {
-			combatHUD_Master.Announce ("You're not in range !");																						//Ajouter un son
+			References.CombatHud.Announce ("You're not in range !");																						//Ajouter un son
 		}
 	}
 

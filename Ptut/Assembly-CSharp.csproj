@@ -120,6 +120,8 @@
     <Compile Include="Assets\MapScene\Class\FightParameters.cs" />
     <Compile Include="Assets\MapScene\Script\DataTransporter_Script.cs" />
     <Compile Include="Assets\MenuScene\Script\MainMenu_Script.cs" />
+    <Compile Include="Assets\CombatScene\Scripts\References.cs" />
+    <Compile Include="Assets\CommonScript\PauseMenu_Script.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -133,5 +135,7 @@
     <Folder Include="Assets\MapScene\Script\Class\" />
     <Folder Include="Assets\MapScene\Class\" />
     <Folder Include="Assets\MenuScene\" />
+    <Folder Include="Assets\MapScene\Script\" />
+    <Folder Include="Assets\CommonScript\" />
   </ItemGroup>
 </Project>
