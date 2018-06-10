@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -61,6 +62,10 @@ namespace MapScene {
 		public void Set_Reachable_point(){
 			interest_marker_script point_script = current_point.GetComponent<interest_marker_script> ();//Récupère le script qui contient les données du point
 
+			if (point_script.Event.EventName == "End") {												//Gère la fin
+				Manage_End ();
+			}
+
 			if (reachable_points != null) {																//Si la liste existe déjà
 				foreach (GameObject N in reachable_points) {											//Rend tous ces points inaccessible
 					N.GetComponent<interest_marker_script>().reachable = false;
@@ -72,6 +77,15 @@ namespace MapScene {
 			foreach (GameObject N in reachable_points) {												//Rend les voisins accessible
 				N.GetComponent<interest_marker_script>().reachable = true;
 			}
+		}
+
+		//Fonction qui s'occupe de la fin
+		private void Manage_End(){
+			string path = Application.persistentDataPath + "/Saves" + "/MapSave.dat";
+			if(File.Exists (path)){
+				File.Delete (path);
+			}
+			StartCoroutine (Load_Next_Fight_In_Background ("MenuScene"));
 		}
 
 		//Fonction qui gère l'évènement après l'affichage du dialogue

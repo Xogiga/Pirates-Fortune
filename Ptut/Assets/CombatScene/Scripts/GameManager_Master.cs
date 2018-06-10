@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -191,11 +192,17 @@ public class GameManager_Master : MonoBehaviour {
 
 	//Fonction qui retourne à la scène de la carte
 	public void Load_Next_Scene(){
+		string next_scene;
 		if (victory == true) {
-			StartCoroutine (Load_Next_Scene_In_Background ("MapScene"));
+			next_scene = "MapScene";
 		} else {
-			Application.Quit ();
+			string path = Application.persistentDataPath + "/Saves" + "/MapSave.dat";
+			if(File.Exists (path)){
+				File.Delete (path);
+			}
+			next_scene = "MenuScene";
 		}
+		StartCoroutine (Load_Next_Scene_In_Background (next_scene));
 	}
 
 	IEnumerator Load_Next_Scene_In_Background(string scene_name)

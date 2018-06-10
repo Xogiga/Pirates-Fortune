@@ -105,10 +105,11 @@ public class Hero_Master : MonoBehaviour {
 	//Fonction qui gère la mort du personnage
 	IEnumerator Death(){
 		References.GameMaster.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
-		while (References.CombatHud.Is_Animating()) {																//Attend la fin de l'annimation de la barre de vie
+		References.GameMaster.Remove_From_List (this.gameObject.name);											//Supprime le personnage de la liste
+
+		while (References.CombatHud.Is_Animating()) {															//Attend la fin de l'annimation de la barre de vie
 			yield return new WaitForSeconds (0.5f);
 		}
-		References.GameMaster.Remove_From_List (this.gameObject.name);													//Supprime le personnage de la liste
 		Destroy (this.gameObject);																			
 	}
 
@@ -118,7 +119,7 @@ public class Hero_Master : MonoBehaviour {
 
 	public void Set_Movement_Point(int new_movement_point){
 		movement_point = new_movement_point;
-		References.CombatHud.Set_Hero_Movement_Point (this.gameObject);										//Affiche la réduction de point de mouvement
+		References.CombatHud.Set_Hero_Movement_Point (this.gameObject);											//Affiche la réduction de point de mouvement
 	}
 
 	public int Get_Action_Point(){

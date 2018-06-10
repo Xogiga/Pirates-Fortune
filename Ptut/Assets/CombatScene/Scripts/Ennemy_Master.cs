@@ -71,25 +71,25 @@ public class Ennemy_Master : MonoBehaviour {
 	public void DeductHealth(int health_change, string caller_name){
 		int previous_health = current_health;
 		current_health -= health_change;
-		if (current_health <= 0) {																//Si la vie du personnage atteint 0 ou inférieur
+		if (current_health <= 0) {																				//Si la vie du personnage atteint 0 ou inférieur
 			current_health = 0;
 			StartCoroutine(Death ());
 		}
-		References.CombatHud.Change_Ennemy_Health (previous_health, current_health, health_stat);	//Change la vie du personnage sur l'ATH
+		References.CombatHud.Change_Ennemy_Health (previous_health, current_health, health_stat);				//Change la vie du personnage sur l'ATH
 		Show_Floating_Text (-health_change);
 		Send_Log_Message (-health_change, caller_name);
 	}
 
 	//Fonction qui gère la mort du personnage
 	IEnumerator Death(){
-		GetComponent<Collider> ().enabled = false;											//Désactive sa hitbox, pour qu'on ne puisse plus le blesser à nouveau
-		while (References.CombatHud.Is_Animating()) {											//Attend la fin de l'annimation de la barre de vie
+		GetComponent<Collider> ().enabled = false;																//Désactive sa hitbox, pour qu'on ne puisse plus le blesser à nouveau
+		References.GameMaster.Remove_From_List (this.gameObject.name);											//Supprime le personnage de la liste
+		while (References.CombatHud.Is_Animating()) {															//Attend la fin de l'annimation de la barre de vie
 			yield return new WaitForSeconds (0.5f);
 		}
-		References.GameMaster.Remove_From_List (this.gameObject.name);								//Supprime le personnage de la liste
-		References.CombatHud.disable_ennemy_stats();										//Cache ses stats
 		References.GameMaster.set_matrice_case (Mathf.RoundToInt (this.transform.position.x), Mathf.RoundToInt (this.transform.position.y), 0);	//Vide la case où il se tenait
-		Destroy (this.gameObject);															//Détruit le gameObject
+		References.CombatHud.disable_ennemy_stats();															//Cache ses stats
+		Destroy (this.gameObject);																				//Détruit le gameObject
 	}
 
 	//Fonction qui fait apparaître un text flotant au dessus du personnage
@@ -274,7 +274,7 @@ public class Ennemy_Master : MonoBehaviour {
 	//Fonction qui attaque l'ennemi a porté
 	IEnumerator Attack(int int_distance,GameObject target){
 		bool attack_possibility = true;
-		References.CombatHud.enable_disable_stats_for_ennemy ();												//Affiche les informations de la cible
+		References.CombatHud.enable_disable_stats_for_ennemy ();											//Affiche les informations de la cible
 		while (target != null && action_point >= 1 && attack_possibility == true) {							//Tant que la cible est en vie, que l'ennemi a des points d'action et qu'il est a portée, il attaque																		
 			if (int_distance == 1 && action_point >= 3) {													//Choisi l'attaque en fonction de la distance et de ses points d'action
 				action_point -= 3;																			//Réduit ses points d'action
@@ -289,7 +289,7 @@ public class Ennemy_Master : MonoBehaviour {
 				yield return new WaitForSeconds (0.5f);														//Attend la fin des animations
 			}
 		}
-		References.CombatHud.enable_disable_stats_for_ennemy ();												//Cache les informations de la cible
+		References.CombatHud.enable_disable_stats_for_ennemy ();											//Cache les informations de la cible
 		References.GameMaster.passer_le_tour (); 
 	}
 
