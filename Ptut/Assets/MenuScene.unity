@@ -291,15 +291,15 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1102288606570312, guid: 515ba8591b7ad3b47b908fa35276c5eb, type: 2}
-      propertyPath: m_Name
-      value: MenuCanvas
-      objectReference: {fileID: 0}
     - target: {fileID: 223632240262010502, guid: 515ba8591b7ad3b47b908fa35276c5eb,
         type: 2}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 965270898}
+    - target: {fileID: 1102288606570312, guid: 515ba8591b7ad3b47b908fa35276c5eb, type: 2}
+      propertyPath: m_Name
+      value: MenuCanvas
+      objectReference: {fileID: 0}
     - target: {fileID: 114884867915536478, guid: 515ba8591b7ad3b47b908fa35276c5eb,
         type: 2}
       propertyPath: m_havePropertiesChanged
@@ -340,35 +340,15 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114884867915536478, guid: 515ba8591b7ad3b47b908fa35276c5eb,
+    - target: {fileID: 114756268498596346, guid: 515ba8591b7ad3b47b908fa35276c5eb,
         type: 2}
-      propertyPath: m_text
-      value: Pirates Fortune
+      propertyPath: m_havePropertiesChanged
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114884867915536478, guid: 515ba8591b7ad3b47b908fa35276c5eb,
+    - target: {fileID: 114756268498596346, guid: 515ba8591b7ad3b47b908fa35276c5eb,
         type: 2}
-      propertyPath: m_fontSize
-      value: 40.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114884867915536478, guid: 515ba8591b7ad3b47b908fa35276c5eb,
-        type: 2}
-      propertyPath: m_textInfo.characterCount
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 114884867915536478, guid: 515ba8591b7ad3b47b908fa35276c5eb,
-        type: 2}
-      propertyPath: m_textInfo.wordCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 224912582696590982, guid: 515ba8591b7ad3b47b908fa35276c5eb,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 448.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224912582696590982, guid: 515ba8591b7ad3b47b908fa35276c5eb,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 66.3
+      propertyPath: m_isInputParsingRequired
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 515ba8591b7ad3b47b908fa35276c5eb, type: 2}
