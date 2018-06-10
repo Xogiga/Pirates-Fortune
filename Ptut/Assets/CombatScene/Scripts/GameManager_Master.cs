@@ -19,6 +19,7 @@ public class GameManager_Master : MonoBehaviour {
 	private CombatHUD_Master combatHUD_master;
 	private int turn;
 	private bool victory;
+	public GameObject data_transporter;
 
 	private void OnEnable(){
 		Set_initial_reference();
@@ -101,6 +102,8 @@ public class GameManager_Master : MonoBehaviour {
 	//Fonction qui termine le combat
 	private void End_Fight(){
 		is_fight_over = true;																							//Déclare le combat terminé
+		GameObject dt = Instantiate(data_transporter);																	//Crée un objet qui transporte le résultat du combat
+		dt.GetComponent<DataTransporter_Script>().Set_Victory(victory);													//Transmet l'information au transporteur
 		combatHUD_master.Show_End_Screen(victory);																		//Affiche l'écran de fin
 	}
 		

@@ -21,10 +21,36 @@ namespace MapScene {
 		public int endPoint_data;
 		public int turn;
 
+		//Fonction qui vérifie si le dossier de sauvegarde existe, sinon le crée et renvoie le chemin d'accès
+		private string Manage_Folders(){
+			string path = Application.persistentDataPath + "/Saves";
+			if(Directory.Exists(path) == false){
+				Directory.CreateDirectory (path);
+			}
+			return path;
+		}
+
+		/*
+		//Fonction qui récupère la liste des noms de sauvegardes sous forme de string
+		private List<string> Get_List_Saves(){
+			List<string> SavesList = new List<string> ();
+			string path = Manage_Folders();
+			string[] files = Directory.GetFiles (path);
+			foreach (string f in files) {
+				string s = f.Substring (path.Length + 1);											//Enlève le chemin et le "/"
+				s = s.Remove (s.Length - 4);														//Enlève l'extension
+				SavesList.Add (s);
+				print (s);
+			}
+			return SavesList;
+		}
+		*/
+
 		//Fonction qui sauvegarde les données dans un fichier externe
 		public void Save(){
+			string path = Manage_Folders ();														//Récupère le chemin d'accès du fichier
 			BinaryFormatter bf = new BinaryFormatter ();											//Permet d'écrire des données dans des fichiers
-			FileStream file = File.Create(Application.persistentDataPath + "/MapSave.dat");			//Crée un fichier
+			FileStream file = File.Create(path + "/MapSave.dat");									//Crée un fichier
 
 			MapData data = new MapData ();															//Crée une classe sérializable
 
@@ -62,7 +88,7 @@ namespace MapScene {
 				
 				int index1 = int.Parse(line.name.Substring (9, 2));
 				int index2 = int.Parse(line.name.Substring(16,2));
-				SerialLines.Add(new LineData(index1,index2));				//Crée un DataLine avec les deux indices contenus dans le nom
+				SerialLines.Add(new LineData(index1,index2));										//Crée un DataLine avec les deux indices contenus dans le nom
 			}
 
 			return SerialLines;
@@ -76,9 +102,11 @@ namespace MapScene {
 
 		//Fonction qui charge les données depuis un fichier externe
 		public bool Load(){
-			if (File.Exists (Application.persistentDataPath + "/MapSave.dat")) {					//Vérifie que le fichier existe
+			string path = Manage_Folders ();														//Récupère le chemin d'accès du fichier
+			if (File.Exists (path + "/MapSave.dat")) {												//Vérifie que le fichier existe
 				BinaryFormatter bf = new BinaryFormatter ();										//Permet d'écrire des données dans des fichiers
-				FileStream file = File.Open (Application.persistentDataPath + "/MapSave.dat", FileMode.Open);//Ouvre le fichier
+				FileStream file = 
+					File.Open (path + "/MapSave.dat", FileMode.Open);								//Ouvre le fichier
 				MapData data = (MapData)bf.Deserialize(file);										//Récupère les données dans une classe
 				file.Close();
 
@@ -116,7 +144,7 @@ namespace MapScene {
 			public int event_index;
 
 
-			public PointData(float x, float y, bool d, int e){					//Constructeur
+			public PointData(float x, float y, bool d, int e){											//Constructeur
 				posX = x;
 				posY = y;
 				done = d;
@@ -126,10 +154,10 @@ namespace MapScene {
 
 		[Serializable]
 		public class LineData {
-			public int index1;														//Indice du premier point relié dans la liste globale
-			public int index2;														//Second indice
+			public int index1;																			//Indice du premier point relié dans la liste globale
+			public int index2;																			//Second indice
 
-			public LineData(int i1, int i2){										//Constructeur
+			public LineData(int i1, int i2){															//Constructeur
 				index1 = i1;
 				index2 = i2;
 			}

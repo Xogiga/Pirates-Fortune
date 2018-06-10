@@ -37,6 +37,7 @@ namespace MapScene {
 			this.index_event = index;
 			if (e.EventName == "Marine") {
 				this.marine = true;
+				this.done = false;
 			}
 		}
 

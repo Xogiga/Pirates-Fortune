@@ -19,6 +19,7 @@ namespace MapScene {
 		public void Can_I_Move(GameObject destination){
 			if (is_moving == false) {
 				is_moving = true;
+				References.CreationScript.Add_Turn ();																									//Ajoute un tour
 				StartCoroutine (Move(destination));
 			}
 		}
@@ -38,7 +39,7 @@ namespace MapScene {
 			}
 
 			is_moving = false;																															//Booléen qui autorise un nouveau déplacement
-			References.GameMaster.Interact_With_Interest_Point(destination, false);																		//Appel la suite des évènements
+			References.GameMaster.Interact_With_Interest_Point(destination);																			//Appel la suite des évènements
 		}
 
 
