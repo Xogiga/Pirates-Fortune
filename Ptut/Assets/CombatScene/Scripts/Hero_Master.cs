@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Runtime.CompilerServices;
 
+namespace CombatScene{
 public class Hero_Master : MonoBehaviour {
 	public bool is_moving;
 	private int stats_de_deplacement;
@@ -143,4 +144,5 @@ public class Hero_Master : MonoBehaviour {
 		action_point = val;
 		combatHUD_master.Set_Hero_Action_Point (this.gameObject);						//Affiche la réduction de point d'action
 	}
+}
 }

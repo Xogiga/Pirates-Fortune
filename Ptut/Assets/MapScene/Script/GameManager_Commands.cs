@@ -38,9 +38,9 @@ namespace MapScene {
 			{
 				References.CreationScript.Center_Camera ();
 			}
-			if (Input.GetKey (KeyCode.Escape)) 														//Ferme l'application
+			if (Input.GetKey (KeyCode.Escape))														//Retourne au menu
 			{
-				Application.Quit ();
+				StartCoroutine(References.GameMaster.Load_Next_Fight_In_Background ("MenuScene"));
 			}
 		}
 	}

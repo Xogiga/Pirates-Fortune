@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace CombatScene{
 public class Hero_Deplacement : MonoBehaviour {
 	private Hero_Master hero_master;
 	private GameManager_Master game_master;
@@ -79,5 +80,4 @@ public class Hero_Deplacement : MonoBehaviour {
 		}
 	}
 }
-
-
+}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace CombatScene{
 public class GameManager_Pathfinding : MonoBehaviour {
 	private int width;
 	private int height;
@@ -123,4 +124,5 @@ public class GameManager_Pathfinding : MonoBehaviour {
 			return null;
 		}
 	}
+}
 }

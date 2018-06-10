@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace CombatScene{
 public class Hero_Show_Possible_Movements : MonoBehaviour {
 	private GameObject game_manager;
 	private GameManager_Master game_master;
@@ -79,4 +80,5 @@ public class Hero_Show_Possible_Movements : MonoBehaviour {
 			sprite_list = null;
 		}
 	}
+}
 }

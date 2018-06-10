@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+namespace CombatScene{
 public class GameManager_Commands : MonoBehaviour {
 	private GameManager_Master game_master;
 	private GameObject hero;
@@ -83,9 +84,9 @@ public class GameManager_Commands : MonoBehaviour {
 				}
 			}
 		}
-		if (Input.GetKey ("escape")) 																	//Ferme l'application
+		if (Input.GetKey ("escape")) 																	//Retourne au Menu
 		{
-			Application.Quit ();
+				StartCoroutine(game_master.Load_Next_Scene_In_Background("MenuScene"));
 		}
 	}
 
@@ -103,4 +104,5 @@ public class GameManager_Commands : MonoBehaviour {
 			Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);						//Remet le curseur classique
 		}
 	}
+}
 }

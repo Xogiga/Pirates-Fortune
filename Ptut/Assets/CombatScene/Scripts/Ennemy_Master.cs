@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace CombatScene{
 public class Ennemy_Master : MonoBehaviour {
 
 	private GameManager_Master game_master;
@@ -320,4 +321,5 @@ public class Ennemy_Master : MonoBehaviour {
 			StopAllCoroutines();
 		}
 	}
+}
 }

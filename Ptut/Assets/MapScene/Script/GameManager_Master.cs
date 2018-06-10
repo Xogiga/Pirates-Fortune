@@ -87,7 +87,7 @@ namespace MapScene {
 					GameObject dt = Instantiate (data_transporter);										//Crée un objet qui transporte les paramètres du fight
 					dt.GetComponent<DataTransporter_Script> ().Set_Fight_Parameters (point_script.Event.fp);//Transmet les paramètres de fight de l'event au transporteur
 				}
-				StartCoroutine (Load_Next_Fight_In_Background ());										//Charge l'évènement à partir de son nom
+				StartCoroutine (Load_Next_Fight_In_Background ("CombatScene"));							//Charge l'évènement à partir de son nom
 			} 
 		}
 
@@ -97,9 +97,9 @@ namespace MapScene {
 		}
 
 
-		IEnumerator Load_Next_Fight_In_Background()
+		public IEnumerator Load_Next_Fight_In_Background(string scene_name)
 		{
-			AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("CombatScene");
+			AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene_name);
 
 			// Wait until the asynchronous scene fully loads
 			while (!asyncLoad.isDone)

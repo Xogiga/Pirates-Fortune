@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace CombatScene{
 public class Competence_Master : MonoBehaviour {
 	private GameObject infobulle;
 	private GameManager_Master game_master;
@@ -100,6 +101,6 @@ public class Competence_Master : MonoBehaviour {
 		Hide_Attack_Info ();
 	}
 }
-
+}
 
 

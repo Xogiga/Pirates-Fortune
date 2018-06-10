@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace CombatScene{
 public class Hero_Attack_1 : MonoBehaviour {
 	private CombatHUD_Master combatHUD_Master;
 	private Hero_Master hero_master;
@@ -71,4 +72,5 @@ public class Hero_Attack_1 : MonoBehaviour {
 			range_max = 4;
 		}
 	}
+}
 }

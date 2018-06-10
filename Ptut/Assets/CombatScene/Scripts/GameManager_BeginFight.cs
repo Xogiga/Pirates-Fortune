@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace CombatScene{
 public class GameManager_BeginFight : MonoBehaviour {
 
 	private GameManager_Master game_manager_master;
@@ -245,4 +246,5 @@ public class GameManager_BeginFight : MonoBehaviour {
 	public int Get_Height(){
 		return height;
 	}
+}
 }

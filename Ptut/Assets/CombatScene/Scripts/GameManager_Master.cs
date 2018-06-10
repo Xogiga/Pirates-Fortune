@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+namespace CombatScene{
 public class GameManager_Master : MonoBehaviour {
 	public delegate void GameManager_EventHandler();  //Gestionnaire d'évènement
 	public event GameManager_EventHandler event_begin_fight;
@@ -198,15 +199,15 @@ public class GameManager_Master : MonoBehaviour {
 	//Fonction qui retourne à la scène de la carte
 	public void Load_Next_Scene(){
 		if (victory == true) {
-			StartCoroutine (Load_Next_Scene_In_Background ());
+			StartCoroutine (Load_Next_Scene_In_Background ("MapScene"));
 		} else {
 			Application.Quit ();
 		}
 	}
 
-	IEnumerator Load_Next_Scene_In_Background()
+		public IEnumerator Load_Next_Scene_In_Background(string scene_name)
 	{
-		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MapScene");
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(scene_name);
 
 		// Wait until the asynchronous scene fully loads
 		while (!asyncLoad.isDone)
@@ -214,4 +215,5 @@ public class GameManager_Master : MonoBehaviour {
 			yield return null;
 		}
 	}
+}
 }

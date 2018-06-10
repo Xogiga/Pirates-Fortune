@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+namespace CombatScene{
 public class Tile_Script : MonoBehaviour {
 	private GameManager_Master game_master;
 	private GameObject player;									
@@ -66,4 +67,5 @@ public class Tile_Script : MonoBehaviour {
 		}
 
 	}
+}
 }

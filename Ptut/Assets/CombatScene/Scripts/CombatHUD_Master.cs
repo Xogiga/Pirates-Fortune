@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace CombatScene{
 public class CombatHUD_Master : MonoBehaviour {
 	private GameObject announce;
 	public GameObject combat_log;
@@ -270,4 +271,5 @@ public class CombatHUD_Master : MonoBehaviour {
 		button.SetActive(true);																		//A la fin de l'animation affiche le bouton pour rejouer
 		is_animating--;
 	}
+}
 }
